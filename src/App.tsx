@@ -15,6 +15,7 @@ import { NotificationsPage } from './components/pages/NotificationsPage/Notifica
 import { ArchivePage } from './components/pages/ArchivePage/ArchivePage'
 import { SupportPage } from './components/pages/SupportPage/SupportPage'
 import { ProfilePage } from './components/pages/ProfilePage/ProfilePage'
+import { ProjectDetailsPage } from './components/pages/ProjectDetailsPage/ProjectDetailsPage'
 import './App.css'
 
 function App() {
@@ -39,6 +40,11 @@ function App() {
             <Route path="/projects" element={
               <MainTemplate>
                 <ProjectsPage />
+              </MainTemplate>
+            } />
+            <Route path="/projects/:id" element={
+              <MainTemplate>
+                <ProjectDetailsPage />
               </MainTemplate>
             } />
             <Route path="/guides" element={

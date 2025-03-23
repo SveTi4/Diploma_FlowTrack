@@ -1,6 +1,6 @@
 export const theme = {
   colors: {
-    primary: '#007AFF',
+    primary: '#2589FF',
     secondary: '#5856D6',
     success: '#34C759',
     danger: '#FF3B30',
@@ -8,6 +8,11 @@ export const theme = {
     info: '#5856D6',
     light: '#F2F2F7',
     dark: '#1C1C1E',
+    page_bg: '#191A1D',
+    project_card_bg: '#27282A',
+    sidebar_bg: '#121315',
+    sidebar_item_bg: '#1E1F21',
+
   },
   
   typography: {
@@ -20,6 +25,12 @@ export const theme = {
       fontSize: '1.5rem',
       fontWeight: 600,
       lineHeight: 1.25,
+    },
+    nav_link: {
+      fontSize: '1rem',
+      fontWeight: 500,
+      lineHeight: 1.5,
+      opacity: 0.6,
     },
     body: {
       fontSize: '1rem',
