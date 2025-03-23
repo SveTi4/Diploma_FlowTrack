@@ -2,7 +2,7 @@ import axios from 'axios'
 import { store } from '../store'
 import { setAccessToken, logout } from '../store/auth/authSlice'
 
-const PUBLIC_ROUTES = ['/auth/login', '/auth/register']
+const PUBLIC_ROUTES = ['/auth/login', '/auth/register', '/auth/refresh']
 
 export const api = axios.create({
   baseURL: 'http://192.168.0.102:7000/v1',

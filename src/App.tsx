@@ -6,6 +6,7 @@ import { theme } from './styles/theme'
 import { GlobalStyles } from './styles/GlobalStyles'
 import { AuthPage } from './components/organisms/AuthPage/AuthPage'
 import { RegisterPage } from './components/organisms/RegisterPage/RegisterPage'
+import { HomePage } from './components/pages/HomePage'
 import './App.css'
 
 function App() {
@@ -17,6 +18,7 @@ function App() {
           <Routes>
             <Route path="/" element={<AuthPage />} />
             <Route path="/register" element={<RegisterPage />} />
+            <Route path="/home" element={<HomePage />} />
           </Routes>
         </BrowserRouter>
       </ThemeProvider>
