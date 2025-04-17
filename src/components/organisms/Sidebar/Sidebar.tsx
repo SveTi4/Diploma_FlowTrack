@@ -12,7 +12,7 @@ const Avatar = styled.div`
 
 const Container = styled.div<{ isCollapsed: boolean }>`
   position: relative;
-  width: ${({ isCollapsed }) => isCollapsed ? '80px' : '240px'};
+  width: ${({ isCollapsed }) => isCollapsed ? '84px' : '240px'};
   height: 100vh;
   background: #121316;
   transition: all 0.3s ease;
@@ -30,7 +30,7 @@ const NavItem = styled(NavLink)<{ isCollapsed?: boolean }>`
   align-items: center;
   gap: 12px;
   padding: 12px 16px;
-  color: rgba(255, 255, 255, 0.6);
+  color: #A5A5A7;
   text-decoration: none;
   font-size: 14px;
   line-height: 20px;
@@ -110,34 +110,34 @@ export const Sidebar = () => {
       </ProfileSection>
       <NavList>
         <NavItem to="/stats" isCollapsed={isCollapsed}>
-          <Icon name="stats" />
+          <Icon name="stats" size={20} />
           <span>Статистика</span>
         </NavItem>
         
         <NavItem to="/projects" isCollapsed={isCollapsed}>
-          <Icon name="projects" />
+          <Icon name="projects" size={20} />
           <span>Мои проекты</span>
         </NavItem>
         
         <NavItem to="/guides" isCollapsed={isCollapsed}>
-          <Icon name="guides" />
+          <Icon name="guides" size={20} />
           <span>Гайды</span>
         </NavItem>
         
         <NavItem to="/notifications" isCollapsed={isCollapsed}>
-          <Icon name="notifications" />
+          <Icon name="notifications" size={20} />
           <span>Уведомления</span>
         </NavItem>
       </NavList>
 
       <BottomSection>
         <NavItem to="/archive" isCollapsed={isCollapsed}>
-          <Icon name="archive" />
+          <Icon name="archive" size={20} />
           <span>Архив</span>
         </NavItem>
         
         <NavItem to="/support" isCollapsed={isCollapsed}>
-          <Icon name="support" />
+          <Icon name="support" size={20} />
           <span>Поддержка</span>
         </NavItem>
       </BottomSection>
