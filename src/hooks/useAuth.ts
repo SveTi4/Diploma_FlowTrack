@@ -15,7 +15,7 @@ export const useAuth = () => {
       dispatch(setLoading(true))
       const response = await authApi.login(data)
       dispatch(setAccessToken(response.access_token))
-      navigate('/home')
+      navigate('/projects')
     } catch (err) {
       dispatch(setError('Ошибка авторизации'))
     } finally {

@@ -6,7 +6,6 @@ const AUTH_URL = '/auth'
 export const authApi = {
   async login(data: LoginRequest): Promise<AuthResponse> {
     const response = await api.post<AuthResponse>(`${AUTH_URL}/login`, data)
-    console.log(response.headers)
     return response.data
   },
 

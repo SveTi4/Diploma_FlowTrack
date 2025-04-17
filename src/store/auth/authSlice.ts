@@ -1,12 +1,26 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit'
 import { AuthState } from '../../types/auth'
 
-const initialState: AuthState = {
-  accessToken: null,
-  isAuthenticated: false,
-  loading: false,
-  error: null
+const loadState = (): AuthState => {
+  try {
+    const accessToken = localStorage.getItem('accessToken')
+    return {
+      accessToken,
+      isAuthenticated: !!accessToken,
+      loading: false,
+      error: null
+    }
+  } catch (e) {
+    return {
+      accessToken: null,
+      isAuthenticated: false,
+      loading: false,
+      error: null
+    }
+  }
 }
+
+const initialState: AuthState = loadState()
 
 const authSlice = createSlice({
   name: 'auth',
@@ -15,10 +29,12 @@ const authSlice = createSlice({
     setAccessToken(state, action: PayloadAction<string>) {
       state.accessToken = action.payload
       state.isAuthenticated = true
+      localStorage.setItem('accessToken', action.payload)
     },
     logout(state) {
       state.accessToken = null
       state.isAuthenticated = false
+      localStorage.removeItem('accessToken')
     },
     setLoading(state, action: PayloadAction<boolean>) {
       state.loading = action.payload
