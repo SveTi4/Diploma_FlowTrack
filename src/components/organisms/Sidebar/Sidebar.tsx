@@ -72,8 +72,12 @@ const ProfileSection = styled(NavItem)`
 `
 
 const BottomSection = styled.div`
-  padding: 8px;
+  padding: 16px;
   border-top: 1px solid rgba(255, 255, 255, 0.1);
+`
+
+const BottomNavItem = styled(NavItem)`
+  margin-bottom: 8px;
 `
 
 const ToggleButton = styled.button`
@@ -131,15 +135,15 @@ export const Sidebar = () => {
       </NavList>
 
       <BottomSection>
-        <NavItem to="/archive" isCollapsed={isCollapsed}>
+        <BottomNavItem to="/archive" isCollapsed={isCollapsed}>
           <Icon name="archive" size={20} />
           <span>Архив</span>
-        </NavItem>
+        </BottomNavItem>
         
-        <NavItem to="/support" isCollapsed={isCollapsed}>
+        <BottomNavItem to="/support" isCollapsed={isCollapsed}>
           <Icon name="support" size={20} />
           <span>Поддержка</span>
-        </NavItem>
+        </BottomNavItem>
       </BottomSection>
 
       <ToggleButton onClick={() => setIsCollapsed(!isCollapsed)}>
