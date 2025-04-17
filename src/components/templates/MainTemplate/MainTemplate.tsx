@@ -10,7 +10,7 @@ const Container = styled.div`
 
 const Content = styled.main`
   flex: 1;
-  background: #1C1C1E;
+  background: #191A1D;
 `
 
 interface MainTemplateProps {

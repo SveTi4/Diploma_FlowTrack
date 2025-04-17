@@ -1,73 +1,103 @@
+import { useEffect } from 'react'
+import { useNavigate } from 'react-router-dom'
 import styled from 'styled-components'
-import { PageHeader } from '../../molecules/PageHeader/PageHeader'
+import { useAppDispatch, useAppSelector } from '../../../hooks/useStore'
+import { fetchProjects } from '../../../store/projects/projectsSlice'
 import { ProjectCard } from '../../molecules/ProjectCard/ProjectCard'
+import { PageHeader } from '../../molecules/PageHeader/PageHeader'
 
 const Container = styled.div`
   min-height: 100vh;
-  background: #1C1C1E;
 `
 
 const ProjectsGrid = styled.div`
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
-  gap: 24px;
-  padding: 24px;
+  grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+  gap: 48px;
+  padding: 48px 32px;
+  margin: 0 auto;
 `
 
-// Временные данные для примера
-const mockProjects = [
-  {
-    id: 1,
-    title: 'Проект номер 1',
-    description: 'Текст текст текст текст текст текст текст текст текст текст текст текст текст текст',
-    progress: 75,
-    timeLeft: 'Осталось: 5 дней 4 часа'
-  },
-  {
-    id: 2,
-    title: 'Проект номер 2',
-    description: 'Текст текст текст текст текст текст текст текст текст текст текст текст текст текст',
-    progress: 100,
-    timeLeft: 'Завершен'
-  },
-  {
-    id: 3,
-    title: 'Проект номер 3',
-    description: 'Текст текст текст текст текст текст текст текст текст текст текст текст текст текст',
-    progress: 35,
-    timeLeft: 'Осталось: 2 недели'
-  }
-]
+const LoadingText = styled.div`
+  color: ${({ theme }) => theme.colors.light};
+  text-align: center;
+  padding: 32px;
+`
+
+const ErrorText = styled.div`
+  color: ${({ theme }) => theme.colors.danger};
+  text-align: center;
+  padding: 32px;
+`
+
+const EmptyState = styled.div`
+  text-align: center;
+  padding: 64px 32px;
+  color: ${({ theme }) => theme.colors.light};
+`
+
+const EmptyStateText = styled.p`
+  font-size: 16px;
+  margin-bottom: 24px;
+  opacity: 0.7;
+`
 
 export const ProjectsPage = () => {
+  const navigate = useNavigate()
+  const dispatch = useAppDispatch()
+  const { items, loading, error } = useAppSelector((state) => state.projects)
+
+  useEffect(() => {
+    dispatch(fetchProjects({ page: 1, limit: 10 }))
+  }, [dispatch])
+
+  console.log('Projects state:', { items, loading, error })
+
   const handleSearch = (value: string) => {
+    // TODO: Реализовать поиск
     console.log('Search:', value)
   }
 
   const handleCreateProject = () => {
-    console.log('Create project')
+    navigate('/projects/new')
   }
 
-  const handleProjectClick = (id: number) => {
-    console.log('Project clicked:', id)
+  if (loading) {
+    return <LoadingText>Загрузка проектов...</LoadingText>
   }
+
+  if (error) {
+    return <ErrorText>{error}</ErrorText>
+  }
+
+  console.log('Projects to render:', items)
 
   return (
     <Container>
-      <PageHeader 
+      <PageHeader
         title="Мои проекты"
         onSearch={handleSearch}
         onCreateClick={handleCreateProject}
       />
-      <ProjectsGrid>
-        {mockProjects.map(project => (
-          <ProjectCard
-            key={project.id}
-            {...project}
-            onClick={() => handleProjectClick(project.id)}
-          />
-        ))}
-      </ProjectsGrid>
+      
+      {!items?.length ? (
+        <EmptyState>
+          <EmptyStateText>У вас пока нет проектов</EmptyStateText>
+          <button onClick={() => navigate('/projects/new')}>
+            Создать первый проект
+          </button>
+        </EmptyState>
+      ) : (
+        <ProjectsGrid>
+          {items.map((project) => (
+            <ProjectCard
+              key={project.Id}
+              project={project}
+              onClick={() => navigate(`/projects/${project.Id}`)}
+            />
+          ))}
+        </ProjectsGrid>
+      )}
     </Container>
   )
 } 

@@ -1,29 +1,34 @@
 import styled from 'styled-components'
-import { useNavigate } from 'react-router-dom'
+import { Project } from '../../../types/project'
 
 const Card = styled.div`
-  background: rgba(255, 255, 255, 0.05);
+  background: #27282A;
+  border: #323336 1px solid;
   border-radius: 12px;
   padding: 20px;
   cursor: pointer;
   transition: all 0.2s ease;
+  box-shadow: 0 0 32px 1px rgba(255, 255, 255, 0.06);
 
   &:hover {
     background: rgba(255, 255, 255, 0.1);
+    transform: translateY(-4px) scale(1.02);
+    //box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
   }
 `
 
-const Title = styled.h3`
-  color: white;
-  font-size: 16px;
-  margin-bottom: 12px;
+const ProjectName = styled.h3`
+  color: ${({ theme }) => theme.colors.light};
+  font-size: 18px;
+  margin: 0 0 16px 0;
 `
 
 const Description = styled.p`
-  color: rgba(255, 255, 255, 0.6);
+  color: ${({ theme }) => theme.colors.light};
+  opacity: 0.7;
   font-size: 14px;
-  margin-bottom: 16px;
-  line-height: 1.4;
+  line-height: 1.5;
+  margin: 0 0 20px 0;
 `
 
 const ProgressContainer = styled.div`
@@ -34,7 +39,8 @@ const ProgressInfo = styled.div`
   display: flex;
   justify-content: space-between;
   margin-bottom: 8px;
-  color: rgba(255, 255, 255, 0.6);
+  color: ${({ theme }) => theme.colors.light};
+  opacity: 0.7;
   font-size: 12px;
 `
 
@@ -43,44 +49,59 @@ const ProgressBar = styled.div<{ progress: number }>`
   background: rgba(255, 255, 255, 0.1);
   border-radius: 2px;
   overflow: hidden;
+  position: relative;
 
   &::after {
     content: '';
-    display: block;
+    position: absolute;
+    top: 0;
+    left: 0;
     height: 100%;
     width: ${({ progress }) => progress}%;
-    background: #007AFF;
+    background: ${({ theme }) => theme.colors.primary};
+    border-radius: 2px;
     transition: width 0.3s ease;
   }
 `
 
+const StatusBadge = styled.span`
+  display: inline-block;
+  padding: 4px 8px;
+  border-radius: 4px;
+  font-size: 12px;
+  background: rgba(255, 255, 255, 0.1);
+  color: ${({ theme }) => theme.colors.light};
+  margin-bottom: 16px;
+`
+
 interface ProjectCardProps {
-  id: number
-  title: string
-  description: string
-  progress: number
-  timeLeft: string
+  project: Project
+  onClick: () => void
 }
 
-export const ProjectCard = ({ 
-  id,
-  title, 
-  description, 
-  progress, 
-  timeLeft
-}: ProjectCardProps) => {
-  const navigate = useNavigate()
+// Временные данные для демонстрации
+const getTempProjectData = (project: Project) => ({
+  description: 'Описание проекта будет добавлено позже...',
+  progress: Math.floor(Math.random() * 100),
+  status: 'В работе',
+  timeLeft: `${Math.floor(Math.random() * 30) + 1} дней`
+})
+
+export const ProjectCard = ({ project, onClick }: ProjectCardProps) => {
+  // Добавляем временные данные к проекту
+  const tempData = getTempProjectData(project)
 
   return (
-    <Card onClick={() => navigate(`/projects/${id}`)}>
-      <Title>{title}</Title>
-      <Description>{description}</Description>
+    <Card onClick={onClick}>
+      <StatusBadge>{tempData.status}</StatusBadge>
+      <ProjectName>{project.Name}</ProjectName>
+      <Description>{tempData.description}</Description>
       <ProgressContainer>
         <ProgressInfo>
-          <span>Прогресс</span>
-          <span>{timeLeft}</span>
+          <span>Прогресс {tempData.progress}%</span>
+          <span>Осталось: {tempData.timeLeft}</span>
         </ProgressInfo>
-        <ProgressBar progress={progress} />
+        <ProgressBar progress={tempData.progress} />
       </ProgressContainer>
     </Card>
   )
