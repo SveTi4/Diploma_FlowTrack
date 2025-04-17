@@ -7,7 +7,6 @@ import { GlobalStyles } from './styles/GlobalStyles'
 import { AuthPage } from './components/organisms/AuthPage/AuthPage'
 import { RegisterPage } from './components/organisms/RegisterPage/RegisterPage'
 import { MainTemplate } from './components/templates/MainTemplate/MainTemplate'
-import { HomePage } from './components/pages/HomePage'
 import { StatsPage } from './components/pages/StatsPage/StatsPage'
 import { ProjectsPage } from './components/pages/ProjectsPage/ProjectsPage'
 import { GuidesPage } from './components/pages/GuidesPage/GuidesPage'
@@ -22,21 +21,11 @@ function App() {
   return (
     <Provider store={store}>
       <ThemeProvider theme={theme}>
-        <GlobalStyles />
+        <GlobalStyles theme={theme} />
         <BrowserRouter>
           <Routes>
             <Route path="/" element={<AuthPage />} />
             <Route path="/register" element={<RegisterPage />} />
-            <Route path="/home" element={
-              <MainTemplate>
-                <HomePage />
-              </MainTemplate>
-            } />
-            <Route path="/stats" element={
-              <MainTemplate>
-                <StatsPage />
-              </MainTemplate>
-            } />
             <Route path="/projects" element={
               <MainTemplate>
                 <ProjectsPage />
@@ -45,6 +34,11 @@ function App() {
             <Route path="/projects/:id" element={
               <MainTemplate>
                 <ProjectDetailsPage />
+              </MainTemplate>
+            } />
+            <Route path="/stats" element={
+              <MainTemplate>
+                <StatsPage />
               </MainTemplate>
             } />
             <Route path="/guides" element={
