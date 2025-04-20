@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react'
 import styled from 'styled-components'
-import { Column, CreateTaskDto } from '../../../types/column'
+import { Column, CreateTaskDto, UpdateTaskDto, Task } from '../../../types/column'
 import { useAppDispatch, useAppSelector } from '../../../hooks/useStore'
 import { fetchColumnTasks, deleteTask } from '../../../store/tasks/tasksSlice'
 import { Modal } from '../../atoms/Modal/Modal'
@@ -237,6 +237,32 @@ const ErrorMessage = styled.span`
   margin-top: 4px;
 `
 
+const EditButton = styled.button`
+  position: absolute;
+  top: 8px;
+  right: 40px;
+  background: none;
+  border: none;
+  padding: 4px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  opacity: 0.6;
+  transition: all 0.2s ease;
+
+  &:hover {
+    opacity: 1;
+    color: ${({ theme }) => theme.colors.primary};
+  }
+
+  svg {
+    width: 16px;
+    height: 16px;
+    stroke: currentColor;
+  }
+`
+
 interface TaskColumnProps {
   column: Column
 }
@@ -257,6 +283,12 @@ export const TaskColumn = ({ column }: TaskColumnProps) => {
     deadline: ''
   })
   const [isSubmitting, setIsSubmitting] = useState(false)
+  const [editingTask, setEditingTask] = useState<Task | null>(null)
+  const [editFormData, setEditFormData] = useState({
+    name: '',
+    description: '',
+    deadline: ''
+  })
 
   useEffect(() => {
     dispatch(fetchColumnTasks({ columnId: column.id }))
@@ -274,19 +306,19 @@ export const TaskColumn = ({ column }: TaskColumnProps) => {
     return date.toISOString() // Получаем формат "2023-11-10T09:00:00.000Z"
   }
 
-  const validateForm = () => {
+  const validateForm = (data: typeof formData) => {
     const newErrors = {
       name: '',
       deadline: ''
     }
     let isValid = true
 
-    if (!formData.name.trim()) {
+    if (!data.name.trim()) {
       newErrors.name = 'Название задачи обязательно'
       isValid = false
     }
 
-    if (!formData.deadline) {
+    if (!data.deadline) {
       newErrors.deadline = 'Дата дедлайна обязательна'
       isValid = false
     }
@@ -298,7 +330,7 @@ export const TaskColumn = ({ column }: TaskColumnProps) => {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
     
-    if (!validateForm()) {
+    if (!validateForm(formData)) {
       return
     }
 
@@ -320,6 +352,44 @@ export const TaskColumn = ({ column }: TaskColumnProps) => {
     } catch (error) {
       console.error('Ошибка при создании задачи:', error)
       // TODO: Добавить уведомление об ошибке
+    } finally {
+      setIsSubmitting(false)
+    }
+  }
+
+  const handleEditClick = (task: Task) => {
+    setEditingTask(task)
+    setEditFormData({
+      name: task.name,
+      description: task.description || '',
+      deadline: task.deadline.split('T')[0]
+    })
+  }
+
+  const handleEditSubmit = async (e: React.FormEvent) => {
+    e.preventDefault()
+    
+    if (!validateForm(editFormData)) {
+      return
+    }
+
+    if (!editingTask) return
+
+    setIsSubmitting(true)
+    try {
+      const taskData: UpdateTaskDto = {
+        name: editFormData.name,
+        description: editFormData.description,
+        deadline: formatDateForApi(editFormData.deadline)
+      }
+
+      await tasksApi.updateTask(editingTask.id, taskData)
+      dispatch(fetchColumnTasks({ columnId: column.id }))
+      setEditingTask(null)
+      setEditFormData({ name: '', description: '', deadline: '' })
+      setErrors({ name: '', deadline: '' })
+    } catch (error) {
+      console.error('Ошибка при обновлении задачи:', error)
     } finally {
       setIsSubmitting(false)
     }
@@ -353,6 +423,12 @@ export const TaskColumn = ({ column }: TaskColumnProps) => {
         ) : (
           tasks.map((task) => (
             <TaskCard key={task.id} completed={task.status}>
+              <EditButton onClick={() => handleEditClick(task)}>
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                  <path d="M11 4H4C3.46957 4 2.96086 4.21071 2.58579 4.58579C2.21071 4.96086 2 5.46957 2 6V20C2 20.5304 2.21071 21.0391 2.58579 21.4142C2.96086 21.7893 3.46957 22 4 22H18C18.5304 22 19.0391 21.7893 19.4142 21.4142C19.7893 21.0391 20 20.5304 20 20V13" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+                  <path d="M18.5 2.50001C18.8978 2.10219 19.4374 1.87869 20 1.87869C20.5626 1.87869 21.1022 2.10219 21.5 2.50001C21.8978 2.89784 22.1213 3.4374 22.1213 4.00001C22.1213 4.56262 21.8978 5.10219 21.5 5.50001L12 15L8 16L9 12L18.5 2.50001Z" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+                </svg>
+              </EditButton>
               <DeleteButton onClick={() => handleDeleteTask(task.id)}>
                 <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
                   <path d="M19 7L18.1327 19.1425C18.0579 20.1891 17.187 21 16.1378 21H7.86224C6.81296 21 5.94208 20.1891 5.86732 19.1425L5 7M10 11V17M14 11V17M3 7H21M17 7V4C17 3.44772 16.5523 3 16 3H8C7.44772 3 7 3.44772 7 4V7" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
@@ -432,6 +508,72 @@ export const TaskColumn = ({ column }: TaskColumnProps) => {
             </CancelButton>
             <SubmitButton type="submit" disabled={isSubmitting}>
               {isSubmitting ? 'Создание...' : 'Создать'}
+            </SubmitButton>
+          </FormActions>
+        </TaskForm>
+      </Modal>
+
+      <Modal
+        isOpen={!!editingTask}
+        onClose={() => {
+          if (!isSubmitting) {
+            setEditingTask(null)
+            setErrors({ name: '', deadline: '' })
+          }
+        }}
+        title="Редактировать задачу"
+      >
+        <TaskForm onSubmit={handleEditSubmit}>
+          <FormField>
+            <FormLabel>Название *</FormLabel>
+            <FormInput
+              type="text"
+              value={editFormData.name}
+              onChange={(e) => {
+                setEditFormData({ ...editFormData, name: e.target.value })
+                if (errors.name) {
+                  setErrors({ ...errors, name: '' })
+                }
+              }}
+            />
+            {errors.name && <ErrorMessage>{errors.name}</ErrorMessage>}
+          </FormField>
+          <FormField>
+            <FormLabel>Описание</FormLabel>
+            <FormTextarea
+              value={editFormData.description}
+              onChange={(e) => setEditFormData({ ...editFormData, description: e.target.value })}
+            />
+          </FormField>
+          <FormField>
+            <FormLabel>Дата дедлайна *</FormLabel>
+            <FormInput
+              type="date"
+              value={editFormData.deadline}
+              onChange={(e) => {
+                setEditFormData({ ...editFormData, deadline: e.target.value })
+                if (errors.deadline) {
+                  setErrors({ ...errors, deadline: '' })
+                }
+              }}
+            />
+            {errors.deadline && <ErrorMessage>{errors.deadline}</ErrorMessage>}
+          </FormField>
+          <FormActions>
+            <CancelButton 
+              type="button" 
+              onClick={() => {
+                if (!isSubmitting) {
+                  setEditingTask(null)
+                  setErrors({ name: '', deadline: '' })
+                }
+              }}
+              disabled={isSubmitting}
+            >
+              Отмена
+            </CancelButton>
+            <SubmitButton type="submit" disabled={isSubmitting}>
+              {isSubmitting ? 'Сохранение...' : 'Сохранить'}
             </SubmitButton>
           </FormActions>
         </TaskForm>
