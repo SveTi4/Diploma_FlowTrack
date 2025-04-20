@@ -16,6 +16,23 @@ const Container = styled.div`
   overflow-x: hidden;
 `
 
+// const TopSection = styled.div`
+//   height: 40vh;
+//   min-height: 300px;
+//   display: grid;
+//   grid-template-columns: repeat(3, 1fr);
+//   gap: 48px;
+//   padding: 48px 32px 24px 32px;
+// `
+//
+// const BottomSection = styled.div`
+//   height: 45vh;
+//   padding: 24px 32px 48px 32px;
+//   display: flex;
+//   flex-direction: column;
+//   //overflow-x: auto;
+// `
+
 const InfoButton = styled.button`
   background: rgba(255, 255, 255, 0.1);
   border: none;
@@ -330,6 +347,10 @@ export const ProjectDetailsPage = () => {
 
   const project = projects.find(p => p.id === parseInt(id!, 10))
   const progress = 50 // Статичный прогресс
+
+  if (projectsLoading) {
+    return <LoadingText>Загрузка проекта...</LoadingText>
+  }
 
   if (!project) {
     return <div>Проект не найден</div>
