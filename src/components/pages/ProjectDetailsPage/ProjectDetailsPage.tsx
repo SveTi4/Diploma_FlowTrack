@@ -6,32 +6,17 @@ import { TaskColumn } from '../../molecules/TaskColumn/TaskColumn'
 import { useAppDispatch, useAppSelector } from '../../../hooks/useStore'
 import { fetchColumns, createColumn } from '../../../store/columns/columnsSlice'
 import { deleteProject, fetchProjects } from '../../../store/projects/projectsSlice'
+import { ProgressBarComponent } from '../../atoms/ProgressBar/ProgressBar'
+import { Card as InfoCard } from '../../atoms/Card/Card'
+import { getTimeLeft } from '../../../utils/time'
 
 const Container = styled.div`
   min-height: 100vh;
-  //background: #1C1C1E;
   display: flex;
   flex-direction: column;
   position: relative;
   overflow-x: hidden;
 `
-
-// const TopSection = styled.div`
-//   height: 40vh;
-//   min-height: 300px;
-//   display: grid;
-//   grid-template-columns: repeat(3, 1fr);
-//   gap: 48px;
-//   padding: 48px 32px 24px 32px;
-// `
-//
-// const BottomSection = styled.div`
-//   height: 45vh;
-//   padding: 24px 32px 48px 32px;
-//   display: flex;
-//   flex-direction: column;
-//   //overflow-x: auto;
-// `
 
 const InfoButton = styled.button`
   background: rgba(255, 255, 255, 0.1);
@@ -63,8 +48,7 @@ const SidePanel = styled.div<{ isOpen: boolean }>`
   right: ${({ isOpen }) => (isOpen ? '0' : '-400px')};
   width: 400px;
   height: 100vh;
-  background: ${({ theme }) => theme.colors.background};
-  border-left: 1px solid ${({ theme }) => theme.colors.border};
+  background: ${({ theme }) => theme.colors.sidebar_bg};
   padding: 24px;
   transition: right 0.3s ease;
   overflow-y: auto;
@@ -106,49 +90,6 @@ const CloseButton = styled.button`
     width: 20px;
     height: 20px;
     stroke: ${({ theme }) => theme.colors.light};
-  }
-`
-
-const Card = styled.div`
-  background: rgba(255, 255, 255, 0.05);
-  border-radius: 12px;
-  padding: 20px;
-  background: #27282A;
-  border: #323336 1px solid;
-`
-
-const CardTitle = styled.h3`
-  color: white;
-  font-size: 16px;
-  margin-bottom: 16px;
-`
-
-const ProgressInfo = styled.div`
-  display: flex;
-  justify-content: space-between;
-  margin-bottom: 8px;
-  color: ${({ theme }) => theme.colors.light};
-  opacity: 0.7;
-  font-size: 12px;
-`
-
-const ProgressBar = styled.div<{ progress: number }>`
-  height: 4px;
-  background: rgba(255, 255, 255, 0.1);
-  border-radius: 2px;
-  overflow: hidden;
-  position: relative;
-
-  &::after {
-    content: '';
-    position: absolute;
-    top: 0;
-    left: 0;
-    height: 100%;
-    width: ${({ progress }) => progress}%;
-    background: ${({ theme }) => theme.colors.primary};
-    border-radius: 2px;
-    transition: width 0.3s ease;
   }
 `
 
@@ -311,25 +252,6 @@ const DeleteButton = styled.button`
   }
 `
 
-const getTimeLeft = (deadline: string | null): string => {
-  if (!deadline) return 'Дедлайн не установлен'
-  
-  const deadlineDate = new Date(deadline)
-  const now = new Date()
-  
-  if (deadlineDate < now) return 'Срок истек'
-  
-  const diffTime = deadlineDate.getTime() - now.getTime()
-  const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24))
-  
-  if (diffDays === 0) return 'Осталось менее дня'
-  if (diffDays === 1) return 'Остался 1 день'
-  if (diffDays < 7) return `Осталось ${diffDays} дня`
-  if (diffDays < 30) return `Осталось ${Math.ceil(diffDays / 7)} недели`
-  
-  return `Осталось ${Math.ceil(diffDays / 30)} месяца`
-}
-
 export const ProjectDetailsPage = () => {
   const { id } = useParams<{ id: string }>()
   const navigate = useNavigate()
@@ -468,24 +390,17 @@ export const ProjectDetailsPage = () => {
           </CloseButton>
         </SidePanelHeader>
 
-        <Card>
-          <CardTitle>Общий прогресс:</CardTitle>
-          <ProgressInfo>
-            <div>Прогресс: {progress}%</div>
-            <div>{getTimeLeft(project.deadline)}</div>
-          </ProgressInfo>
-          <ProgressBar progress={progress} />
-        </Card>
+        <InfoCard title="Общий прогресс">
+          <ProgressBarComponent progress={progress} timeLeft={getTimeLeft(project.deadline)} />
+        </InfoCard>
 
-        <Card>
-          <CardTitle>График продуктивности:</CardTitle>
+        <InfoCard title="График продуктивности">
           <Chart>График будет добавлен позже</Chart>
-        </Card>
+        </InfoCard>
 
-        <Card>
-          <CardTitle>Описание проекта:</CardTitle>
+        <InfoCard title="Описание проекта">
           <Description>{project.description}</Description>
-        </Card>
+        </InfoCard>
       </SidePanel>
     </Container>
   )
