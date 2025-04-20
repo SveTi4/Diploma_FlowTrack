@@ -118,9 +118,10 @@ const MainContent = styled.div`
 
 const ColumnsContainer = styled.div`
   display: flex;
+  flex-grow: 1;
   gap: 24px;
   height: 100%;
-  min-width: fit-content;
+  min-width: 100%;
   overflow-x: auto;
 `
 
@@ -337,7 +338,7 @@ export const ProjectDetailsPage = () => {
     return (
       <ColumnsContainer>
         {columns.map((column) => (
-          <TaskColumn key={column.Id} column={column} />
+          <TaskColumn key={column.id} column={column} />
         ))}
       </ColumnsContainer>
     )

@@ -1,7 +1,7 @@
 export interface Column {
-  Id: number
-  ProjectId: number
-  Name: string
+  id: number
+  project_id: number
+  name: string
 }
 
 export interface Task {

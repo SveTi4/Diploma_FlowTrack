@@ -9,7 +9,7 @@ const ColumnContainer = styled.div`
   border: #323336 1px solid;
   border-radius: 12px;
   padding: 20px;
-  width: 320px;
+  min-width: 320px;
   height: 100%;
   display: flex;
   flex-direction: column;
@@ -93,13 +93,13 @@ interface TaskColumnProps {
 
 export const TaskColumn = ({ column }: TaskColumnProps) => {
   const dispatch = useAppDispatch()
-  const tasks = useAppSelector((state) => state.tasks.items[column.Id] || [])
-  const loading = useAppSelector((state) => state.tasks.loading[column.Id])
-  const error = useAppSelector((state) => state.tasks.error[column.Id])
+  const tasks = useAppSelector((state) => state.tasks.items[column.id] || [])
+  const loading = useAppSelector((state) => state.tasks.loading[column.id])
+  const error = useAppSelector((state) => state.tasks.error[column.id])
 
   useEffect(() => {
-    dispatch(fetchColumnTasks({ columnId: column.Id }))
-  }, [dispatch, column.Id])
+    dispatch(fetchColumnTasks({ columnId: column.id }))
+  }, [dispatch, column.id])
 
   const formatDate = (dateString: string) => {
     return new Date(dateString).toLocaleDateString('ru-RU', {
@@ -112,7 +112,7 @@ export const TaskColumn = ({ column }: TaskColumnProps) => {
   return (
     <ColumnContainer>
       <ColumnHeader>
-        {column.Name}
+        {column.name}
         <TaskCount>{tasks.length}</TaskCount>
       </ColumnHeader>
       <TaskList>
@@ -122,14 +122,14 @@ export const TaskColumn = ({ column }: TaskColumnProps) => {
           <ErrorText>{error}</ErrorText>
         ) : (
           tasks.map((task) => (
-            <TaskCard key={task.Id} completed={task.Status}>
-              <TaskTitle>{task.Name}</TaskTitle>
-              {task.Description && (
-                <TaskDescription>{task.Description}</TaskDescription>
+            <TaskCard key={task.id} completed={task.status}>
+              <TaskTitle>{task.name}</TaskTitle>
+              {task.description && (
+                <TaskDescription>{task.description}</TaskDescription>
               )}
               <TaskMeta>
-                <span>Срок: {formatDate(task.Deadline)}</span>
-                <span>{task.Status ? 'Завершено' : 'В работе'}</span>
+                <span>Срок: {formatDate(task.deadline)}</span>
+                <span>{task.status ? 'Завершено' : 'В работе'}</span>
               </TaskMeta>
             </TaskCard>
           ))
