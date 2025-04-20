@@ -1,13 +1,15 @@
 export interface Project {
   id: number
   name: string
-  userId: number
+  description: string
+  deadline: string | null
 }
 
 export interface ProjectResponse {
-  Id: number
-  Name: string
-  UserId: number
+  id: number
+  name: string
+  description: string
+  deadline: string | null
 }
 
 export interface ProjectsResponse {

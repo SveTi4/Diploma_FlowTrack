@@ -5,7 +5,7 @@ import { PageHeader } from '../../molecules/PageHeader/PageHeader'
 import { TaskColumn } from '../../molecules/TaskColumn/TaskColumn'
 import { useAppDispatch, useAppSelector } from '../../../hooks/useStore'
 import { fetchColumns, createColumn } from '../../../store/columns/columnsSlice'
-import { deleteProject } from '../../../store/projects/projectsSlice'
+import { deleteProject, fetchProjects } from '../../../store/projects/projectsSlice'
 
 const Container = styled.div`
   min-height: 100vh;
@@ -14,23 +14,6 @@ const Container = styled.div`
   flex-direction: column;
   position: relative;
   overflow-x: hidden;
-`
-
-const TopSection = styled.div`
-  height: 40vh;
-  min-height: 300px;
-  display: grid;
-  grid-template-columns: repeat(3, 1fr);
-  gap: 48px;
-  padding: 48px 32px 24px 32px;
-`
-
-const BottomSection = styled.div`
-  height: 45vh;
-  padding: 24px 32px 48px 32px;
-  display: flex;
-  flex-direction: column;
-  //overflow-x: auto;
 `
 
 const InfoButton = styled.button`
@@ -311,76 +294,52 @@ const DeleteButton = styled.button`
   }
 `
 
-// Временные данные для примера
-const mockProjectDetails = {
-  1: {
-    title: 'Проект 1',
-    description: 'Подробное описание проекта и его целей',
-    progress: 75,
-    timeLeft: 'Осталось: 5 дней 4 часа'
-  },
-  2: {
-    title: 'Проект номер 2',
-    description: 'Подробное описание проекта номер 2. Проект успешно завершен.',
-    progress: 100,
-    timeLeft: 'Завершен'
-  },
-  3: {
-    title: 'Проект номер 3',
-    description: 'Подробное описание проекта номер 3. Проект находится на начальной стадии реализации.',
-    progress: 35,
-    timeLeft: 'Осталось: 2 недели'
-  },
-  4: {
-    title: 'Проект номер 4',
-    description: 'Подробное описание проекта номер 3. Проект находится на начальной стадии реализации.',
-    progress: 35,
-    timeLeft: 'Осталось: 2 недели'
-  },
-  5: {
-    title: 'Проект номер 5',
-    description: 'Подробное описание проекта номер 3. Проект находится на начальной стадии реализации.',
-    progress: 35,
-    timeLeft: 'Осталось: 2 недели'
-  },
-  6: {
-    title: 'Проект номер 3',
-    description: 'Подробное описание проекта номер 3. Проект находится на начальной стадии реализации.',
-    progress: 35,
-    timeLeft: 'Осталось: 2 недели'
-  }
-}
-
-interface Task {
-  id: string
-  title: string
-  description: string
-  status: string
-  createdAt: string
-  updatedAt: string
+const getTimeLeft = (deadline: string | null): string => {
+  if (!deadline) return 'Дедлайн не установлен'
+  
+  const deadlineDate = new Date(deadline)
+  const now = new Date()
+  
+  if (deadlineDate < now) return 'Срок истек'
+  
+  const diffTime = deadlineDate.getTime() - now.getTime()
+  const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24))
+  
+  if (diffDays === 0) return 'Осталось менее дня'
+  if (diffDays === 1) return 'Остался 1 день'
+  if (diffDays < 7) return `Осталось ${diffDays} дня`
+  if (diffDays < 30) return `Осталось ${Math.ceil(diffDays / 7)} недели`
+  
+  return `Осталось ${Math.ceil(diffDays / 30)} месяца`
 }
 
 export const ProjectDetailsPage = () => {
   const { id } = useParams<{ id: string }>()
   const navigate = useNavigate()
   const dispatch = useAppDispatch()
-  const { items: columns, loading, error } = useAppSelector((state) => state.columns)
+  const { items: columns, loading: columnsLoading, error: columnsError } = useAppSelector((state) => state.columns)
+  const { items: projects, loading: projectsLoading } = useAppSelector((state) => state.projects)
   const [isInfoPanelOpen, setIsInfoPanelOpen] = useState(false)
   
   useEffect(() => {
     if (id) {
       dispatch(fetchColumns({ projectId: parseInt(id, 10) }))
+      dispatch(fetchProjects())
     }
   }, [dispatch, id])
 
-  // @ts-ignore - игнорируем для демо
-  const project = mockProjectDetails[id]
+  const project = projects.find(p => p.id === parseInt(id!, 10))
+  const progress = 50 // Статичный прогресс
+
+  if (!project) {
+    return <div>Проект не найден</div>
+  }
 
   const handleAddColumn = () => {
     if (id) {
-      const columnName = prompt('Введите название колонки:')
-      if (columnName) {
-        dispatch(createColumn({ name: columnName, projectId: parseInt(id, 10) }))
+      const column_name = prompt('Введите название колонки:')
+      if (column_name) {
+        dispatch(createColumn({ name: column_name, projectId: parseInt(id, 10) }))
       }
     }
   }
@@ -389,7 +348,7 @@ export const ProjectDetailsPage = () => {
     if (window.confirm('Вы уверены, что хотите удалить этот проект?')) {
       try {
         await dispatch(deleteProject(parseInt(id!, 10))).unwrap()
-        navigate('/projects') // Перенаправляем на список проектов после удаления
+        navigate('/projects')
       } catch (error) {
         console.error('Ошибка при удалении проекта:', error)
         alert('Не удалось удалить проект')
@@ -398,12 +357,12 @@ export const ProjectDetailsPage = () => {
   }
 
   const renderContent = () => {
-    if (loading) {
+    if (columnsLoading) {
       return <LoadingText>Загрузка колонок...</LoadingText>
     }
 
-    if (error) {
-      return <ErrorText>{error}</ErrorText>
+    if (columnsError) {
+      return <ErrorText>{columnsError}</ErrorText>
     }
 
     if (columns.length === 0) {
@@ -441,10 +400,6 @@ export const ProjectDetailsPage = () => {
     )
   }
 
-  if (!project) {
-    return <div>Проект не найден</div>
-  }
-
   const headerButtons = (
     <>
       <InfoButton onClick={() => setIsInfoPanelOpen(true)}>
@@ -463,7 +418,7 @@ export const ProjectDetailsPage = () => {
   return (
     <Container>
       <PageHeader 
-        title={project.title}
+        title={project.name}
         showBackButton
         rightContent={headerButtons}
       />
@@ -495,10 +450,10 @@ export const ProjectDetailsPage = () => {
         <Card>
           <CardTitle>Общий прогресс:</CardTitle>
           <ProgressInfo>
-            <div>Прогресс: {project.progress}%</div>
-            <div>{project.timeLeft}</div>
+            <div>Прогресс: {progress}%</div>
+            <div>{getTimeLeft(project.deadline)}</div>
           </ProgressInfo>
-          <ProgressBar progress={project.progress} />
+          <ProgressBar progress={progress} />
         </Card>
 
         <Card>

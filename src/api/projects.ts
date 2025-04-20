@@ -14,9 +14,10 @@ export const projectsApi = {
 
     return {
       items: response.data.map(item => ({
-        id: item.Id,
-        name: item.Name,
-        userId: item.UserId
+        id: item.id,
+        name: item.name,
+        description: item.description,
+        deadline: item.deadline
       })),
       total: response.data.length,
       page: params.page,
@@ -27,9 +28,10 @@ export const projectsApi = {
   async getProject(id: number): Promise<Project> {
     const response = await api.get<ProjectResponse>(`${PROJECTS_URL}/${id}`)
     return {
-      id: response.data.Id,
-      name: response.data.Name,
-      userId: response.data.UserId
+      id: response.data.id,
+      name: response.data.name,
+      description: response.data.description,
+      deadline: response.data.deadline
     }
   },
 
@@ -38,9 +40,10 @@ export const projectsApi = {
       username: data.name
     })
     return {
-      id: response.data.Id,
-      name: response.data.Name,
-      userId: response.data.UserId
+      id: response.data.id,
+      name: response.data.name,
+      description: response.data.description,
+      deadline: response.data.deadline
     }
   },
 
@@ -49,9 +52,10 @@ export const projectsApi = {
       name: data.name
     })
     return {
-      id: response.data.Id,
-      name: response.data.Name,
-      userId: response.data.UserId
+      id: response.data.id,
+      name: response.data.name,
+      description: response.data.description,
+      deadline: response.data.deadline
     }
   },
 

@@ -69,33 +69,39 @@ interface ProjectCardProps {
   onClick: () => void
 }
 
-// Временные данные для демонстрации
-const getTempProjectData = () => ({
-  id: '1',
-  name: 'Название проекта',
-  description: 'Описание проекта',
-  status: 'active',
-  createdAt: '2024-01-01',
-  updatedAt: '2024-01-01',
-  tasks: [],
-  progress: Math.floor(Math.random() * 100),
-  timeLeft: `${Math.floor(Math.random() * 30) + 1} дней`
-})
+const getTimeLeft = (deadline: string | null): string => {
+  if (!deadline) return 'Дедлайн не установлен'
+  
+  const deadlineDate = new Date(deadline)
+  const now = new Date()
+  
+  if (deadlineDate < now) return 'Срок истек'
+  
+  const diffTime = deadlineDate.getTime() - now.getTime()
+  const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24))
+  
+  if (diffDays === 0) return 'Осталось менее дня'
+  if (diffDays === 1) return 'Остался 1 день'
+  if (diffDays < 7) return `Осталось ${diffDays} дня`
+  if (diffDays < 30) return `Осталось ${Math.ceil(diffDays / 7)} недели`
+  
+  return `Осталось ${Math.ceil(diffDays / 30)} месяца`
+}
 
 export const ProjectCard = ({ project, onClick }: ProjectCardProps) => {
-  // Добавляем временные данные к проекту
-  const tempData = getTempProjectData()
+  const timeLeft = getTimeLeft(project.deadline)
+  const progress = 50 // Статичный прогресс
 
   return (
     <Card onClick={onClick}>
       <ProjectName>{project.name}</ProjectName>
-      <Description>{tempData.description}</Description>
+      <Description>{project.description}</Description>
       <ProgressContainer>
         <ProgressInfo>
-          <span>Прогресс {tempData.progress}%</span>
-          <span>Осталось: {tempData.timeLeft}</span>
+          <span>Прогресс {progress}%</span>
+          <span>{timeLeft}</span>
         </ProgressInfo>
-        <ProgressBar progress={tempData.progress} />
+        <ProgressBar progress={progress} />
       </ProgressContainer>
     </Card>
   )

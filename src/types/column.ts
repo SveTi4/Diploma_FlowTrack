@@ -5,22 +5,22 @@ export interface Column {
 }
 
 export interface Task {
-  Id: number
-  ColumnId: number
-  Name: string
-  Description: string
-  Status: boolean
-  Deadline: string
-  CreatedAt: string
-  UpdatedAt: string
+  id: number
+  column_id: number
+  name: string
+  description: string
+  status: boolean
+  deadline: string
+  created_at: string
+  updated_at: string
 }
 
 export interface Subtask {
   id: number
   title: string
   completed: boolean
-  createdAt: string
-  updatedAt: string
+  created_at: string
+  updated_at: string
 }
 
 export interface TasksResponse {
