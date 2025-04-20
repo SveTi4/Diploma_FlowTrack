@@ -1,5 +1,5 @@
-import { createSlice, createAsyncThunk, PayloadAction } from '@reduxjs/toolkit'
-import { Project, ProjectsParams } from '../../types/project'
+import { createSlice, createAsyncThunk } from '@reduxjs/toolkit'
+import { Project, ProjectsResponse } from '../../types/project'
 import { projectsApi } from '../../api/projects'
 
 interface ProjectsState {
@@ -9,13 +9,6 @@ interface ProjectsState {
   limit: number
   loading: boolean
   error: string | null
-}
-
-interface ProjectsResponse {
-  items: Project[]
-  total: number
-  page: number
-  limit: number
 }
 
 const initialState: ProjectsState = {
@@ -29,25 +22,30 @@ const initialState: ProjectsState = {
 
 export const fetchProjects = createAsyncThunk(
   'projects/fetchProjects',
-  async (params: ProjectsParams = {}): Promise<ProjectsResponse> => {
-    const response = await projectsApi.getProjects(params)
-    return {
-      items: response.items,
-      total: response.total || response.items.length,
-      page: params.page || 1,
-      limit: params.limit || 10
-    }
+  async (params?: { page?: number; limit?: number }): Promise<ProjectsResponse> => {
+    return await projectsApi.getProjects(params)
+  }
+)
+
+export const createProject = createAsyncThunk(
+  'projects/createProject',
+  async (data: { name: string; description?: string }): Promise<Project> => {
+    return await projectsApi.createProject(data)
+  }
+)
+
+export const deleteProject = createAsyncThunk(
+  'projects/deleteProject',
+  async (projectId: number) => {
+    await projectsApi.deleteProject(projectId)
+    return projectId
   }
 )
 
 const projectsSlice = createSlice({
   name: 'projects',
   initialState,
-  reducers: {
-    setError(state, action: PayloadAction<string | null>) {
-      state.error = action.payload
-    }
-  },
+  reducers: {},
   extraReducers: (builder) => {
     builder
       .addCase(fetchProjects.pending, (state) => {
@@ -65,8 +63,13 @@ const projectsSlice = createSlice({
         state.loading = false
         state.error = action.error.message || 'Произошла ошибка при загрузке проектов'
       })
+      .addCase(createProject.fulfilled, (state, action) => {
+        state.items.push(action.payload)
+      })
+      .addCase(deleteProject.fulfilled, (state, action) => {
+        state.items = state.items.filter(project => project.Id !== action.payload)
+      })
   }
 })
 
-export const { setError } = projectsSlice.actions
 export default projectsSlice.reducer 

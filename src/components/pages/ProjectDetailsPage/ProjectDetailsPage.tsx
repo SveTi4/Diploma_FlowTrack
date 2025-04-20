@@ -1,10 +1,11 @@
 import { useEffect, useState } from 'react'
 import styled from 'styled-components'
-import { useParams } from 'react-router-dom'
+import { useParams, useNavigate } from 'react-router-dom'
 import { PageHeader } from '../../molecules/PageHeader/PageHeader'
 import { TaskColumn } from '../../molecules/TaskColumn/TaskColumn'
 import { useAppDispatch, useAppSelector } from '../../../hooks/useStore'
 import { fetchColumns, createColumn } from '../../../store/columns/columnsSlice'
+import { deleteProject } from '../../../store/projects/projectsSlice'
 
 const Container = styled.div`
   min-height: 100vh;
@@ -287,6 +288,29 @@ const EmptyStateButton = styled.button`
   }
 `
 
+const DeleteButton = styled.button`
+  background: none;
+  border: none;
+  padding: 8px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  opacity: 0.6;
+  transition: all 0.2s ease;
+
+  &:hover {
+    opacity: 1;
+    color: ${({ theme }) => theme.colors.danger};
+  }
+
+  svg {
+    width: 20px;
+    height: 20px;
+    stroke: currentColor;
+  }
+`
+
 // Временные данные для примера
 const mockProjectDetails = {
   1: {
@@ -338,6 +362,7 @@ interface Task {
 
 export const ProjectDetailsPage = () => {
   const { id } = useParams<{ id: string }>()
+  const navigate = useNavigate()
   const dispatch = useAppDispatch()
   const { items: columns, loading, error } = useAppSelector((state) => state.columns)
   const [isInfoPanelOpen, setIsInfoPanelOpen] = useState(false)
@@ -356,6 +381,18 @@ export const ProjectDetailsPage = () => {
       const columnName = prompt('Введите название колонки:')
       if (columnName) {
         dispatch(createColumn({ name: columnName, projectId: parseInt(id, 10) }))
+      }
+    }
+  }
+
+  const handleDeleteProject = async () => {
+    if (window.confirm('Вы уверены, что хотите удалить этот проект?')) {
+      try {
+        await dispatch(deleteProject(parseInt(id!, 10))).unwrap()
+        navigate('/projects') // Перенаправляем на список проектов после удаления
+      } catch (error) {
+        console.error('Ошибка при удалении проекта:', error)
+        alert('Не удалось удалить проект')
       }
     }
   }
@@ -415,6 +452,11 @@ export const ProjectDetailsPage = () => {
           <path d="M13 16H12V12H11M12 8H12.01M21 12C21 16.9706 16.9706 21 12 21C7.02944 21 3 16.9706 3 12C3 7.02944 7.02944 3 12 3C16.9706 3 21 7.02944 21 12Z" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
         </svg>
       </InfoButton>
+      <DeleteButton onClick={handleDeleteProject}>
+        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <path d="M19 7L18.1327 19.1425C18.0579 20.1891 17.187 21 16.1378 21H7.86224C6.81296 21 5.94208 20.1891 5.86732 19.1425L5 7M10 11V17M14 11V17M3 7H21M17 7V4C17 3.44772 16.5523 3 16 3H8C7.44772 3 7 3.44772 7 4V7" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+        </svg>
+      </DeleteButton>
     </>
   )
 
