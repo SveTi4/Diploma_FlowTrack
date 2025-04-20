@@ -64,16 +64,6 @@ const ProgressBar = styled.div<{ progress: number }>`
   }
 `
 
-const StatusBadge = styled.span`
-  display: inline-block;
-  padding: 4px 8px;
-  border-radius: 4px;
-  font-size: 12px;
-  background: rgba(255, 255, 255, 0.1);
-  color: ${({ theme }) => theme.colors.light};
-  margin-bottom: 16px;
-`
-
 interface ProjectCardProps {
   project: Project
   onClick: () => void
@@ -98,7 +88,6 @@ export const ProjectCard = ({ project, onClick }: ProjectCardProps) => {
 
   return (
     <Card onClick={onClick}>
-      <StatusBadge>{tempData.status}</StatusBadge>
       <ProjectName>{project.name}</ProjectName>
       <Description>{tempData.description}</Description>
       <ProgressContainer>
