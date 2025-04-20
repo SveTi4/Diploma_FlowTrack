@@ -1,8 +1,8 @@
-import { useState, useEffect } from 'react'
+import { useEffect } from 'react'
 import styled from 'styled-components'
-import { Column, Task } from '../../../types/column'
+import { Column } from '../../../types/column'
 import { useAppDispatch, useAppSelector } from '../../../hooks/useStore'
-import { fetchColumnTasks } from '../../../store/tasks/tasksSlice'
+import { fetchColumnTasks, deleteTask } from '../../../store/tasks/tasksSlice'
 
 const ColumnContainer = styled.div`
   background: #27282A;
@@ -45,6 +45,7 @@ const TaskCard = styled.div<{ completed?: boolean }>`
   padding: 12px;
   cursor: pointer;
   opacity: ${({ completed }) => completed ? 0.6 : 1};
+  position: relative;
 
   &:hover {
     background: rgba(255, 255, 255, 0.1);
@@ -87,6 +88,32 @@ const ErrorText = styled.div`
   font-size: 12px;
 `
 
+const DeleteButton = styled.button`
+  position: absolute;
+  top: 8px;
+  right: 8px;
+  background: none;
+  border: none;
+  padding: 4px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  opacity: 0.6;
+  transition: all 0.2s ease;
+
+  &:hover {
+    opacity: 1;
+    color: ${({ theme }) => theme.colors.danger};
+  }
+
+  svg {
+    width: 16px;
+    height: 16px;
+    stroke: currentColor;
+  }
+`
+
 interface TaskColumnProps {
   column: Column
 }
@@ -100,6 +127,12 @@ export const TaskColumn = ({ column }: TaskColumnProps) => {
   useEffect(() => {
     dispatch(fetchColumnTasks({ columnId: column.id }))
   }, [dispatch, column.id])
+
+  const handleDeleteTask = (taskId: number) => {
+    if (window.confirm('Вы уверены, что хотите удалить эту задачу?')) {
+      dispatch(deleteTask({ taskId, columnId: column.id }))
+    }
+  }
 
   const formatDate = (dateString: string) => {
     return new Date(dateString).toLocaleDateString('ru-RU', {
@@ -123,6 +156,11 @@ export const TaskColumn = ({ column }: TaskColumnProps) => {
         ) : (
           tasks.map((task) => (
             <TaskCard key={task.id} completed={task.status}>
+              <DeleteButton onClick={() => handleDeleteTask(task.id)}>
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                  <path d="M19 7L18.1327 19.1425C18.0579 20.1891 17.187 21 16.1378 21H7.86224C6.81296 21 5.94208 20.1891 5.86732 19.1425L5 7M10 11V17M14 11V17M3 7H21M17 7V4C17 3.44772 16.5523 3 16 3H8C7.44772 3 7 3.44772 7 4V7" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+                </svg>
+              </DeleteButton>
               <TaskTitle>{task.name}</TaskTitle>
               {task.description && (
                 <TaskDescription>{task.description}</TaskDescription>

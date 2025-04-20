@@ -22,6 +22,14 @@ export const fetchColumnTasks = createAsyncThunk(
   }
 )
 
+export const deleteTask = createAsyncThunk(
+  'tasks/deleteTask',
+  async ({ taskId, columnId }: { taskId: number; columnId: number }) => {
+    await tasksApi.deleteTask(taskId)
+    return { taskId, columnId }
+  }
+)
+
 const tasksSlice = createSlice({
   name: 'tasks',
   initialState,
@@ -42,6 +50,10 @@ const tasksSlice = createSlice({
         const columnId = action.meta.arg.columnId
         state.loading[columnId] = false
         state.error[columnId] = action.error.message || 'Произошла ошибка при загрузке задач'
+      })
+      .addCase(deleteTask.fulfilled, (state, action) => {
+        const { taskId, columnId } = action.payload
+        state.items[columnId] = state.items[columnId].filter(task => task.id !== taskId)
       })
   }
 })

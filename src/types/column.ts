@@ -23,11 +23,27 @@ export interface Subtask {
   updated_at: string
 }
 
+export interface CreateTaskDto {
+  column_id: number
+  name: string
+  description: string
+  status: boolean
+  deadline: string
+}
+
+export interface UpdateTaskDto {
+  column_id?: number
+  name?: string
+  description?: string
+  status?: boolean
+  deadline?: string
+}
+
 export interface TasksResponse {
   items: Task[]
-  total?: number
-  page?: number
-  limit?: number
+  total: number
+  page: number
+  limit: number
 }
 
 export interface ColumnsResponse {
