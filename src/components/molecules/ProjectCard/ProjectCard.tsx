@@ -80,21 +80,26 @@ interface ProjectCardProps {
 }
 
 // Временные данные для демонстрации
-const getTempProjectData = (project: Project) => ({
-  description: 'Описание проекта будет добавлено позже...',
+const getTempProjectData = () => ({
+  id: '1',
+  name: 'Название проекта',
+  description: 'Описание проекта',
+  status: 'active',
+  createdAt: '2024-01-01',
+  updatedAt: '2024-01-01',
+  tasks: [],
   progress: Math.floor(Math.random() * 100),
-  status: 'В работе',
   timeLeft: `${Math.floor(Math.random() * 30) + 1} дней`
 })
 
 export const ProjectCard = ({ project, onClick }: ProjectCardProps) => {
   // Добавляем временные данные к проекту
-  const tempData = getTempProjectData(project)
+  const tempData = getTempProjectData()
 
   return (
     <Card onClick={onClick}>
       <StatusBadge>{tempData.status}</StatusBadge>
-      <ProjectName>{project.Name}</ProjectName>
+      <ProjectName>{project.name}</ProjectName>
       <Description>{tempData.description}</Description>
       <ProgressContainer>
         <ProgressInfo>

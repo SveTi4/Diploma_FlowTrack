@@ -91,9 +91,9 @@ export const ProjectsPage = () => {
         <ProjectsGrid>
           {items.map((project) => (
             <ProjectCard
-              key={project.Id}
+              key={project.id}
               project={project}
-              onClick={() => navigate(`/projects/${project.Id}`)}
+              onClick={() => navigate(`/projects/${project.id}`)}
             />
           ))}
         </ProjectsGrid>

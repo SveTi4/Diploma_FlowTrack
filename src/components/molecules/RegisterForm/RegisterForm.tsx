@@ -3,6 +3,7 @@ import styled from 'styled-components'
 import { Input } from '../../atoms/Input/Input'
 import { Button } from '../../atoms/Button/Button'
 import { useAuth } from '../../../hooks/useAuth'
+import { useNavigate } from 'react-router-dom'
 
 const Form = styled.form`
   display: flex;
@@ -10,22 +11,36 @@ const Form = styled.form`
   gap: ${({ theme }) => theme.spacing.md};
   width: 100%;
   max-width: 400px;
+  padding: 32px;
+  background: #121316;
+  border-radius: 12px;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+`
+
+const ErrorMessage = styled.div`
+  color: #FF3B30;
+  font-size: 14px;
+  margin-bottom: ${({ theme }) => theme.spacing.md};
 `
 
 export const RegisterForm = () => {
   const [username, setUsername] = useState('')
   const [password, setPassword] = useState('')
-  const [rePassword, setRePassword] = useState('')
+  const [confirmPassword, setConfirmPassword] = useState('')
   const { register, loading, error } = useAuth()
+  const navigate = useNavigate()
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
-    await register({ username, password, re_password: rePassword })
+    if (password !== confirmPassword) {
+      return
+    }
+    await register({ username, password, re_password: confirmPassword })
   }
 
   return (
     <Form onSubmit={handleSubmit}>
-      {error && <div style={{ color: 'red' }}>{error}</div>}
+      {error && <ErrorMessage>{error}</ErrorMessage>}
       <Input
         value={username}
         onChange={(e) => setUsername(e.target.value)}
@@ -39,15 +54,19 @@ export const RegisterForm = () => {
       />
       <Input
         type="password"
-        value={rePassword}
-        onChange={(e) => setRePassword(e.target.value)}
-        placeholder="Повторите пароль"
+        value={confirmPassword}
+        onChange={(e) => setConfirmPassword(e.target.value)}
+        placeholder="Подтвердите пароль"
       />
       <Button disabled={loading}>
         {loading ? 'Загрузка...' : 'Зарегистрироваться'}
       </Button>
-      <Button variant="secondary" type="button" onClick={() => window.history.back()}>
-        Назад
+      <Button 
+        variant="secondary" 
+        type="button" 
+        onClick={() => navigate('/')}
+      >
+        Войти
       </Button>
     </Form>
   )

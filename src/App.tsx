@@ -36,6 +36,7 @@ function App() {
                 <ProjectDetailsPage />
               </MainTemplate>
             } />
+            // Projects/new: Страница создания нового проекта (нужно дописать!)
             <Route path="/stats" element={
               <MainTemplate>
                 <StatsPage />

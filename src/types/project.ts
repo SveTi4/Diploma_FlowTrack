@@ -1,4 +1,10 @@
 export interface Project {
+  id: number
+  name: string
+  userId: number
+}
+
+export interface ProjectResponse {
   Id: number
   Name: string
   UserId: number
@@ -6,9 +12,9 @@ export interface Project {
 
 export interface ProjectsResponse {
   items: Project[]
-  total: number
-  page: number
-  limit: number
+  total?: number
+  page?: number
+  limit?: number
 }
 
 export interface ProjectsParams {

@@ -11,6 +11,13 @@ interface ProjectsState {
   error: string | null
 }
 
+interface ProjectsResponse {
+  items: Project[]
+  total: number
+  page: number
+  limit: number
+}
+
 const initialState: ProjectsState = {
   items: [],
   total: 0,
@@ -22,12 +29,11 @@ const initialState: ProjectsState = {
 
 export const fetchProjects = createAsyncThunk(
   'projects/fetchProjects',
-  async (params: ProjectsParams = {}) => {
+  async (params: ProjectsParams = {}): Promise<ProjectsResponse> => {
     const response = await projectsApi.getProjects(params)
-    // API возвращает массив проектов напрямую, без обертки
     return {
-      items: response,
-      total: response.length,
+      items: response.items,
+      total: response.total || response.items.length,
       page: params.page || 1,
       limit: params.limit || 10
     }

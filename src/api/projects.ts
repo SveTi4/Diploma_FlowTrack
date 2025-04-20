@@ -1,27 +1,58 @@
 import { api } from './axios'
-import { Project, ProjectsResponse, ProjectsParams } from '../types/project'
+import { Project, ProjectsResponse, ProjectsParams, ProjectResponse } from '../types/project'
 
 const PROJECTS_URL = '/projects'
 
 export const projectsApi = {
   async getProjects(params: ProjectsParams = { page: 1, limit: 10 }): Promise<ProjectsResponse> {
-    const response = await api.get<ProjectsResponse>(PROJECTS_URL, { params })
-    return response.data
+    const response = await api.get<ProjectResponse[]>(PROJECTS_URL, { params })
+    
+    // Проверяем, что получен массив
+    if (!Array.isArray(response.data)) {
+      throw new Error('Неверный формат данных: ожидается массив проектов')
+    }
+
+    return {
+      items: response.data.map(item => ({
+        id: item.Id,
+        name: item.Name,
+        userId: item.UserId
+      })),
+      total: response.data.length,
+      page: params.page,
+      limit: params.limit
+    }
   },
 
   async getProject(id: number): Promise<Project> {
-    const response = await api.get<Project>(`${PROJECTS_URL}/${id}`)
-    return response.data
+    const response = await api.get<ProjectResponse>(`${PROJECTS_URL}/${id}`)
+    return {
+      id: response.data.Id,
+      name: response.data.Name,
+      userId: response.data.UserId
+    }
   },
 
   async createProject(data: Omit<Project, 'id' | 'userId'>): Promise<Project> {
-    const response = await api.post<Project>(PROJECTS_URL, data)
-    return response.data
+    const response = await api.post<ProjectResponse>(PROJECTS_URL, {
+      username: data.name
+    })
+    return {
+      id: response.data.Id,
+      name: response.data.Name,
+      userId: response.data.UserId
+    }
   },
 
   async updateProject(id: number, data: Partial<Omit<Project, 'id' | 'userId'>>): Promise<Project> {
-    const response = await api.patch<Project>(`${PROJECTS_URL}/${id}`, data)
-    return response.data
+    const response = await api.patch<ProjectResponse>(`${PROJECTS_URL}/${id}`, {
+      name: data.name
+    })
+    return {
+      id: response.data.Id,
+      name: response.data.Name,
+      userId: response.data.UserId
+    }
   },
 
   async deleteProject(id: number): Promise<void> {

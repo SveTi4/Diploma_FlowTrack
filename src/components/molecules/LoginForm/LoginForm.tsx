@@ -11,6 +11,16 @@ const Form = styled.form`
   gap: ${({ theme }) => theme.spacing.md};
   width: 100%;
   max-width: 400px;
+  padding: 32px;
+  background: #121316;
+  border-radius: 12px;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+`
+
+const ErrorMessage = styled.div`
+  color: #FF3B30;
+  font-size: 14px;
+  margin-bottom: ${({ theme }) => theme.spacing.md};
 `
 
 export const LoginForm = () => {
@@ -26,7 +36,7 @@ export const LoginForm = () => {
 
   return (
     <Form onSubmit={handleSubmit}>
-      {error && <div style={{ color: 'red' }}>{error}</div>}
+      {error && <ErrorMessage>{error}</ErrorMessage>}
       <Input
         value={username}
         onChange={(e) => setUsername(e.target.value)}

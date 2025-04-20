@@ -2,15 +2,17 @@ import styled from 'styled-components'
 import { Sidebar } from '../../organisms/Sidebar/Sidebar'
 
 const Container = styled.div`
-  display: flex;
-  min-height: 100vh;
-  background: #000000;
-  color: white;
+    display: flex;
+    min-height: 100vh;
+    background: #000000;
+    color: white;
 `
 
 const Content = styled.main`
-  flex: 1;
-  background: #191A1D;
+    flex: 1;
+    background: #191A1D;
+    height: 100vh;
+    overflow-y: scroll;
 `
 
 interface MainTemplateProps {

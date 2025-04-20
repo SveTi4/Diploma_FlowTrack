@@ -8,7 +8,7 @@ const Container = styled.div`
   justify-content: center;
   min-height: 100vh;
   padding: ${({ theme }) => theme.spacing.md};
-  background: ${({ theme }) => theme.colors.light};
+  background: #191A1D;
 `
 
 const Logo = styled.div`
@@ -24,13 +24,12 @@ const Logo = styled.div`
 
 const Title = styled.h1`
   margin-bottom: ${({ theme }) => theme.spacing.md};
-  color: ${({ theme }) => theme.colors.dark};
+  color: #FFFFFF;
 `
 
 const Subtitle = styled.p`
   margin-bottom: ${({ theme }) => theme.spacing.xl};
-  color: ${({ theme }) => theme.colors.dark};
-  opacity: 0.7;
+  color: #A5A5A7;
 `
 
 export const AuthPage = () => {
