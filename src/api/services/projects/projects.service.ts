@@ -17,7 +17,10 @@ export class ProjectsService extends BaseService<Project> {
 
   // Получение списка проектов с фильтрами
   async getProjects(params?: PaginationParams & ProjectFilters): Promise<ApiListResponse<Project>> {
-    return this.getList(params)
+    console.log('Fetching projects with params:', params)
+    const response = await this.getList(params)
+    console.log('Raw API response:', response)
+    return response
   }
 
   // Получение проекта по ID
