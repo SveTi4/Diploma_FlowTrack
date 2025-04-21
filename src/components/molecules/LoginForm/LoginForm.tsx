@@ -40,7 +40,7 @@ export const LoginForm = () => {
       <Input
         value={username}
         onChange={(e) => setUsername(e.target.value)}
-        placeholder="Имя пользователя"
+        placeholder="Логин"
       />
       <Input
         type="password"

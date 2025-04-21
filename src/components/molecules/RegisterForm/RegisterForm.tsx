@@ -36,6 +36,7 @@ export const RegisterForm = () => {
       return
     }
     await register({ username, password, re_password: confirmPassword })
+    navigate('/')
   }
 
   return (
@@ -44,7 +45,7 @@ export const RegisterForm = () => {
       <Input
         value={username}
         onChange={(e) => setUsername(e.target.value)}
-        placeholder="Имя пользователя"
+        placeholder="Логин"
       />
       <Input
         type="password"

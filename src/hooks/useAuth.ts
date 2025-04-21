@@ -2,7 +2,7 @@ import { useNavigate } from 'react-router-dom'
 import { useAppDispatch, useAppSelector } from './useStore'
 import { authApi } from '../api/auth'
 import { setAccessToken, setError, setLoading, logout } from '../store/auth/authSlice'
-import { LoginRequest, RegisterRequest } from '../types/auth'
+import { LoginDto, RegisterDto } from '../api/services/auth/types'
 import { RootState } from '../store'
 
 export const useAuth = () => {
@@ -10,7 +10,7 @@ export const useAuth = () => {
   const navigate = useNavigate()
   const { isAuthenticated, loading, error } = useAppSelector((state: RootState) => state.auth)
 
-  const login = async (data: LoginRequest) => {
+  const login = async (data: LoginDto) => {
     try {
       dispatch(setLoading(true))
       const response = await authApi.login(data)
@@ -23,7 +23,7 @@ export const useAuth = () => {
     }
   }
 
-  const register = async (data: RegisterRequest) => {
+  const register = async (data: RegisterDto) => {
     try {
       dispatch(setLoading(true))
       await authApi.register(data)
