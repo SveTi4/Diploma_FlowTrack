@@ -1,7 +1,7 @@
 import styled from 'styled-components'
 import { useState } from 'react'
 import { NavLink } from 'react-router-dom'
-import { Icon, StyledIcon } from '../../atoms/Icon/Icon'
+import { StatsIcon, ProjectsIcon, GuidesIcon, NotificationsIcon, ArchiveIcon, SupportIcon } from '../../atoms/Icon/icons'
 
 const Avatar = styled.div`
   width: 24px;
@@ -66,7 +66,7 @@ const ProfileSection = styled(NavItem)`
     min-width: 24px;
   }
 
-  span:not(${StyledIcon}) {
+  span {
     opacity: ${({ isCollapsed }) => isCollapsed ? 0 : 1};
   }
 `
@@ -114,34 +114,34 @@ export const Sidebar = () => {
       </ProfileSection>
       <NavList>
         <NavItem to="/stats" isCollapsed={isCollapsed}>
-          <Icon name="stats" size={20} />
+          <StatsIcon size={20} />
           <span>Статистика</span>
         </NavItem>
         
         <NavItem to="/projects" isCollapsed={isCollapsed}>
-          <Icon name="projects" size={20} />
+          <ProjectsIcon size={20} />
           <span>Мои проекты</span>
         </NavItem>
         
         <NavItem to="/guides" isCollapsed={isCollapsed}>
-          <Icon name="guides" size={20} />
+          <GuidesIcon size={20} />
           <span>Гайды</span>
         </NavItem>
         
         <NavItem to="/notifications" isCollapsed={isCollapsed}>
-          <Icon name="notifications" size={20} />
+          <NotificationsIcon size={20} />
           <span>Уведомления</span>
         </NavItem>
       </NavList>
 
       <BottomSection>
         <BottomNavItem to="/archive" isCollapsed={isCollapsed}>
-          <Icon name="archive" size={20} />
+          <ArchiveIcon size={20} />
           <span>Архив</span>
         </BottomNavItem>
         
         <BottomNavItem to="/support" isCollapsed={isCollapsed}>
-          <Icon name="support" size={20} />
+          <SupportIcon size={20} />
           <span>Поддержка</span>
         </BottomNavItem>
       </BottomSection>
