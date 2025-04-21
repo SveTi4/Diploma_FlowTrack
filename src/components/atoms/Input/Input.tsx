@@ -13,7 +13,7 @@ const StyledInput = styled.input`
   padding: ${({ theme }) => theme.spacing.sm};
   border: 1px solid ${({ theme }) => theme.colors.light};
   border-radius: 4px;
-  font-size: ${({ theme }) => theme.typography.body.fontSize};
+  font-size: ${({ theme }) => theme.typography.fontSize.sm};
   
   &:focus {
     outline: none;
