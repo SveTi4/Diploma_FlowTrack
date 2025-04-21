@@ -59,7 +59,7 @@ export const RegisterForm = () => {
         onChange={(e) => setConfirmPassword(e.target.value)}
         placeholder="Подтвердите пароль"
       />
-      <Button disabled={loading}>
+      <Button disabled={loading} type="submit">
         {loading ? 'Загрузка...' : 'Зарегистрироваться'}
       </Button>
       <Button 

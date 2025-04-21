@@ -48,7 +48,7 @@ export const LoginForm = () => {
         onChange={(e) => setPassword(e.target.value)}
         placeholder="Пароль"
       />
-      <Button disabled={loading}>
+      <Button disabled={loading} type="submit">
         {loading ? 'Загрузка...' : 'Войти'}
       </Button>
       <Button 
