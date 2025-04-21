@@ -74,17 +74,13 @@ const CreateButton = styled.button`
 interface PageHeaderProps {
   title: string
   showBackButton?: boolean
-  onSearch?: (value: string) => void
-  onCreateClick?: () => void
-  rightContent?: ReactNode
+  children?: ReactNode
 }
 
 export const PageHeader = ({ 
   title, 
   showBackButton,
-  onSearch, 
-  onCreateClick,
-  rightContent
+  children
 }: PageHeaderProps) => {
   const navigate = useNavigate()
 
@@ -101,20 +97,7 @@ export const PageHeader = ({
         <Title>{title}</Title>
       </TitleSection>
       
-      <Actions>
-        {onSearch && (
-          <SearchInput 
-            placeholder="Поиск проекта..." 
-            onChange={(e) => onSearch(e.target.value)}
-          />
-        )}
-        {onCreateClick && (
-          <CreateButton onClick={onCreateClick}>
-            + Новый проект
-          </CreateButton>
-        )}
-        {rightContent}
-      </Actions>
+      {children && <Actions>{children}</Actions>}
     </Container>
   )
 } 
