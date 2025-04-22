@@ -19,7 +19,7 @@ export class AuthService extends BaseService<User> {
   // Авторизация
   async login(data: LoginDto): Promise<ApiResponse<AuthResponse>> {
     const response = await api.post(`${this.endpoint}/login`, data)
-    return response.data
+    return response
   }
 
   // Регистрация
@@ -37,7 +37,7 @@ export class AuthService extends BaseService<User> {
   // Обновление токена
   async refreshToken(): Promise<ApiResponse<{ accessToken: string }>> {
     const response = await api.get(`${this.endpoint}/refresh`)
-    return response.data
+    return response
   }
 
   // Получение текущего пользователя

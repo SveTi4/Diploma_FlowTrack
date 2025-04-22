@@ -20,10 +20,10 @@ export interface Task {
 export interface CreateTaskDto {
   title: string;
   description?: string;
-  projectId: string;
-  columnId: string;
+  project_id: string;
+  column_id: string;
   priority?: TaskPriority;
-  assigneeId?: string;
+  assignee_id?: string;
   deadline?: string;
   tags?: string[];
 }

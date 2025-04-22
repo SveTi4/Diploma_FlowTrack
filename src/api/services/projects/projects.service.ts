@@ -7,7 +7,8 @@ import {
   UpdateProjectDto,
   ProjectFilters,
   ProjectStats,
-  ProjectPriority
+  ProjectPriority,
+  // ProjectResponse
 } from './types'
 
 export class ProjectsService extends BaseService<Project> {
@@ -24,8 +25,9 @@ export class ProjectsService extends BaseService<Project> {
   }
 
   // Получение проекта по ID
-  async getProject(id: string): Promise<ApiResponse<Project>> {
-    return this.getById(id)
+  async getProject(id: number): Promise<ApiResponse<Project>> {
+    const response = await this.getById(id.toString())
+    return response
   }
 
   // Создание проекта
@@ -39,8 +41,8 @@ export class ProjectsService extends BaseService<Project> {
   }
 
   // Удаление проекта
-  async deleteProject(id: string): Promise<ApiResponse<void>> {
-    return this.delete(id)
+  async deleteProject(id: number): Promise<void> {
+    await this.delete(id.toString())
   }
 
   // Получение статистики
@@ -75,14 +77,14 @@ export class ProjectsService extends BaseService<Project> {
   }
 
   // Добавление тегов
-  async addTags(id: string, tags: string[]): Promise<ApiResponse<Project>> {
+  async addTags(id: number, tags: string[]): Promise<ApiResponse<Project>> {
     const project = await this.getProject(id)
     const updatedTags = [...new Set([...(project.data.tags || []), ...tags])]
     return this.patch(id, { tags: updatedTags })
   }
 
   // Удаление тегов
-  async removeTags(id: string, tags: string[]): Promise<ApiResponse<Project>> {
+  async removeTags(id: number, tags: string[]): Promise<ApiResponse<Project>> {
     const project = await this.getProject(id)
     const updatedTags = (project.data.tags || []).filter((tag: string) => !tags.includes(tag))
     return this.patch(id, { tags: updatedTags })

@@ -1,37 +1,37 @@
+// import { ApiResponse } from '../../types/response.types'
+
 export type ProjectStatus = 'active' | 'archived' | 'completed' | 'draft';
 export type ProjectPriority = 'low' | 'medium' | 'high';
 
 export interface Project {
-  id: string;
-  title: string;
-  description?: string;
-  status: ProjectStatus;
-  priority: ProjectPriority;
-  createdAt: string;
-  updatedAt: string;
-  deadline?: string;
-  teamSize?: number;
-  progress: number;
-  ownerId: string;
+  id: number;
+  name: string;
+  description: string;
+  deadline: string | null;
+  progress?: number;
+  status?: ProjectStatus;
+  priority?: ProjectPriority;
+  created_at?: string;
+  updated_at?: string;
   tags?: string[];
-  archived: boolean;
+  archived?: boolean;
 }
 
 export interface CreateProjectDto {
-  title: string;
-  description?: string;
+  name: string;
+  description: string;
+  deadline?: string | null;
   priority?: ProjectPriority;
-  deadline?: string;
   teamSize?: number;
   tags?: string[];
 }
 
 export interface UpdateProjectDto {
-  title?: string;
+  name?: string;
   description?: string;
   status?: ProjectStatus;
   priority?: ProjectPriority;
-  deadline?: string;
+  deadline?: string | null;
   teamSize?: number;
   progress?: number;
   tags?: string[];

@@ -27,7 +27,7 @@ export abstract class BaseService<T> {
   // Получение одного элемента по ID
   protected async getById(id: string | number): Promise<ApiResponse<T>> {
     const response = await api.get(`${this.endpoint}/${id}`, this.config)
-    return response.data
+    return response
   }
 
   // Создание нового элемента
