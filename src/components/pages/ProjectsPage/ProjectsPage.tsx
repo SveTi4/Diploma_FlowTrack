@@ -1,14 +1,16 @@
 import styled from 'styled-components'
 import { useState, useEffect, useMemo } from 'react'
+import { useDispatch, useSelector } from 'react-redux'
+import { AppDispatch, RootState } from '../../../store'
 import { PageHeader } from '../../molecules/PageHeader/PageHeader'
 import { ProjectCard } from './components/ProjectCard'
 import { CreateProjectModal } from './components/CreateProjectModal'
 import { PlusIcon, RefreshIcon } from '../../atoms/Icon/icons'
 import { Button } from '../../atoms/Button/Button'
 import { EmptyState } from '../../atoms/EmptyState/EmptyState'
-import { projectsApi } from '../../../api/projects'
 import { Loader } from '../../atoms/Loader/Loader'
 import { SearchInput } from '../../atoms/SearchInput/SearchInput'
+import { fetchProjects, createProject } from '../../../store/projects/projectsSlice'
 
 const Container = styled.div`
   padding: 0;
@@ -41,57 +43,26 @@ const HeaderContent = styled.div`
   align-items: center;
 `
 
-interface Project {
-  id: number
-  name: string
-  description: string
-  deadline: string | null
-}
-
 export const ProjectsPage = () => {
+  const dispatch = useDispatch<AppDispatch>()
   const [isCreateModalOpen, setIsCreateModalOpen] = useState(false)
-  const [projects, setProjects] = useState<Project[]>([])
-  const [isLoading, setIsLoading] = useState(true)
-  const [isRefreshing, setIsRefreshing] = useState(false)
-  const [error, setError] = useState<string | null>(null)
   const [searchQuery, setSearchQuery] = useState('')
+  const [isRefreshing, setIsRefreshing] = useState(false)
 
-  const fetchProjects = async (showLoader = true) => {
-    try {
-      if (showLoader) {
-        setIsLoading(true)
-      } else {
-        setIsRefreshing(true)
-      }
-      
-      const response = await projectsApi.getProjects({ page: 1, limit: 10 })
-      console.log('Projects response:', response)
-      const projectsList = Array.isArray(response) ? response : (Array.isArray(response.data) ? response.data : [])
-      console.log('Parsed projects:', projectsList)
-      setProjects(projectsList)
-    } catch (err) {
-      console.error('Error fetching projects:', err)
-      setError(err instanceof Error ? err.message : 'Произошла ошибка')
-    } finally {
-      setIsLoading(false)
-      setIsRefreshing(false)
-    }
-  }
+  const { items: projects, loading, error } = useSelector((state: RootState) => state.projects)
 
-  const handleRefresh = () => {
-    fetchProjects(false)
+  const handleRefresh = async () => {
+    setIsRefreshing(true)
+    await dispatch(fetchProjects())
+    setIsRefreshing(false)
   }
 
   const handleCreateProject = async (project: { name: string; description: string; deadline: string | null }) => {
     try {
-      const response = await projectsApi.createProject(project)
-      console.log('Create project response:', response)
-      const newProject = response.data || response
-      setProjects(prevProjects => [...prevProjects, newProject])
+      await dispatch(createProject(project)).unwrap()
       setIsCreateModalOpen(false)
     } catch (err) {
       console.error('Error creating project:', err)
-      setError(err instanceof Error ? err.message : 'Произошла ошибка при создании проекта')
     }
   }
 
@@ -106,10 +77,10 @@ export const ProjectsPage = () => {
   }, [projects, searchQuery])
 
   useEffect(() => {
-    fetchProjects()
-  }, [])
+    dispatch(fetchProjects())
+  }, [dispatch])
 
-  if (isLoading) {
+  if (loading && !isRefreshing) {
     return (
       <Container>
         <PageHeader title="Мои проекты" />
