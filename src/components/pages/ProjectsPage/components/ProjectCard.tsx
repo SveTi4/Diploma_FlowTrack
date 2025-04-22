@@ -7,9 +7,10 @@ const Card = styled.div`
   background: #27282A;
   border: 1px solid #323336;
   border-radius: 12px;
-  padding: 24px;
+  padding: 20px;
   cursor: pointer;
   transition: all 0.2s ease;
+    box-shadow: 0 0 32px 1px rgba(255, 255, 255, 0.06);
 
   &:hover {
     transform: translateY(-2px);

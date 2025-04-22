@@ -1,36 +1,49 @@
 import styled from 'styled-components'
+import { ChangeEvent } from 'react'
 
 interface SearchInputProps {
-  placeholder?: string
   value?: string
   onChange: (value: string) => void
+  placeholder?: string
 }
 
-const StyledInput = styled.input`
+const Input = styled.input`
   background: rgba(255, 255, 255, 0.1);
-  border: none;
-  border-radius: 6px;
-  padding: 8px 12px;
-  color: white;
-  width: 240px;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 8px;
+  padding: 10px 16px;
+  color: #fff;
+  font-size: 14px;
+  width: 280px;
+  transition: all 0.2s ease;
 
-  &::placeholder {
-    color: rgba(255, 255, 255, 0.6);
+  &:hover {
+    background: rgba(255, 255, 255, 0.15);
+    border-color: rgba(255, 255, 255, 0.2);
   }
 
   &:focus {
     outline: none;
-    background: rgba(255, 255, 255, 0.15);
+    background: rgba(255, 255, 255, 0.2);
+    border-color: rgba(255, 255, 255, 0.3);
+  }
+
+  &::placeholder {
+    color: rgba(255, 255, 255, 0.5);
   }
 `
 
-export const SearchInput = ({ placeholder = 'Поиск...', value, onChange }: SearchInputProps) => {
+export const SearchInput = ({ value = '', onChange, placeholder = 'Поиск...' }: SearchInputProps) => {
+  const handleChange = (e: ChangeEvent<HTMLInputElement>) => {
+    onChange(e.target.value)
+  }
+
   return (
-    <StyledInput
+    <Input
       type="text"
-      placeholder={placeholder}
       value={value}
-      onChange={(e) => onChange(e.target.value)}
+      onChange={handleChange}
+      placeholder={placeholder}
     />
   )
 } 

@@ -44,33 +44,6 @@ const Actions = styled.div`
   align-items: center;
 `
 
-const SearchInput = styled.input`
-  background: rgba(255, 255, 255, 0.1);
-  border: none;
-  border-radius: 6px;
-  padding: 8px 12px;
-  color: white;
-  width: 240px;
-
-  &::placeholder {
-    color: rgba(255, 255, 255, 0.6);
-  }
-`
-
-const CreateButton = styled.button`
-  background: #007AFF;
-  color: white;
-  border: none;
-  border-radius: 6px;
-  padding: 8px 16px;
-  cursor: pointer;
-  font-size: 14px;
-
-  &:hover {
-    background: #0066CC;
-  }
-`
-
 interface PageHeaderProps {
   title: string
   showBackButton?: boolean
