@@ -3,10 +3,11 @@ import { useState, useEffect } from 'react'
 import { PageHeader } from '../../molecules/PageHeader/PageHeader'
 import { ProjectCard } from './components/ProjectCard'
 import { CreateProjectModal } from './components/CreateProjectModal'
-import { PlusIcon } from '../../atoms/Icon/icons'
+import { PlusIcon, RefreshIcon } from '../../atoms/Icon/icons'
 import { Button } from '../../atoms/Button/Button'
 import { EmptyState } from '../../atoms/EmptyState/EmptyState'
 import { projectsApi } from '../../../api/projects'
+import { Loader } from '../../atoms/Loader/Loader'
 
 const Container = styled.div`
   padding: 0;
@@ -28,6 +29,11 @@ const ProjectsGrid = styled.div`
   margin-top: 24px;
 `
 
+const ButtonGroup = styled.div`
+  display: flex;
+  gap: 8px;
+`
+
 interface Project {
   id: number
   name: string
@@ -39,10 +45,17 @@ export const ProjectsPage = () => {
   const [isCreateModalOpen, setIsCreateModalOpen] = useState(false)
   const [projects, setProjects] = useState<Project[]>([])
   const [isLoading, setIsLoading] = useState(true)
+  const [isRefreshing, setIsRefreshing] = useState(false)
   const [error, setError] = useState<string | null>(null)
 
-  const fetchProjects = async () => {
+  const fetchProjects = async (showLoader = true) => {
     try {
+      if (showLoader) {
+        setIsLoading(true)
+      } else {
+        setIsRefreshing(true)
+      }
+      
       const response = await projectsApi.getProjects({ page: 1, limit: 10 })
       console.log('Projects response:', response)
       const projectsList = Array.isArray(response) ? response : (Array.isArray(response.data) ? response.data : [])
@@ -53,7 +66,12 @@ export const ProjectsPage = () => {
       setError(err instanceof Error ? err.message : 'Произошла ошибка')
     } finally {
       setIsLoading(false)
+      setIsRefreshing(false)
     }
+  }
+
+  const handleRefresh = () => {
+    fetchProjects(false)
   }
 
   const handleCreateProject = async (project: { name: string; description: string; deadline: string | null }) => {
@@ -74,7 +92,14 @@ export const ProjectsPage = () => {
   }, [])
 
   if (isLoading) {
-    return <div>Загрузка...</div>
+    return (
+      <Container>
+        <PageHeader title="Мои проекты" />
+        <Content>
+          <Loader size="large" />
+        </Content>
+      </Container>
+    )
   }
 
   if (error) {
@@ -84,10 +109,16 @@ export const ProjectsPage = () => {
   return (
     <Container>
       <PageHeader title="Мои проекты">
-        <Button onClick={() => setIsCreateModalOpen(true)}>
-          <PlusIcon size={16} />
-          Создать проект
-        </Button>
+        <ButtonGroup>
+          <Button variant="secondary" onClick={handleRefresh} disabled={isRefreshing}>
+            <RefreshIcon size={16} />
+            {isRefreshing ? 'Обновление...' : 'Обновить'}
+          </Button>
+          <Button onClick={() => setIsCreateModalOpen(true)}>
+            <PlusIcon size={16} />
+            Создать проект
+          </Button>
+        </ButtonGroup>
       </PageHeader>
 
       <Content>

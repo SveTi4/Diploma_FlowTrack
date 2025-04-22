@@ -80,3 +80,26 @@ export const SupportIcon = ({ size, color }: { size?: number; color?: string }) 
     </svg>
   </Icon>
 ) 
+
+export const RefreshIcon = ({ size, color }: { size?: number; color?: string }) => (
+  <Icon size={size} color={color}>
+    <svg
+      viewBox="0 0 24 24"
+      fill="none"
+      xmlns="http://www.w3.org/2000/svg"
+    >
+      <path
+        d="M12 20C16.4183 20 20 16.4183 20 12C20 7.58172 16.4183 4 12 4C7.58172 4 4 7.58172 4 12"
+        stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"
+      />
+      <path
+        d="M4 12L4 16L8 16"
+        stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"
+      />
+      <path
+        d="M16.0002 8.5C15.3432 7.56251 14.4797 6.81391 13.4866 6.31213C12.4935 5.81035 11.4002 5.57076 10.3002 5.615"
+        stroke="currentColor" strokeWidth="2" strokeLinecap="round"
+      />
+    </svg>
+  </Icon>
+)
