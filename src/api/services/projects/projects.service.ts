@@ -1,14 +1,11 @@
 import { BaseService } from '../base/base.service'
 import {ApiResponse, PaginationParams, PaginatedResponse} from '../../types/response.types'
-import { api } from '../../config/axios.config'
+
 import {
   Project,
   CreateProjectDto,
   UpdateProjectDto,
   ProjectFilters,
-  ProjectStats,
-  ProjectPriority,
-  // ProjectResponse
 } from './types'
 
 export class ProjectsService extends BaseService<Project> {
@@ -26,7 +23,9 @@ export class ProjectsService extends BaseService<Project> {
 
   // Получение проекта по ID
   async getProject(id: number): Promise<ApiResponse<Project>> {
+    console.log('Fetching project with id:', id)
     const response = await this.getById(id.toString())
+    console.log('Raw Project API response:', response)
     return response
   }
 
@@ -44,60 +43,4 @@ export class ProjectsService extends BaseService<Project> {
   async deleteProject(id: number): Promise<void> {
     await this.delete(id.toString())
   }
-
-  // Получение статистики
-  async getProjectStats(): Promise<ApiResponse<ProjectStats>> {
-    const response = await api.get(`${this.endpoint}/stats`)
-    return response.data
-  }
-
-  // Архивация проекта
-  async archiveProject(id: string): Promise<ApiResponse<Project>> {
-    return this.patch(id, { archived: true })
-  }
-
-  // Восстановление проекта из архива
-  async unarchiveProject(id: string): Promise<ApiResponse<Project>> {
-    return this.patch(id, { archived: false })
-  }
-
-  // Получение архивированных проектов
-  // async getArchivedProjects(params?: PaginationParams): Promise<ApiResponse<PaginatedResponse<Project>>> {
-  //   const response = await this.getList(params)
-  //   return response
-  // }
-
-  // Обновление прогресса
-  async updateProgress(id: string, progress: number): Promise<ApiResponse<Project>> {
-    return this.patch(id, { progress })
-  }
-
-  // Обновление приоритета
-  async updatePriority(id: string, priority: ProjectPriority): Promise<ApiResponse<Project>> {
-    return this.patch(id, { priority })
-  }
-
-  // Добавление тегов
-  async addTags(id: number, tags: string[]): Promise<ApiResponse<Project>> {
-    const project = await this.getProject(id)
-    const updatedTags = [...new Set([...(project.data.tags || []), ...tags])]
-    return this.patch(id, { tags: updatedTags })
-  }
-
-  // Удаление тегов
-  async removeTags(id: number, tags: string[]): Promise<ApiResponse<Project>> {
-    const project = await this.getProject(id)
-    const updatedTags = (project.data.tags || []).filter((tag: string) => !tags.includes(tag))
-    return this.patch(id, { tags: updatedTags })
-  }
-
-  // Пакетное обновление статусов
-  async bulkUpdateStatus(ids: string[], status: Project['status']): Promise<ApiResponse<Project[]>> {
-    return this.bulkUpdate(ids.map(id => ({ id, status })))
-  }
-
-  // Пакетное обновление приоритетов
-  async bulkUpdatePriority(ids: string[], priority: ProjectPriority): Promise<ApiResponse<Project[]>> {
-    return this.bulkUpdate(ids.map(id => ({ id, priority })))
-  }
-} 
+}

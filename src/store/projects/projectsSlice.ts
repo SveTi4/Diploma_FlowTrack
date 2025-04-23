@@ -1,5 +1,6 @@
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit'
 import {CreateProjectDto, Project , services} from "../../api/services";
+import {ApiResponse} from "../../api/types/response.types.ts";
 // import {ApiResponse} from "../../api/types/response.types.ts";
 
 interface ProjectsState {
@@ -76,7 +77,7 @@ const projectsSlice = createSlice({
         state.total = action.payload.data.total || 0
         state.page = action.payload.data.page || 1
         state.limit = action.payload.data.limit || 10
-        state.totalPAges = action.payload.data.totalPages || 0
+        state.totalPages = action.payload.data.totalPages || 0
       })
       .addCase(fetchProjects.rejected, (state, action) => {
         state.loading = false
