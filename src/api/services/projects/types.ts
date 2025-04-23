@@ -24,13 +24,11 @@ export interface CreateProjectDto {
   priority?: ProjectPriority;
   teamSize?: number;
   tags?: string[];
-  status: boolean;
 }
 
 export interface UpdateProjectDto {
   name?: string;
   description?: string;
-  status?: ProjectStatus;
   priority?: ProjectPriority;
   deadline?: string | null;
   teamSize?: number;
@@ -39,7 +37,6 @@ export interface UpdateProjectDto {
 }
 
 export interface ProjectFilters {
-  status?: ProjectStatus;
   priority?: ProjectPriority;
   search?: string;
   archived?: boolean;
