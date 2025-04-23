@@ -45,19 +45,19 @@ const retryRequest = async (error: AxiosError, retryCount: number = 0): Promise<
 api.interceptors.request.use(
   (config) => {
     const url = config.url as string
-    console.log('Request URL:', url)
-    console.log('Is public route:', API_CONFIG.PUBLIC_ROUTES.some(route => url?.includes(route)))
+    // console.log('Request URL:', url)
+    // console.log('Is public route:', API_CONFIG.PUBLIC_ROUTES.some(route => url?.includes(route)))
     
     if (url && !API_CONFIG.PUBLIC_ROUTES.some(route => url?.includes(route))) {
       const state = store.getState()
-      console.log('Full Redux State:', state)
-      console.log('Auth State:', state.auth)
+      // console.log('Full Redux State:', state)
+      // console.log('Auth State:', state.auth)
       const { accessToken } = state.auth
-      console.log('Access Token:', accessToken)
+      // console.log('Access Token:', accessToken)
       
       if (accessToken) {
         config.headers.Authorization = `Bearer ${accessToken}`
-        console.log('Added Authorization header:', config.headers.Authorization)
+        // console.log('Added Authorization header:', config.headers.Authorization)
       } else {
         console.log('No access token available')
       }

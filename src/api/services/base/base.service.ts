@@ -21,13 +21,32 @@ export abstract class BaseService<T> {
       ...this.config,
       params 
     })
-    return response.data
+    console.log("base Response: ", response)
+
+    // Извлекаем важные заголовки
+    const totalCount = parseInt(response.headers['x-total-count'] || '0')
+    const page = params?.page || 1
+    const limit = params?.limit || 10
+
+    return {
+      data: {
+        items: response.data,
+        total: totalCount,
+        page: page,
+        limit: limit,
+        totalPages: Math.ceil(totalCount / limit)
+      },
+      status: response.status,
+    }
   }
 
   // Получение одного элемента по ID
   protected async getById(id: string | number): Promise<ApiResponse<T>> {
     const response = await api.get(`${this.endpoint}/${id}`, this.config)
-    return response
+    return {
+      data: response.data,
+      status: response.status,
+    }
   }
 
   // Создание нового элемента

@@ -1,6 +1,6 @@
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit'
 import {CreateProjectDto, Project , services} from "../../api/services";
-import {ApiListResponse, ApiResponse} from "../../api/types/response.types.ts";
+// import {ApiResponse} from "../../api/types/response.types.ts";
 
 interface ProjectsState {
   items: Project[]
@@ -8,6 +8,7 @@ interface ProjectsState {
   total: number
   page: number
   limit: number
+  totalPages: number
   loading: boolean
   error: string | null
 }
@@ -18,14 +19,17 @@ const initialState: ProjectsState = {
   total: 0,
   page: 1,
   limit: 10,
+  totalPages: 0,
   loading: false,
   error: null
 }
 
 export const fetchProjects = createAsyncThunk(
   'projects/fetchProjects',
-  async (params?: { page?: number; limit?: number }): Promise<ApiListResponse<Project>> => {
-    return await services.projects.getProjects(params)
+  async (params: { page: number; limit: number }) => {
+    const response = await services.projects.getProjects(params)
+    console.log('API Response:', response)
+    return response
   }
 )
 
@@ -66,11 +70,13 @@ const projectsSlice = createSlice({
         state.error = null
       })
       .addCase(fetchProjects.fulfilled, (state, action) => {
+        console.log('Action payload:', action.payload)
         state.loading = false
-        state.items = action.payload.data.items
-        state.total = action.payload.data.total
-        state.page = action.payload.data.page
-        state.limit = action.payload.data.limit
+        state.items = action.payload.data.items || []
+        state.total = action.payload.data.total || 0
+        state.page = action.payload.data.page || 1
+        state.limit = action.payload.data.limit || 10
+        state.totalPAges = action.payload.data.totalPages || 0
       })
       .addCase(fetchProjects.rejected, (state, action) => {
         state.loading = false

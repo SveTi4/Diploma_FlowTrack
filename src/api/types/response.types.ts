@@ -23,8 +23,8 @@ export interface ApiListResponse<T> extends ApiResponse<PaginatedResponse<T>> {}
 
 // Общие параметры для запросов с пагинацией
 export interface PaginationParams {
-  page?: number;
-  limit?: number;
+  page: number;
+  limit: number;
   sort?: string;
   order?: 'asc' | 'desc';
 }

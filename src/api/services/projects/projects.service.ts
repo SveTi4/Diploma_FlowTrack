@@ -1,5 +1,5 @@
 import { BaseService } from '../base/base.service'
-import { ApiResponse, ApiListResponse, PaginationParams } from '../../types/response.types'
+import {ApiResponse, PaginationParams, PaginatedResponse} from '../../types/response.types'
 import { api } from '../../config/axios.config'
 import {
   Project,
@@ -17,7 +17,7 @@ export class ProjectsService extends BaseService<Project> {
   }
 
   // Получение списка проектов с фильтрами
-  async getProjects(params?: PaginationParams & ProjectFilters): Promise<ApiListResponse<Project>> {
+  async getProjects(params?: PaginationParams & ProjectFilters): Promise<ApiResponse<PaginatedResponse<Project>>> {
     console.log('Fetching projects with params:', params)
     const response = await this.getList(params)
     console.log('Raw API response:', response)
@@ -62,9 +62,10 @@ export class ProjectsService extends BaseService<Project> {
   }
 
   // Получение архивированных проектов
-  async getArchivedProjects(params?: PaginationParams): Promise<ApiListResponse<Project>> {
-    return this.getList({ ...params, archived: true })
-  }
+  // async getArchivedProjects(params?: PaginationParams): Promise<ApiResponse<PaginatedResponse<Project>>> {
+  //   const response = await this.getList(params)
+  //   return response
+  // }
 
   // Обновление прогресса
   async updateProgress(id: string, progress: number): Promise<ApiResponse<Project>> {
