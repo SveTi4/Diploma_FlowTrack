@@ -6,6 +6,8 @@ import { PlusIcon, TrashIcon } from '../../atoms/Icon/icons'
 import { createColumn, deleteColumn, fetchColumns, updateColumn } from '../../../store/columns/columnsSlice'
 import { AppDispatch } from '../../../store'
 import { Loader } from "../../atoms/Loader/Loader.tsx"
+import { TasksBoard } from '../TasksBoard/TasksBoard'
+import { createTask } from '../../../store/tasks/tasksSlice'
 
 const BoardHeader = styled.div`
   display: flex;
@@ -255,12 +257,20 @@ export const ColumnsBoard: React.FC<ColumnsBoardProps> = ({ project_id }) => {
                 <TrashIcon size={16} />
               </DeleteColumnButton>
             </ColumnHeader>
-            <AddTaskButton>
+            <AddTaskButton
+              onClick={() => dispatch(createTask({
+                name: 'New Task',
+                column_id: column?.id,
+                deadline: "2025-04-29T02:00:00.000Z",
+                description: "Test description",
+                status: false,
+              }))}
+            >
               <PlusIcon size={24} />
               Add task
             </AddTaskButton>
             <ColumnContent>
-              {/* Здесь будут задачи колонки */}
+              <TasksBoard column_id={Number(column?.id)} />
             </ColumnContent>
           </Column>
         )) || null}
