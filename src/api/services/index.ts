@@ -1,19 +1,20 @@
 import { ProjectsService } from './projects/projects.service'
 import { AuthService } from './auth/auth.service'
-import {TasksService} from "./tasks/tasks.service.ts";
+import {ColumnsService} from "./columns/columns.service.ts";
 
 // Создаем экземпляры сервисов
 export const projectsService = new ProjectsService()
 export const authService = new AuthService()
-export const tasksService = new TasksService()
+export const columnService = new ColumnsService()
+
 // Экспортируем типы
 export * from './projects/types'
 export * from './auth/types'
-export * from './tasks/types'
+export * from './columns/types'
 
 // Экспортируем все сервисы
 export const services = {
   projects: projectsService,
-  tasks: tasksService,
+  columns: columnService,
   auth: authService
 }

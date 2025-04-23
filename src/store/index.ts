@@ -1,6 +1,7 @@
 import { configureStore } from '@reduxjs/toolkit'
 import authReducer from './auth/authSlice'
 import projectsReducer from './projects/projectsSlice'
+import columnsReducer from './columns/columnsSlice'
 // import columnsReducer from './columns/columnsSlice'
 // import tasksReducer from './tasks/tasksSlice'
 
@@ -8,7 +9,7 @@ export const store = configureStore({
   reducer: {
     auth: authReducer,
     projects: projectsReducer,
-    // columns: columnsReducer,
+    columns: columnsReducer,
     // tasks: tasksReducer
   }
 })
