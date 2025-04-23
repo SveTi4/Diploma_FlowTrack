@@ -6,9 +6,11 @@ import styled from 'styled-components'
 import { PageHeader } from '../../molecules/PageHeader/PageHeader'
 import { Card } from '../../atoms/Card/Card'
 import { ProgressBarComponent } from "../../atoms/ProgressBar/ProgressBar"
-import { CloseIcon, InfoIcon, TrashIcon } from "../../atoms/Icon/icons.tsx"
+import { CloseIcon, InfoIcon, TrashIcon } from "../../atoms/Icon/icons"
 import { AppDispatch, RootState } from '../../../store'
 import { fetchProject, deleteProject, clearCurrentProject } from '../../../store/projects/projectsSlice'
+import { ColumnsBoard } from '../../organisms/ColumnsBoard/ColumnsBoard'
+import { Loader } from "../../atoms/Loader/Loader.tsx"
 
 const Container = styled.div`
   min-height: 100vh;
@@ -21,6 +23,7 @@ const Container = styled.div`
 const MainContent = styled.div`
   flex: 1;
   padding: 24px 32px;
+  width: 100%;
 `
 
 const SidePanel = styled.div<{ isOpen: boolean }>`
@@ -112,12 +115,6 @@ const Chart = styled.div`
   color: ${({ theme }) => theme.colors.textSecondary};
 `
 
-const LoadingText = styled.div`
-  color: ${({ theme }) => theme.colors.text};
-  text-align: center;
-  padding: 32px;
-`
-
 const ActionButton = styled.button`
   background: none;
   border: none;
@@ -145,11 +142,12 @@ export const ProjectPage: React.FC = () => {
   const dispatch = useDispatch<AppDispatch>()
   const [isInfoOpen, setIsInfoOpen] = useState(false)
   
-  const { currentProject: project, loading, error } = useSelector((state: RootState) => state.projects)
+  const { currentProject: project, loading: projectLoading, error: projectError } = useSelector((state: RootState) => state.projects)
 
   useEffect(() => {
     if (id) {
-      dispatch(fetchProject(parseInt(id)))
+      const projectId = parseInt(id)
+      dispatch(fetchProject(projectId))
     }
     
     return () => {
@@ -168,9 +166,9 @@ export const ProjectPage: React.FC = () => {
     }
   }
 
-  if (loading) return <LoadingText>Загрузка...</LoadingText>
-  if (error) return <LoadingText>Ошибка: {error}</LoadingText>
-  if (!project) return <LoadingText>Проект не найден</LoadingText>
+  if (projectLoading) return <Loader size="large"  fullscreen={true} />
+  if (projectError) return <div>Ошибка: {projectError}</div>
+  if (!project) return <div>Проект не найден</div>
 
   return (
     <Container>
@@ -188,7 +186,7 @@ export const ProjectPage: React.FC = () => {
       </PageHeader>
 
       <MainContent>
-        {/* Здесь будут колонки с задачами */}
+        <ColumnsBoard projectId={project.id} />
       </MainContent>
 
       <SidePanel isOpen={isInfoOpen}>
