@@ -48,7 +48,7 @@ export class TasksService extends BaseService<Task> {
   // Обновление задачи
   async updateTask(id: number, data: UpdateTaskDto): Promise<ApiResponse<Task>> {
     console.log('Updating task with id:', id, 'and data:', data)
-    const response = await this.update(id, data)
+    const response = await this.patch(id, data)
     console.log('Raw Task API response:', response)
     return {
       data: response.data,
