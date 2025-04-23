@@ -3,56 +3,37 @@ export type TaskPriority = 'low' | 'medium' | 'high';
 
 export interface Task {
   id: string;
-  title: string;
+  name: string;
   description?: string;
-  status: TaskStatus;
-  priority: TaskPriority;
-  projectId: string;
-  columnId: string;
-  assigneeId?: string;
-  deadline?: string;
-  createdAt: string;
-  updatedAt: string;
-  order: number;
-  tags?: string[];
+  status: boolean;
+  archived: boolean;
+  column_id: number;
+  deadline: string | null;
+  created_at: string;
+  updated_at: string;
 }
 
 export interface CreateTaskDto {
-  title: string;
-  description?: string;
-  project_id: string;
-  column_id: string;
-  priority?: TaskPriority;
-  assignee_id?: string;
-  deadline?: string;
-  tags?: string[];
+  name: string;
+  description: string;
+  column_id: number;
+  deadline: string | null;
+  status: boolean;
 }
 
 export interface UpdateTaskDto {
-  title?: string;
+  name?: string;
   description?: string;
-  status?: TaskStatus;
-  priority?: TaskPriority;
-  columnId?: string;
-  assigneeId?: string;
-  deadline?: string;
-  order?: number;
-  tags?: string[];
+  status?: boolean;
+  column_id?: number;
+  deadline?: string | null;
 }
 
 export interface TaskFilters {
-  status?: TaskStatus;
-  priority?: TaskPriority;
-  projectId?: string;
-  columnId?: string;
-  assigneeId?: string;
+  status?: boolean;
+  column_id?: string;
   search?: string;
-  startDate?: string;
-  endDate?: string;
-  tags?: string[];
+  deadline?: string | null;
+  created_at?: string;
+  updated_at?: string;
 }
-
-export interface MoveTaskDto {
-  columnId: string;
-  order: number;
-} 

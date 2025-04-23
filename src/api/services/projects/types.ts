@@ -24,6 +24,7 @@ export interface CreateProjectDto {
   priority?: ProjectPriority;
   teamSize?: number;
   tags?: string[];
+  status: boolean;
 }
 
 export interface UpdateProjectDto {
