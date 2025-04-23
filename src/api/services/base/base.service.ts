@@ -48,7 +48,7 @@ export abstract class BaseService<T> {
     const response = await api.get(`${this.endpoint}/${id}`, this.config)
     return {
       data: response.data,
-      status: response.status
+      status: response.status,
     }
   }
 
@@ -76,7 +76,10 @@ export abstract class BaseService<T> {
     data: D
   ): Promise<ApiResponse<T>> {
     const response = await api.patch(`${this.endpoint}/${id}`, data, this.config)
-    return response.data
+    return {
+      data: response.data,
+      status: response.status
+    }
   }
 
   // Удаление элемента

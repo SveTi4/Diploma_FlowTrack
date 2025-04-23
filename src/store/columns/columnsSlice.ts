@@ -1,5 +1,5 @@
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit'
-import {Column, CreateColumnDto, services} from "../../api/services";
+import {Column, CreateColumnDto, services, UpdateColumnDto} from "../../api/services";
 import {ApiResponse} from "../../api/types/response.types.ts";
 
 interface ColumnsState {
@@ -24,8 +24,8 @@ const initialState: ColumnsState = {
 
 export const fetchColumns = createAsyncThunk(
   'columns/fetchColumns',
-  async ({ projectId, params }: { projectId: number; params: { page: number; limit: number } }) => {
-    const response = await services.columns.getColumns(projectId, params)
+  async ({ project_id, params }: { project_id: number; params: { page: number; limit: number } }) => {
+    const response = await services.columns.getColumns(project_id, params)
     console.log('API Response columns:', response)
     return response
     // return await services.columns.getColumns(projectId, params)
@@ -35,7 +35,16 @@ export const fetchColumns = createAsyncThunk(
 export const createColumn = createAsyncThunk(
   'columns/createColumn',
   async (data: CreateColumnDto): Promise<ApiResponse<Column>> => {
-    return await services.columns.createColumn(data)
+    const response = await services.columns.createColumn(data)
+    console.log('Create column response:', response)
+    return response
+  }
+)
+
+export const updateColumn = createAsyncThunk(
+  'columns/updateColumn',
+  async ({ id, data }: { id: number; data: UpdateColumnDto }) => {
+    return await services.columns.updateColumn(id, data)
   }
 )
 
@@ -80,7 +89,10 @@ const columnsSlice = createSlice({
       })
       .addCase(createColumn.fulfilled, (state, action) => {
         state.loading = false
-        state.items.push(action.payload.data)
+        if (action.payload && action.payload.data) {
+          state.items = [...state.items, action.payload.data]
+          state.total += 1
+        }
       })
       .addCase(createColumn.rejected, (state, action) => {
         state.loading = false
@@ -93,11 +105,27 @@ const columnsSlice = createSlice({
       .addCase(deleteColumn.fulfilled, (state, action) => {
         state.loading = false
         state.items = state.items.filter(item => Number(item.id) !== action.payload)
+        state.total -= 1
       })
       .addCase(deleteColumn.rejected, (state, action) => {
         state.loading = false
         state.error = action.error.message || 'Произошла ошибка при удалении колонки'
       })  
+      .addCase(updateColumn.pending, (state) => {
+        state.loading = true
+        state.error = null
+      })
+      .addCase(updateColumn.fulfilled, (state, action) => {
+        state.loading = false
+        const index = state.items.findIndex(item => Number(item.id) === Number(action.payload.data.id))
+        if (index !== -1) {
+          state.items[index] = action.payload.data
+        }
+      })
+      .addCase(updateColumn.rejected, (state, action) => {
+        state.loading = false
+        state.error = action.error.message || 'Произошла ошибка при обновлении колонки'
+      })
   }
 })
 

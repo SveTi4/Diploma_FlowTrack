@@ -1,5 +1,5 @@
 import { BaseService } from '../base/base.service'
-import {Column, ColumnFilters, CreateColumnDto} from './types'
+import {Column, ColumnFilters, CreateColumnDto, UpdateColumnDto} from './types'
 import {ApiResponse, PaginatedResponse, PaginationParams} from "../../types/response.types.ts";
 
 export class ColumnsService extends BaseService<Column> {
@@ -8,9 +8,9 @@ export class ColumnsService extends BaseService<Column> {
   }
 
   // Получение списка колонок с фильтрами
-  async getColumns(projectId: number, params?: PaginationParams & ColumnFilters): Promise<ApiResponse<PaginatedResponse<Column>>> {
+  async getColumns(project_id: number, params?: PaginationParams & ColumnFilters): Promise<ApiResponse<PaginatedResponse<Column>>> {
     console.log('Fetching columns with params:', params)
-    const response = await this.getList(params, `projects/${projectId}/columns`)
+    const response = await this.getList(params, `projects/${project_id}/columns`)
     console.log('Raw API response:', response)
     return response
   }
@@ -21,6 +21,10 @@ export class ColumnsService extends BaseService<Column> {
 
   async deleteColumn(id: number): Promise<void> {
     await this.delete(id.toString())
+  }
+
+  async updateColumn(id: number, data: UpdateColumnDto): Promise<ApiResponse<Column>> {
+    return this.patch(id.toString(), data)
   }
   //
   // Получение колонки по ID

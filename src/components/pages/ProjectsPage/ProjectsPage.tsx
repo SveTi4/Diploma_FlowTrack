@@ -50,7 +50,7 @@ export const ProjectsPage = () => {
   const [isRefreshing, setIsRefreshing] = useState(false)
 
   const page = 1
-  const limit = 2
+  const limit = 10
 
   const { items: projects, loading, error } = useSelector((state: RootState) => state.projects)
 

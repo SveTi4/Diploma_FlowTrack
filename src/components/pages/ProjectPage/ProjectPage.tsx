@@ -186,7 +186,7 @@ export const ProjectPage: React.FC = () => {
       </PageHeader>
 
       <MainContent>
-        <ColumnsBoard projectId={project.id} />
+        <ColumnsBoard project_id={project.id} />
       </MainContent>
 
       <SidePanel isOpen={isInfoOpen}>
