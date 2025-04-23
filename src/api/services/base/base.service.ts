@@ -15,9 +15,12 @@ export abstract class BaseService<T> {
 
   // Получение списка с пагинацией и поиском
   protected async getList(
-    params?: PaginationParams & SearchParams & Record<string, any>
+      params?: PaginationParams & SearchParams & Record<string, any>,
+      altEndpoint?: string
   ): Promise<ApiListResponse<T>> {
-    const response = await api.get(this.endpoint, { 
+    const endpoint = altEndpoint ?? this.endpoint;
+
+    const response = await api.get(endpoint, {
       ...this.config,
       params 
     })
@@ -45,14 +48,17 @@ export abstract class BaseService<T> {
     const response = await api.get(`${this.endpoint}/${id}`, this.config)
     return {
       data: response.data,
-      status: response.status,
+      status: response.status
     }
   }
 
   // Создание нового элемента
   protected async create<D = Partial<T>>(data: D): Promise<ApiResponse<T>> {
     const response = await api.post(this.endpoint, data, this.config)
-    return response.data
+    return {
+      data: response.data,
+      status: response.status
+    }
   }
 
   // Обновление элемента
@@ -76,27 +82,6 @@ export abstract class BaseService<T> {
   // Удаление элемента
   protected async delete(id: string | number): Promise<ApiResponse<void>> {
     const response = await api.delete(`${this.endpoint}/${id}`, this.config)
-    return response.data
-  }
-
-  // Пакетное создание
-  protected async bulkCreate<D = Partial<T>>(data: D[]): Promise<ApiResponse<T[]>> {
-    const response = await api.post(`${this.endpoint}/bulk`, data, this.config)
-    return response.data
-  }
-
-  // Пакетное обновление
-  protected async bulkUpdate<D = Partial<T>>(data: D[]): Promise<ApiResponse<T[]>> {
-    const response = await api.put(`${this.endpoint}/bulk`, data, this.config)
-    return response.data
-  }
-
-  // Пакетное удаление
-  protected async bulkDelete(ids: (string | number)[]): Promise<ApiResponse<void>> {
-    const response = await api.delete(`${this.endpoint}/bulk`, {
-      ...this.config,
-      data: { ids }
-    })
     return response.data
   }
 
