@@ -39,19 +39,19 @@ export class TasksService extends BaseService<Task> {
   }
 
   // Получение задач проекта
-  async getProjectTasks(projectId: string, params?: PaginationParams): Promise<ApiListResponse<Task>> {
-    return this.getList({ ...params, projectId })
-  }
-
-  // Получение задач колонки
-  async getColumnTasks(columnId: string, params?: PaginationParams): Promise<ApiListResponse<Task>> {
-    return this.getList({ ...params, columnId })
-  }
-
-  // Получение задач пользователя
-  async getUserTasks(assigneeId: string, params?: PaginationParams): Promise<ApiListResponse<Task>> {
-    return this.getList({ ...params, assigneeId })
-  }
+  // async getProjectTasks(projectId: string, params?: PaginationParams): Promise<ApiListResponse<Task>> {
+  //   return this.getList({ ...params, projectId })
+  // }
+  //
+  // // Получение задач колонки
+  // async getColumnTasks(columnId: string, params?: PaginationParams): Promise<ApiListResponse<Task>> {
+  //   return this.getList({ ...params, columnId })
+  // }
+  //
+  // // Получение задач пользователя
+  // async getUserTasks(assigneeId: string, params?: PaginationParams): Promise<ApiListResponse<Task>> {
+  //   return this.getList({ ...params, assigneeId })
+  // }
 
   // Перемещение задачи
   async moveTask(id: string, data: MoveTaskDto): Promise<ApiResponse<Task>> {
@@ -85,20 +85,5 @@ export class TasksService extends BaseService<Task> {
     const task = await this.getTask(id)
     const updatedTags = (task.data.tags || []).filter((tag: string) => !tags.includes(tag))
     return this.patch(id, { tags: updatedTags })
-  }
-
-  // Пакетное обновление статусов
-  async bulkUpdateStatus(ids: string[], status: Task['status']): Promise<ApiResponse<Task[]>> {
-    return this.bulkUpdate(ids.map(id => ({ id, status })))
-  }
-
-  // Пакетное обновление приоритетов
-  async bulkUpdatePriority(ids: string[], priority: Task['priority']): Promise<ApiResponse<Task[]>> {
-    return this.bulkUpdate(ids.map(id => ({ id, priority })))
-  }
-
-  // Пакетное назначение исполнителя
-  async bulkAssign(ids: string[], assigneeId: string): Promise<ApiResponse<Task[]>> {
-    return this.bulkUpdate(ids.map(id => ({ id, assigneeId })))
   }
 } 
