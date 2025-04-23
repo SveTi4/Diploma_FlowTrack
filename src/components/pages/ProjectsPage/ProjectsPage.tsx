@@ -11,6 +11,7 @@ import { EmptyState } from '../../atoms/EmptyState/EmptyState'
 import { Loader } from '../../atoms/Loader/Loader'
 import { SearchInput } from '../../atoms/SearchInput/SearchInput'
 import { fetchProjects, createProject } from '../../../store/projects/projectsSlice'
+import {Input} from "../../atoms/Input/Input.tsx";
 
 const Container = styled.div`
   padding: 0;
@@ -48,12 +49,14 @@ export const ProjectsPage = () => {
   const [isCreateModalOpen, setIsCreateModalOpen] = useState(false)
   const [searchQuery, setSearchQuery] = useState('')
   const [isRefreshing, setIsRefreshing] = useState(false)
+  const [page, setPage] = useState(1)
+  const [limit, setLimit] = useState(2)
 
   const { items: projects, loading, error } = useSelector((state: RootState) => state.projects)
 
   const handleRefresh = async () => {
     setIsRefreshing(true)
-    await dispatch(fetchProjects())
+    await dispatch(fetchProjects({ page, limit }))
     setIsRefreshing(false)
   }
 
@@ -77,8 +80,8 @@ export const ProjectsPage = () => {
   }, [projects, searchQuery])
 
   useEffect(() => {
-    dispatch(fetchProjects())
-  }, [dispatch])
+    dispatch(fetchProjects({ page, limit }))
+  }, [dispatch, page])
 
   if (loading && !isRefreshing) {
     return (
@@ -99,6 +102,8 @@ export const ProjectsPage = () => {
     <Container>
       <PageHeader title="Мои проекты">
         <HeaderContent>
+          <Input type="number" value={limit} onChange={setLimit} placeholder={"Кол-во"} />
+          <Input type="number" value={page} onChange={setPage} placeholder={"Стрраница"} />
           <SearchInput 
             value={searchQuery}
             onChange={setSearchQuery}

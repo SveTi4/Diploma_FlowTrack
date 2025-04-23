@@ -2,7 +2,7 @@ import styled from 'styled-components'
 import { BaseProps } from '../../../types/common'
 
 interface InputProps extends BaseProps {
-  type?: 'text' | 'password'
+  type?: 'text' | 'password' | 'number'
   placeholder?: string
   value: string
   onChange: (e: React.ChangeEvent<HTMLInputElement>) => void

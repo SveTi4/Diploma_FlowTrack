@@ -16,7 +16,7 @@ const IconWrapper = styled.div<{ size: number, color?: string }>`
   color: ${({ color }) => color || 'inherit'};
   
   svg {
-    width: 100%;
+    width: inherit;
     height: 100%;
   }
 `

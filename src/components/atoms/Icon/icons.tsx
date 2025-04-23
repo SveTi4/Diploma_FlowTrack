@@ -81,25 +81,34 @@ export const SupportIcon = ({ size, color }: { size?: number; color?: string }) 
   </Icon>
 ) 
 
-export const RefreshIcon = ({ size, color }: { size?: number; color?: string }) => (
-  <Icon size={size} color={color}>
-    <svg
-      viewBox="0 0 24 24"
-      fill="none"
-      xmlns="http://www.w3.org/2000/svg"
-    >
-      <path
-        d="M12 20C16.4183 20 20 16.4183 20 12C20 7.58172 16.4183 4 12 4C7.58172 4 4 7.58172 4 12"
-        stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"
-      />
-      <path
-        d="M4 12L4 16L8 16"
-        stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"
-      />
-      <path
-        d="M16.0002 8.5C15.3432 7.56251 14.4797 6.81391 13.4866 6.31213C12.4935 5.81035 11.4002 5.57076 10.3002 5.615"
-        stroke="currentColor" strokeWidth="2" strokeLinecap="round"
-      />
-    </svg>
-  </Icon>
+export const InfoIcon = ({ size, color }: { size?: number; color?: string }) => (
+    <Icon size={size} color={color}>
+        <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <path
+                d="M13 16H12V12H11M12 8H12.01M21 12C21 16.9706 16.9706 21 12 21C7.02944 21 3 16.9706 3 12C3 7.02944 7.02944 3 12 3C16.9706 3 21 7.02944 21 12Z"
+                stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+        </svg>
+    </Icon>
+)
+
+export const TrashIcon = ({ size, color }: { size?: number; color?: string }) => (
+    <Icon size={size} color={color}>
+        <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <path
+                d="M19 7L18.1327 19.1425C18.0579 20.1891 17.187 21 16.1378 21H7.86224C6.81296 21 5.94208 20.1891 5.86732 19.1425L5 7M10 11V17M14 11V17M3 7H21M17 7V4C17 3.44772 16.5523 3 16 3H8C7.44772 3 7 3.44772 7 4V7"
+                stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+        </svg>
+    </Icon>
+)
+
+export const RefreshIcon = ({size, color}: { size?: number; color?: string }) => (
+    <Icon size={size} color={color}>
+        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24">
+            <g fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2">
+                <path
+                    d="M4.266 16.06a8.923 8.923 0 0 0 3.915 3.978a8.706 8.706 0 0 0 5.471.832a8.796 8.796 0 0 0 4.887-2.64a9.067 9.067 0 0 0 2.388-5.079a9.137 9.137 0 0 0-1.044-5.53a8.904 8.904 0 0 0-4.068-3.815a8.7 8.7 0 0 0-5.5-.608c-1.85.401-3.367 1.313-4.62 2.755a7.62 7.62 0 0 0-1.22 1.781"/>
+                <path d="m8.931 7.813l-5.04.907L3 3.59"/>
+            </g>
+        </svg>
+    </Icon>
 )

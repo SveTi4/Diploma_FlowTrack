@@ -8,7 +8,9 @@ import { AuthPage } from './components/organisms/AuthPage/AuthPage'
 import { RegisterPage } from './components/organisms/RegisterPage/RegisterPage'
 import { MainTemplate } from './components/templates/MainTemplate/MainTemplate'
 import './App.css'
-import { ProjectsPage } from './components/pages/ProjectsPage/ProjectsPage'
+import {ProjectsPage} from "./components/pages/ProjectsPage/ProjectsPage.tsx";
+import {ProjectPage} from "./components/pages/ProjectPage/ProjectPage.tsx";
+import {PageHeader} from "./components/molecules/PageHeader/PageHeader.tsx";
 
 function App() {
   return (
@@ -24,42 +26,60 @@ function App() {
                 <ProjectsPage />
               </MainTemplate>
             } />
-            {/*<Route path="/projects/:id" element={*/}
-            {/*  <MainTemplate>*/}
-            {/*    <ProjectDetailsPage />*/}
-            {/*  </MainTemplate>*/}
-            {/*} />*/}
-            {/*// Projects/new: Страница создания нового проекта (нужно дописать!)*/}
-            {/*<Route path="/stats" element={*/}
-            {/*  <MainTemplate>*/}
-            {/*    <StatsPage />*/}
-            {/*  </MainTemplate>*/}
-            {/*} />*/}
-            {/*<Route path="/guides" element={*/}
-            {/*  <MainTemplate>*/}
-            {/*    <GuidesPage />*/}
-            {/*  </MainTemplate>*/}
-            {/*} />*/}
-            {/*<Route path="/notifications" element={*/}
-            {/*  <MainTemplate>*/}
-            {/*    <NotificationsPage />*/}
-            {/*  </MainTemplate>*/}
-            {/*} />*/}
-            {/*<Route path="/archive" element={*/}
-            {/*  <MainTemplate>*/}
-            {/*    <ArchivePage />*/}
-            {/*  </MainTemplate>*/}
-            {/*} />*/}
-            {/*<Route path="/support" element={*/}
-            {/*  <MainTemplate>*/}
-            {/*    <SupportPage />*/}
-            {/*  </MainTemplate>*/}
-            {/*} />*/}
-            {/*<Route path="/profile" element={*/}
-            {/*  <MainTemplate>*/}
-            {/*    <ProfilePage />*/}
-            {/*  </MainTemplate>*/}
-            {/*} />*/}
+            <Route path="/projects/:id" element={
+              <MainTemplate>
+                <ProjectPage />
+              </MainTemplate>
+            } />
+            // Projects/new: Страница создания нового проекта (нужно дописать!)
+            <Route path="/stats" element={
+              <MainTemplate>
+                <PageHeader title={'Статистика'}>
+                  Когда-нибудь тут будет статичстика
+                </PageHeader>
+                {/*<StatsPage />*/}
+              </MainTemplate>
+            } />
+            <Route path="/guides" element={
+              <MainTemplate>
+                <PageHeader title={'Гайды'}>
+                  Если мне будет не лень то может и гайды появятся
+                </PageHeader>
+                {/*<GuidesPage />*/}
+              </MainTemplate>
+            } />
+            <Route path="/notifications" element={
+              <MainTemplate>
+                <PageHeader title={'Уведомления'}>
+                  Ууууу, этот пункт вообще покрыт тайной
+                </PageHeader>
+                {/*<NotificationsPage />*/}
+              </MainTemplate>
+            } />
+            <Route path="/archive" element={
+              <MainTemplate>
+                <PageHeader title={'Архив'}>
+                  Туть будет то, что ты "СЛУЧАЙНО" удалил/а, но оно оказалось жизненно необходимым
+                </PageHeader>
+                {/*<ArchivePage />*/}
+              </MainTemplate>
+            } />
+            <Route path="/support" element={
+              <MainTemplate>
+                <PageHeader title={'Поддержка'}>
+                  Увы, тебе уже ничего не поможет...
+                </PageHeader>
+                {/*<SupportPage />*/}
+              </MainTemplate>
+            } />
+            <Route path="/profile" element={
+              <MainTemplate>
+                <PageHeader title={'Профиль'} >
+                  Профиль - база, позже появится, отвечаю
+                </PageHeader>
+                {/*<ProfilePage />*/}
+              </MainTemplate>
+            } />
           </Routes>
         </BrowserRouter>
       </ThemeProvider>

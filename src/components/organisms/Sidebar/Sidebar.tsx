@@ -38,7 +38,8 @@ const NavItem = styled(NavLink)<{ isCollapsed?: boolean }>`
   border-radius: 8px;
   margin-bottom: 8px;
   white-space: nowrap;
-
+  overflow: hidden;
+    
   span:last-child {
     opacity: ${({ isCollapsed }) => isCollapsed ? 0 : 1};
     transition: opacity 0.2s ease;
