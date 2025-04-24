@@ -2,12 +2,13 @@ import React, { useEffect, useState, KeyboardEvent } from 'react'
 import styled from 'styled-components'
 import { useDispatch, useSelector } from 'react-redux'
 import { RootState } from '../../../store'
-import { PlusIcon, TrashIcon } from '../../atoms/Icon/icons'
+import { PlusIcon } from '../../atoms/Icon/icons'
 import { createColumn, deleteColumn, fetchColumns, updateColumn } from '../../../store/columns/columnsSlice'
 import { AppDispatch } from '../../../store'
 import { Loader } from "../../atoms/Loader/Loader.tsx"
 import { TasksBoard } from '../TasksBoard/TasksBoard'
 import { createTask } from '../../../store/tasks/tasksSlice'
+import { DeleteButton } from '../../atoms/DeleteButton/DeleteButton'
 
 const BoardHeader = styled.div`
   display: flex;
@@ -51,7 +52,26 @@ const ColumnsContainer = styled.div`
   padding: 24px 0;
   overflow-x: auto;
   width: 100%;
-  white-space: nowrap;
+  min-height: calc(100vh - 200px);
+  
+  /* Стилизация скроллбара */
+  &::-webkit-scrollbar {
+    height: 8px;
+  }
+
+  &::-webkit-scrollbar-track {
+    background: ${({ theme }) => theme.colors.surface};
+    border-radius: ${({ theme }) => theme.borderRadius.small};
+  }
+
+  &::-webkit-scrollbar-thumb {
+    background: ${({ theme }) => theme.colors.border};
+    border-radius: ${({ theme }) => theme.borderRadius.small};
+  }
+
+  &::-webkit-scrollbar-thumb:hover {
+    background: ${({ theme }) => theme.colors.surfaceHover};
+  }
 `
 
 const Column = styled.div`
@@ -60,7 +80,13 @@ const Column = styled.div`
   height: fit-content;
   background: ${({ theme }) => theme.colors.surface};
   border: 1px solid ${({ theme }) => theme.colors.border};
-  border-radius: 12px;
+  border-radius: ${({ theme }) => theme.borderRadius.medium};
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
+  transition: box-shadow 0.2s ease;
+  
+  &:hover {
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+  }
 `
 
 const ColumnHeader = styled.div`
@@ -69,6 +95,9 @@ const ColumnHeader = styled.div`
   display: flex;
   align-items: center;
   justify-content: space-between;
+  background: ${({ theme }) => theme.colors.background};
+  border-top-left-radius: ${({ theme }) => theme.borderRadius.medium};
+  border-top-right-radius: ${({ theme }) => theme.borderRadius.medium};
 `
 
 const ColumnTitle = styled.h3`
@@ -79,47 +108,39 @@ const ColumnTitle = styled.h3`
 `
 
 const AddTaskButton = styled.button`
-    background: none;
-    display: flex;
-    justify-content: center;
-    padding: 0;
-    width: 100%;
-    height: 48px;
-    align-items: center;
-    border-bottom: 1px solid ${({ theme }) => theme.colors.border};
-    
-    &:hover {
-        background: #888888;
-    }
+  background: none;
+  display: flex;
+  justify-content: center;
+  gap: 8px;
+  width: 100%;
+  height: 48px;
+  align-items: center;
+  border: none;
+  border-bottom: 1px solid ${({ theme }) => theme.colors.border};
+  color: ${({ theme }) => theme.colors.textSecondary};
+  cursor: pointer;
+  transition: all 0.2s ease;
+  font-size: 14px;
+  font-weight: 500;
+  
+  &:hover {
+    background: ${({ theme }) => theme.colors.surfaceHover};
+    color: ${({ theme }) => theme.colors.primary};
+  }
+
+  svg {
+    width: 20px;
+    height: 20px;
+    stroke: currentColor;
+  }
 `
 
 const ColumnContent = styled.div`
   padding: 16px;
   min-height: 100px;
-`
-
-const DeleteColumnButton = styled.button`
-  background: none;
-  border: none;
-  padding: 4px;
-  color: ${({ theme }) => theme.colors.textSecondary};
-  cursor: pointer;
   display: flex;
-  align-items: center;
-  justify-content: center;
-  opacity: 0.6;
-  transition: all 0.2s ease;
-
-  &:hover {
-    opacity: 1;
-    color: ${({ theme }) => theme.colors.error};
-  }
-
-  svg {
-    width: 16px;
-    height: 16px;
-    stroke: currentColor;
-  }
+  flex-direction: column;
+  gap: 12px;
 `
 
 const EditableTitle = styled.input`
@@ -232,7 +253,7 @@ export const ColumnsBoard: React.FC<ColumnsBoardProps> = ({ project_id }) => {
         <BoardTitle>Колонки</BoardTitle>
         <AddColumnButton
             onClick={() => dispatch(createColumn({
-                name: 'New Column',
+                name: 'Новая колонка',
                 project_id: project_id
             }))}
         >
@@ -251,29 +272,23 @@ export const ColumnsBoard: React.FC<ColumnsBoardProps> = ({ project_id }) => {
                   onSave={(newName) => handleUpdateColumnName(Number(column?.id), newName)}
                 />
               </ColumnTitleWrapper>
-              <DeleteColumnButton
-                onClick={() => column?.id && dispatch(deleteColumn(parseInt(column.id)))}
-              >
-                <TrashIcon size={16} />
-              </DeleteColumnButton>
+              <DeleteButton onClick={() => dispatch(deleteColumn(Number(column?.id)))} />
             </ColumnHeader>
-            <AddTaskButton
-              onClick={() => dispatch(createTask({
-                name: 'New Task',
-                column_id: column?.id,
-                deadline: "2025-04-29T02:00:00.000Z",
-                description: "Test description",
-                status: false,
-              }))}
-            >
-              <PlusIcon size={24} />
-              Add task
+            <AddTaskButton onClick={() => dispatch(createTask({
+              name: 'Новая задача',
+              column_id: Number(column?.id),
+              description: '',
+              deadline: null,
+              status: false
+            }))}>
+              <PlusIcon size={16} />
+              Добавить задачу
             </AddTaskButton>
             <ColumnContent>
               <TasksBoard column_id={Number(column?.id)} />
             </ColumnContent>
           </Column>
-        )) || null}
+        ))}
       </ColumnsContainer>
     </div>
   )
