@@ -14,7 +14,7 @@ const Container = styled.div<{ isCollapsed: boolean }>`
   position: relative;
   width: ${({ isCollapsed }) => isCollapsed ? '84px' : '240px'};
   height: 100vh;
-  background: #121316;
+  background: ${({ theme }) => theme.colors.surface};
   transition: all 0.3s ease;
   display: flex;
   flex-direction: column;
@@ -88,7 +88,7 @@ const ToggleButton = styled.button`
   transform: translateY(-50%);
   width: 40px;
   height: 64px;
-  background: #121316;
+  background: ${({ theme }) => theme.colors.surface};
   //border: 1px solid rgba(255, 255, 255, 0.1);
   border-radius: 50%;
   //color: rgba(255, 255, 255, 1);
