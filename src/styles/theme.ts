@@ -6,7 +6,6 @@ declare module 'styled-components' {
       // Основные цвета фона
       background: string
       surface: string
-      surfaceHover: string
       
       // Цвета текста
       text: string
@@ -17,10 +16,16 @@ declare module 'styled-components' {
       
       // Акцентные цвета
       primary: string
+      secondary: string
       error: string
+      success: string
+      warning: string
+      danger: string
       
       // Состояния
+      primaryHover: string
       backgroundHover: string
+      surfaceHover: string
     }
     
     // Можно добавить другие параметры темы
@@ -35,6 +40,24 @@ declare module 'styled-components' {
       medium: string
       large: string
     }
+
+    typography: {
+      fontFamily: string,
+      fontSize: {
+        xs: string,
+        sm: string,
+        md: string,
+        lg: string,
+        xl: string,
+        xxl: string
+      },
+      fontWeight: {
+        regular: number,
+        medium: number,
+        semibold: number,
+        bold: number
+      }
+    }
   }
 }
 
@@ -43,20 +66,25 @@ export const darkTheme: DefaultTheme = {
     // Основные цвета фона
     background: '#191A1C', // Основной фон контента
     surface: '#121316',    // Фон для карточек, панелей
-    surfaceHover: 'rgba(255, 255, 255, 0.1)', // Фон при наведении
-    
+
     // Цвета текста
     text: '#FFFFFF',
     textSecondary: 'rgba(255, 255, 255, 0.6)',
-    
+
     // Цвета границ
     border: 'rgba(255, 255, 255, 0.1)',
-    
+
     // Акцентные цвета
     primary: '#7B68EE',   // Можете заменить на ваш основной цвет
+    secondary: '#4F46E5',
     error: '#FF5252',
-    
+    success: '#22C55E',
+    warning: '#F59E0B',
+    danger: '#EF4444',
+
     // Состояния
+    primaryHover: '#6B46C1',
+    surfaceHover: 'rgba(255, 255, 255, 0.1)', // Фон при наведении
     backgroundHover: 'rgba(255, 255, 255, 0.1)'
   },
   
@@ -70,6 +98,24 @@ export const darkTheme: DefaultTheme = {
     small: '8px',
     medium: '12px',
     large: '16px'
+  },
+
+  typography: {
+    fontFamily: "'Inter', sans-serif",
+    fontSize: {
+      xs: '12px',
+      sm: '14px',
+      md: '16px',
+      lg: '18px',
+      xl: '24px',
+      xxl: '32px'
+    },
+    fontWeight: {
+      regular: 400,
+      medium: 500,
+      semibold: 600,
+      bold: 700
+    }
   }
 }
 

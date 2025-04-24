@@ -14,10 +14,12 @@ const getVariantStyles = (variant: ButtonProps['variant']) => {
   switch (variant) {
     case 'primary':
       return css`
-        background: #007AFF;
+        background: ${({ theme }) => theme.colors.primary};
+        border: ${({ theme }) => theme.colors.primary} 1px solid;
         color: white;
         &:hover:not(:disabled) {
-          background: #0066CC;
+          background: ${({ theme }) => theme.colors.background};
+          color: ${({ theme }) => theme.colors.primary};
         }
       `
     case 'secondary':

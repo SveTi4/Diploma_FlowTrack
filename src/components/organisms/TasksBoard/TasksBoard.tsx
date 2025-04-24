@@ -47,6 +47,7 @@ export const TasksBoard: React.FC<TasksBoardProps> = ({ column_id }) => {
           key={task.id}
           id={Number(task.id)}
           name={task.name}
+          status={task.status}
           description={task.description}
           onDelete={handleDeleteTask}
           onUpdate={handleUpdateTask}

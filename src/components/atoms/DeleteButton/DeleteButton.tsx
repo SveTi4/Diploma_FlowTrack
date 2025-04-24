@@ -11,7 +11,7 @@ const StyledButton = styled.button<{ $size?: number }>`
   align-items: center;
   justify-content: center;
   opacity: 0.6;
-  transition: all 0.2s ease;
+  transition: all 0.1s ease;
 
   &:hover {
     opacity: 1;

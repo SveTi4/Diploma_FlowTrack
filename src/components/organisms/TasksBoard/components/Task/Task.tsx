@@ -1,12 +1,13 @@
-import React, { useState } from 'react'
+import React, { useState} from 'react'
 import styled from 'styled-components'
 import { DeleteButton } from '../../../../atoms/DeleteButton/DeleteButton'
 import { TaskPanel } from '../TaskPanel/TaskPanel'
+import { CheckIcon } from "../../../../atoms/Icon/icons.tsx";
 
 const TaskWrapper = styled.div`
   width: 100%;
   display: flex;
-  flex-direction: column;
+  flex-direction: row;
   margin-bottom: 12px;
   border: 1px solid ${({ theme }) => theme.colors.border};
   border-radius: ${({ theme }) => theme.borderRadius.medium};
@@ -42,6 +43,32 @@ const TaskWrapper = styled.div`
   &:last-child {
     margin-bottom: 0;
   }
+`
+
+const TaskStatus = styled.div`
+  width: 16%;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  height: inherit;
+  background: inherit;
+  border-right: inherit;
+  transition: 
+          color 0.2s ease-in-out, 
+          background 0.2s ease-in-out,
+          width 0.2s ease-in-out,
+          height 0.2s ease-in-out;
+  
+  &:hover {
+    background: ${({ theme }) => theme.colors.surfaceHover};
+  }
+`
+
+const TaskInfo = styled.div`
+  width: 100%;
+  display: flex;
+  flex-direction: column;
 `
 
 const TaskHeader = styled.div`
@@ -105,19 +132,22 @@ interface TaskProps {
   id: number;
   name: string;
   description?: string;
+  status?: boolean;
   onDelete: (id: number) => void;
-  onUpdate?: (id: number, data: { name?: string; description?: string }) => void;
+  onUpdate?: (id: number, data: { name?: string; description?: string, status?: boolean }) => void;
 }
 
 export const Task: React.FC<TaskProps> = ({
   id,
   name,
   description,
+  status,
   onDelete,
   onUpdate
 }) => {
   const [isPanelOpen, setIsPanelOpen] = useState(false);
-
+  const [stateIconBefore, setStateIconBefore] = useState({color: status ? 'green' : 'red', size: 24});
+  const [stateIconAfter, setStateIconAfter] = useState({color: 'gray', size: 0});
   const handleClick = () => {
     setIsPanelOpen(true);
   };
@@ -127,22 +157,49 @@ export const Task: React.FC<TaskProps> = ({
     onDelete(id);
   };
 
+  const handleUpdateStatus = () => {
+    console.log("Текущий статус: ", status);
+    console.log("Ожидаемый статус: ", !status);
+    onUpdate?.(id, { status: !status });
+  }
+
+  const handleStatusHover = () => {
+    setStateIconBefore({color: 'gray', size: 0});
+    setStateIconAfter({color: !status ? 'green' : 'red', size: 24});
+  }
+
+  const handleStatusUnHover = () => {
+    setStateIconBefore({color: status ? 'green' : 'red', size: 24});
+    setStateIconAfter({color: 'gray', size: 0});
+  }
+
   return (
     <>
-      <TaskWrapper onClick={handleClick}>
-        <TaskHeader>
-          <TaskTitleWrapper>
-            <TaskTitle>{name}</TaskTitle>
-          </TaskTitleWrapper>
-          <TaskActions>
-            <DeleteButton onClick={handleDeleteClick} />
-          </TaskActions>
-        </TaskHeader>
-        {description && (
-          <TaskContent>
-            <TaskDescription>{description}</TaskDescription>
-          </TaskContent>
-        )}
+      <TaskWrapper>
+        <TaskStatus
+          onClick={handleUpdateStatus}
+          onMouseEnter={handleStatusHover}
+          onMouseLeave={handleStatusUnHover}
+        >
+          <CheckIcon size={stateIconBefore.size} color={stateIconBefore.color} />
+          <CheckIcon size={stateIconAfter.size} color={stateIconAfter.color} />
+        </TaskStatus>
+
+        <TaskInfo onClick={handleClick}>
+          <TaskHeader>
+            <TaskTitleWrapper>
+              <TaskTitle>{name}</TaskTitle>
+            </TaskTitleWrapper>
+            <TaskActions>
+              <DeleteButton onClick={handleDeleteClick} />
+            </TaskActions>
+          </TaskHeader>
+          {description && (
+            <TaskContent>
+              <TaskDescription>{description}</TaskDescription>
+            </TaskContent>
+          )}
+        </TaskInfo>
       </TaskWrapper>
 
       <TaskPanel

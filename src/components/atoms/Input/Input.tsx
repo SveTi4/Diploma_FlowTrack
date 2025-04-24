@@ -10,8 +10,8 @@ interface InputProps extends BaseProps {
 
 const StyledInput = styled.input`
   width: 100%;
-  padding: ${({ theme }) => theme.spacing.sm};
-  border: 1px solid ${({ theme }) => theme.colors.light};
+  padding: ${({ theme }) => theme.spacing.small};
+  border: 1px solid ${({ theme }) => theme.colors.border};
   border-radius: 4px;
   font-size: ${({ theme }) => theme.typography.fontSize.sm};
   

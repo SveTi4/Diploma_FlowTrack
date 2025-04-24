@@ -14,10 +14,12 @@ const IconWrapper = styled.div<{ size: number, color?: string }>`
   width: ${({ size }) => size}px;
   height: ${({ size }) => size}px;
   color: ${({ color }) => color || 'inherit'};
+  transition: inherit;
   
   svg {
     width: inherit;
     height: 100%;
+    transition: inherit;
   }
 `
 
