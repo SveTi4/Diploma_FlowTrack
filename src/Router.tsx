@@ -12,6 +12,7 @@ import { PageHeader } from "./components/molecules/PageHeader/PageHeader"
 export const Router = () => {
   return (
     <Provider store={store}>
+      {/* @ts-ignore */}
       <GlobalStyles />
       <BrowserRouter>
         <Routes>
