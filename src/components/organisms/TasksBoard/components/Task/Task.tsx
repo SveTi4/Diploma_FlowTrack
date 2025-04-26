@@ -111,8 +111,8 @@ const TaskTitle = styled.h3`
 
 interface TaskProps {
   task: Task;
-  onDelete: (id: string) => void;
-  onUpdate?: (id: string, data: { name?: string; description?: string, status?: boolean }) => void;
+  onDelete: (id: number) => void;
+  onUpdate?: (id: number, data: { name?: string; description?: string, status?: boolean }) => void;
 }
 
 export const TaskCard: React.FC<TaskProps> = ({
