@@ -277,7 +277,7 @@ export const ColumnsBoard: React.FC<ColumnsBoardProps> = ({ project_id }) => {
             <AddTaskButton onClick={() => dispatch(createTask({
               name: 'Новая задача',
               column_id: Number(column?.id),
-              description: '',
+              description: 'Тестовое описание',
               deadline: null,
               status: false
             }))}>
