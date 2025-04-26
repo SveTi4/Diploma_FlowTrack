@@ -8,7 +8,7 @@ const ProgressInfo = styled.div`
   display: flex;
   justify-content: space-between;
   margin-bottom: 8px;
-  color: ${({ theme }) => theme.colors.light};
+  color: ${({ theme }) => theme.colors.text};
   opacity: 0.7;
   font-size: 12px;
 `
