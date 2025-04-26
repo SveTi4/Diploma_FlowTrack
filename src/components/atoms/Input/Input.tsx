@@ -2,7 +2,7 @@ import styled from 'styled-components'
 import { BaseProps } from '../../../types/common'
 
 interface InputProps extends BaseProps {
-  type?: 'text' | 'password'
+  type?: 'text' | 'password' | 'number'
   placeholder?: string
   value: string
   onChange: (e: React.ChangeEvent<HTMLInputElement>) => void
@@ -10,10 +10,10 @@ interface InputProps extends BaseProps {
 
 const StyledInput = styled.input`
   width: 100%;
-  padding: ${({ theme }) => theme.spacing.sm};
-  border: 1px solid ${({ theme }) => theme.colors.light};
+  padding: ${({ theme }) => theme.spacing.small};
+  border: 1px solid ${({ theme }) => theme.colors.border};
   border-radius: 4px;
-  font-size: ${({ theme }) => theme.typography.body.fontSize};
+  font-size: ${({ theme }) => theme.typography.fontSize.sm};
   
   &:focus {
     outline: none;

@@ -1,12 +1,12 @@
 import styled from 'styled-components'
 
 const Container = styled.div`
-  padding: ${({ theme }) => theme.spacing.md};
+  padding: ${({ theme }) => theme.spacing.medium};
 `
 
 const Title = styled.h1`
   color: white;
-  margin-bottom: ${({ theme }) => theme.spacing.md};
+  margin-bottom: ${({ theme }) => theme.spacing.medium};
 `
 
 interface PagePlaceholderProps {

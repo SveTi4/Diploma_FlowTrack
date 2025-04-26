@@ -1,8 +1,8 @@
 import { useNavigate } from 'react-router-dom'
 import { useAppDispatch, useAppSelector } from './useStore'
-import { authApi } from '../api/auth'
+import { services } from "../api/services";
 import { setAccessToken, setError, setLoading, logout } from '../store/auth/authSlice'
-import { LoginRequest, RegisterRequest } from '../types/auth'
+import { LoginDto, RegisterDto } from '../api/services/auth/types'
 import { RootState } from '../store'
 
 export const useAuth = () => {
@@ -10,11 +10,11 @@ export const useAuth = () => {
   const navigate = useNavigate()
   const { isAuthenticated, loading, error } = useAppSelector((state: RootState) => state.auth)
 
-  const login = async (data: LoginRequest) => {
+  const login = async (data: LoginDto) => {
     try {
       dispatch(setLoading(true))
-      const response = await authApi.login(data)
-      dispatch(setAccessToken(response.access_token))
+      const response = await services.auth.login(data)
+      dispatch(setAccessToken(response.data.access_token))
       navigate('/projects')
     } catch (err) {
       dispatch(setError('Ошибка авторизации'))
@@ -23,10 +23,10 @@ export const useAuth = () => {
     }
   }
 
-  const register = async (data: RegisterRequest) => {
+  const register = async (data: RegisterDto) => {
     try {
       dispatch(setLoading(true))
-      await authApi.register(data)
+      await services.auth.register(data)
     } catch (err) {
       dispatch(setError('Ошибка регистрации'))
     } finally {
@@ -36,8 +36,8 @@ export const useAuth = () => {
 
   const refreshToken = async () => {
     try {
-      const response = await authApi.refresh()
-      dispatch(setAccessToken(response.access_token))
+      const response = await services.auth.refreshToken()
+      dispatch(setAccessToken(response.data.accessToken))
     } catch (err) {
       dispatch(logout())
     }

@@ -8,19 +8,26 @@ import { useNavigate } from 'react-router-dom'
 const Form = styled.form`
   display: flex;
   flex-direction: column;
-  gap: ${({ theme }) => theme.spacing.md};
+  gap: ${({ theme }) => theme.spacing.medium};
   width: 100%;
   max-width: 400px;
   padding: 32px;
-  background: #121316;
-  border-radius: 12px;
-  border: 1px solid rgba(255, 255, 255, 0.1);
+  background: ${({ theme }) => theme.colors.surface};
+  border-radius: ${({ theme }) => theme.borderRadius.medium};
+  border: ${({ theme }) => theme.colors.border} solid 1px;
+    
+  &:hover {
+    border-color: ${({ theme }) => theme.colors.primary};
+  }
+  &:focus-within {
+      border-color: ${({ theme }) => theme.colors.primary};
+  }
 `
 
 const ErrorMessage = styled.div`
   color: #FF3B30;
   font-size: 14px;
-  margin-bottom: ${({ theme }) => theme.spacing.md};
+  margin-bottom: ${({ theme }) => theme.spacing.medium};
 `
 
 export const LoginForm = () => {
@@ -40,7 +47,7 @@ export const LoginForm = () => {
       <Input
         value={username}
         onChange={(e) => setUsername(e.target.value)}
-        placeholder="Имя пользователя"
+        placeholder="Логин"
       />
       <Input
         type="password"
@@ -48,7 +55,7 @@ export const LoginForm = () => {
         onChange={(e) => setPassword(e.target.value)}
         placeholder="Пароль"
       />
-      <Button disabled={loading}>
+      <Button disabled={loading} type="submit">
         {loading ? 'Загрузка...' : 'Войти'}
       </Button>
       <Button 

@@ -1,0 +1,295 @@
+import React, { useEffect, useState, KeyboardEvent } from 'react'
+import styled from 'styled-components'
+import { useDispatch, useSelector } from 'react-redux'
+import { RootState } from '../../../store'
+import { PlusIcon } from '../../atoms/Icon/icons'
+import { createColumn, deleteColumn, fetchColumns, updateColumn } from '../../../store/columns/columnsSlice'
+import { AppDispatch } from '../../../store'
+import { Loader } from "../../atoms/Loader/Loader.tsx"
+import { TasksBoard } from '../TasksBoard/TasksBoard'
+import { createTask } from '../../../store/tasks/tasksSlice'
+import { DeleteButton } from '../../atoms/DeleteButton/DeleteButton'
+
+const BoardHeader = styled.div`
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 24px;
+`
+
+const BoardTitle = styled.h2`
+  font-size: 18px;
+  font-weight: 500;
+  color: ${({ theme }) => theme.colors.text};
+  margin: 0;
+`
+
+const AddColumnButton = styled.button`
+  background: none;
+  border: none;
+  color: ${({ theme }) => theme.colors.text};
+  cursor: pointer;
+  padding: 8px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 14px;
+  
+  &:hover {
+    opacity: 0.8;
+  }
+
+  svg {
+    width: 16px;
+    height: 16px;
+    stroke: currentColor;
+  }
+`
+
+const ColumnsContainer = styled.div`
+  display: flex;
+  gap: 24px;
+  padding: 24px 0;
+  overflow-x: auto;
+  width: 100%;
+  min-height: calc(100vh - 200px);
+  
+  /* Стилизация скроллбара */
+  &::-webkit-scrollbar {
+    height: 8px;
+  }
+
+  &::-webkit-scrollbar-track {
+    background: ${({ theme }) => theme.colors.surface};
+    border-radius: ${({ theme }) => theme.borderRadius.small};
+  }
+
+  &::-webkit-scrollbar-thumb {
+    background: ${({ theme }) => theme.colors.border};
+    border-radius: ${({ theme }) => theme.borderRadius.small};
+  }
+
+  &::-webkit-scrollbar-thumb:hover {
+    background: ${({ theme }) => theme.colors.surfaceHover};
+  }
+`
+
+const Column = styled.div`
+  width: 360px;
+  flex: 0 0 360px;
+  height: fit-content;
+  background: ${({ theme }) => theme.colors.surface};
+  border: 1px solid ${({ theme }) => theme.colors.border};
+  border-radius: ${({ theme }) => theme.borderRadius.medium};
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
+  transition: box-shadow 0.2s ease;
+  
+  &:hover {
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+  }
+`
+
+const ColumnHeader = styled.div`
+  padding: 16px;
+  border-bottom: 1px solid ${({ theme }) => theme.colors.border};
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  background: ${({ theme }) => theme.colors.background};
+  border-top-left-radius: ${({ theme }) => theme.borderRadius.medium};
+  border-top-right-radius: ${({ theme }) => theme.borderRadius.medium};
+`
+
+const ColumnTitle = styled.h3`
+  margin: 0;
+  font-size: 16px;
+  font-weight: 500;
+  color: ${({ theme }) => theme.colors.text};
+`
+
+const AddTaskButton = styled.button`
+  background: none;
+  display: flex;
+  justify-content: center;
+  gap: 8px;
+  width: 100%;
+  height: 48px;
+  align-items: center;
+  border: none;
+  border-bottom: 1px solid ${({ theme }) => theme.colors.border};
+  color: ${({ theme }) => theme.colors.textSecondary};
+  cursor: pointer;
+  transition: all 0.2s ease;
+  font-size: 14px;
+  font-weight: 500;
+  
+  &:hover {
+    background: ${({ theme }) => theme.colors.surfaceHover};
+    color: ${({ theme }) => theme.colors.primary};
+  }
+
+  svg {
+    width: 20px;
+    height: 20px;
+    stroke: currentColor;
+  }
+`
+
+const ColumnContent = styled.div`
+  padding: 16px;
+  min-height: 100px;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+`
+
+const EditableTitle = styled.input`
+  background: none;
+  border: none;
+  font-size: 16px;
+  font-weight: 500;
+  color: ${({ theme }) => theme.colors.text};
+  width: 100%;
+  padding: 0;
+  margin: 0;
+  
+  &:focus {
+    outline: none;
+    border-bottom: 1px solid ${({ theme }) => theme.colors.primary};
+  }
+  
+  &:hover {
+    border-bottom: 1px solid ${({ theme }) => theme.colors.border};
+  }
+`
+
+const ColumnTitleWrapper = styled.div`
+  flex: 1;
+  display: flex;
+  align-items: center;
+`
+
+interface EditableTitleProps {
+  value: string;
+  onSave: (newValue: string) => void;
+}
+
+const EditableTitleComponent: React.FC<EditableTitleProps> = ({ value, onSave }) => {
+  const [isEditing, setIsEditing] = useState(false);
+  const [editedValue, setEditedValue] = useState(value);
+
+  const handleDoubleClick = () => {
+    setIsEditing(true);
+  };
+
+  const handleBlur = () => {
+    if (editedValue.trim() !== value) {
+      onSave(editedValue.trim());
+    }
+    setIsEditing(false);
+  };
+
+  const handleKeyDown = (e: KeyboardEvent<HTMLInputElement>) => {
+    if (e.key === 'Enter') {
+      if (editedValue.trim() !== value) {
+        onSave(editedValue.trim());
+      }
+      setIsEditing(false);
+    }
+    if (e.key === 'Escape') {
+      setEditedValue(value);
+      setIsEditing(false);
+    }
+  };
+
+  if (isEditing) {
+    return (
+      <EditableTitle
+        type="text"
+        value={editedValue}
+        onChange={(e) => setEditedValue(e.target.value)}
+        onBlur={handleBlur}
+        onKeyDown={handleKeyDown}
+        autoFocus
+      />
+    );
+  }
+
+  return (
+    <ColumnTitle onDoubleClick={handleDoubleClick}>
+      {value}
+    </ColumnTitle>
+  );
+};
+
+interface ColumnsBoardProps {
+    project_id: number;
+}
+
+export const ColumnsBoard: React.FC<ColumnsBoardProps> = ({ project_id }) => {
+  const dispatch = useDispatch<AppDispatch>()
+  const { items: columns, loading, error } = useSelector((state: RootState) => state.columns)
+
+  useEffect(() => {
+    dispatch(fetchColumns({ 
+      project_id, 
+      params: { page: 1, limit: 10 } 
+    }))
+  }, [project_id, dispatch])
+
+  const handleUpdateColumnName = (columnId: number, newName: string) => {
+    dispatch(updateColumn({
+      id: columnId,
+      data: { name: newName }
+    }));
+  };
+
+  if (loading) return <Loader size="medium" />
+  if (error) return <div>Ошибка: {error}</div>
+
+  return (
+    <div>
+      <BoardHeader>
+        <BoardTitle>Колонки</BoardTitle>
+        <AddColumnButton
+            onClick={() => dispatch(createColumn({
+                name: 'Новая колонка',
+                project_id: project_id
+            }))}
+        >
+          <PlusIcon size={16} />
+          Добавить колонку
+        </AddColumnButton>
+      </BoardHeader>
+      
+      <ColumnsContainer>
+        {columns?.map(column => (
+          <Column key={column?.id}>
+            <ColumnHeader>
+              <ColumnTitleWrapper>
+                <EditableTitleComponent
+                  value={column?.name || 'Без названия'}
+                  onSave={(newName) => handleUpdateColumnName(Number(column?.id), newName)}
+                />
+              </ColumnTitleWrapper>
+              <DeleteButton onClick={() => dispatch(deleteColumn(Number(column?.id)))} />
+            </ColumnHeader>
+            <AddTaskButton onClick={() => dispatch(createTask({
+              name: 'Новая задача',
+              column_id: Number(column?.id),
+              description: 'Тестовое описание',
+              deadline: null,
+              status: false
+            }))}>
+              <PlusIcon size={16} />
+              Добавить задачу
+            </AddTaskButton>
+            <ColumnContent>
+              <TasksBoard column_id={Number(column?.id)} />
+            </ColumnContent>
+          </Column>
+        ))}
+      </ColumnsContainer>
+    </div>
+  )
+} 

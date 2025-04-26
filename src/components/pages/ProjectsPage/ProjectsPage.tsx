@@ -1,103 +1,151 @@
-import { useEffect } from 'react'
-import { useNavigate } from 'react-router-dom'
 import styled from 'styled-components'
-import { useAppDispatch, useAppSelector } from '../../../hooks/useStore'
-import { fetchProjects } from '../../../store/projects/projectsSlice'
-import { ProjectCard } from '../../molecules/ProjectCard/ProjectCard'
+import { useState, useEffect, useMemo } from 'react'
+import { useDispatch, useSelector } from 'react-redux'
+import { AppDispatch, RootState } from '../../../store'
 import { PageHeader } from '../../molecules/PageHeader/PageHeader'
+import { ProjectCard } from './components/ProjectCard'
+import { CreateProjectModal } from './components/CreateProjectModal'
+import { PlusIcon, RefreshIcon } from '../../atoms/Icon/icons'
+import { Button } from '../../atoms/Button/Button'
+import { EmptyState } from '../../atoms/EmptyState/EmptyState'
+import { Loader } from '../../atoms/Loader/Loader'
+import { SearchInput } from '../../atoms/SearchInput/SearchInput'
+import { fetchProjects, createProject } from '../../../store/projects/projectsSlice'
 
 const Container = styled.div`
-  min-height: 100vh;
+  padding: 0;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+`
+
+const Content = styled.div`
+  padding: 32px;
+  flex: 1;
+  overflow: auto;
 `
 
 const ProjectsGrid = styled.div`
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+  grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
   gap: 48px;
-  padding: 48px 32px;
-  margin: 0 auto;
+  margin-top: 24px;
 `
 
-const LoadingText = styled.div`
-  color: ${({ theme }) => theme.colors.light};
-  text-align: center;
-  padding: 32px;
+const ButtonGroup = styled.div`
+  display: flex;
+  gap: 8px;
 `
 
-const ErrorText = styled.div`
-  color: ${({ theme }) => theme.colors.danger};
-  text-align: center;
-  padding: 32px;
-`
-
-const EmptyState = styled.div`
-  text-align: center;
-  padding: 64px 32px;
-  color: ${({ theme }) => theme.colors.light};
-`
-
-const EmptyStateText = styled.p`
-  font-size: 16px;
-  margin-bottom: 24px;
-  opacity: 0.7;
+const HeaderContent = styled.div`
+  display: flex;
+  gap: 16px;
+  align-items: center;
 `
 
 export const ProjectsPage = () => {
-  const navigate = useNavigate()
-  const dispatch = useAppDispatch()
-  const { items, loading, error } = useAppSelector((state) => state.projects)
+  const dispatch = useDispatch<AppDispatch>()
+  const [isCreateModalOpen, setIsCreateModalOpen] = useState(false)
+  const [searchQuery, setSearchQuery] = useState('')
+  const [isRefreshing, setIsRefreshing] = useState(false)
+
+  const page = 1
+  const limit = 10
+
+  const { items: projects, loading, error } = useSelector((state: RootState) => state.projects)
+
+  const handleRefresh = async () => {
+    setIsRefreshing(true)
+    await dispatch(fetchProjects({ page, limit }))
+    setIsRefreshing(false)
+  }
+
+  const handleCreateProject = async (project: { name: string; description: string; deadline: string | null }) => {
+    try {
+      await dispatch(createProject(project)).unwrap()
+      setIsCreateModalOpen(false)
+    } catch (err) {
+      console.error('Error creating project:', err)
+    }
+  }
+
+  const filteredProjects = useMemo(() => {
+    if (!searchQuery) return projects
+
+    const query = searchQuery.toLowerCase()
+    return projects.filter(project => 
+      project.name.toLowerCase().includes(query) ||
+      project.description?.toLowerCase().includes(query)
+    )
+  }, [projects, searchQuery])
 
   useEffect(() => {
-    dispatch(fetchProjects({ page: 1, limit: 10 }))
-  }, [dispatch])
+    dispatch(fetchProjects({ page, limit }))
+  }, [dispatch, page])
 
-  console.log('Projects state:', { items, loading, error })
-
-  const handleSearch = (value: string) => {
-    // TODO: Реализовать поиск
-    console.log('Search:', value)
-  }
-
-  const handleCreateProject = () => {
-    navigate('/projects/new')
-  }
-
-  if (loading) {
-    return <LoadingText>Загрузка проектов...</LoadingText>
+  if (loading && !isRefreshing) {
+    return (
+      <Container>
+        <PageHeader title="Мои проекты" />
+        <Content>
+          <Loader size="large" />
+        </Content>
+      </Container>
+    )
   }
 
   if (error) {
-    return <ErrorText>{error}</ErrorText>
+    return <div>Ошибка: {error}</div>
   }
-
-  console.log('Projects to render:', items)
 
   return (
     <Container>
-      <PageHeader
-        title="Мои проекты"
-        onSearch={handleSearch}
-        onCreateClick={handleCreateProject}
+      <PageHeader title="Мои проекты">
+        <HeaderContent>
+          <SearchInput 
+            value={searchQuery}
+            onChange={setSearchQuery}
+            placeholder="Поиск по названию или описанию..."
+          />
+          <ButtonGroup>
+            <Button variant="secondary" onClick={handleRefresh} disabled={isRefreshing}>
+              <RefreshIcon size={16} />
+              {isRefreshing ? 'Обновление...' : 'Обновить'}
+            </Button>
+            <Button onClick={() => setIsCreateModalOpen(true)}>
+              <PlusIcon size={16} />
+              Создать проект
+            </Button>
+          </ButtonGroup>
+        </HeaderContent>
+      </PageHeader>
+
+      <Content>
+        {filteredProjects.length === 0 ? (
+          <EmptyState
+            icon={<PlusIcon size={48} />}
+            title={searchQuery ? "Проекты не найдены" : "У вас пока нет проектов"}
+            description={searchQuery 
+              ? "Попробуйте изменить параметры поиска"
+              : "Создайте свой первый проект, чтобы начать работу"
+            }
+            buttonText="Создать проект"
+            onButtonClick={() => setIsCreateModalOpen(true)}
+          />
+        ) : (
+          <ProjectsGrid>
+            {filteredProjects.map(project => (
+              <ProjectCard key={project.id} project={project} />
+            ))}
+          </ProjectsGrid>
+        )}
+      </Content>
+
+      <CreateProjectModal
+        isOpen={isCreateModalOpen}
+        onClose={() => setIsCreateModalOpen(false)}
+        onSubmit={handleCreateProject}
       />
-      
-      {!items?.length ? (
-        <EmptyState>
-          <EmptyStateText>У вас пока нет проектов</EmptyStateText>
-          <button onClick={() => navigate('/projects/new')}>
-            Создать первый проект
-          </button>
-        </EmptyState>
-      ) : (
-        <ProjectsGrid>
-          {items.map((project) => (
-            <ProjectCard
-              key={project.id}
-              project={project}
-              onClick={() => navigate(`/projects/${project.id}`)}
-            />
-          ))}
-        </ProjectsGrid>
-      )}
     </Container>
   )
-} 
+}

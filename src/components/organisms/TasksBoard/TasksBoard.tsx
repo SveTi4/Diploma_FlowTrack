@@ -1,0 +1,55 @@
+import React, { useEffect } from 'react'
+import styled from 'styled-components'
+import { useDispatch, useSelector } from 'react-redux'
+import { AppDispatch, RootState } from '../../../store'
+import { deleteTask, fetchTasks, updateTask } from '../../../store/tasks/tasksSlice'
+import { Loader } from '../../atoms/Loader/Loader'
+import { TaskCard } from './components/Task/Task'
+
+const TasksContainer = styled.div`
+  width: 100%;
+`
+
+interface TasksBoardProps {
+  column_id: string
+}
+
+export const TasksBoard: React.FC<TasksBoardProps> = ({ column_id }) => {
+  const dispatch = useDispatch<AppDispatch>()
+  const { tasksByColumn, loading, error } = useSelector((state: RootState) => state.tasks)
+  const columnTasks = tasksByColumn[column_id]
+
+  useEffect(() => {
+    if (column_id) {
+      dispatch(fetchTasks({
+        column_id,
+        params: { page: 1, limit: 10 }
+      }))
+    }
+  }, [column_id, dispatch])
+
+  const handleDeleteTask = (taskId: string) => {
+    dispatch(deleteTask({ id: taskId, column_id }))
+  }
+
+  const handleUpdateTask = async (taskId: string, data: { name?: string; description?: string; status?: boolean }) => {
+    return dispatch(updateTask({ id: taskId, data: { ...data, column_id } })).unwrap()
+  }
+
+  if (loading && !columnTasks) return <Loader size="medium" />
+  if (error) return <div>Ошибка: {error}</div>
+  if (!columnTasks?.items) return null
+
+  return (
+    <TasksContainer>
+      {columnTasks.items.map(task => (
+        <TaskCard
+          key={task.id}
+          task={task}
+          onDelete={handleDeleteTask}
+          onUpdate={handleUpdateTask}
+        />
+      ))}
+    </TasksContainer>
+  )
+}   

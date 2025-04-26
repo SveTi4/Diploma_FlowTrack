@@ -44,47 +44,16 @@ const Actions = styled.div`
   align-items: center;
 `
 
-const SearchInput = styled.input`
-  background: rgba(255, 255, 255, 0.1);
-  border: none;
-  border-radius: 6px;
-  padding: 8px 12px;
-  color: white;
-  width: 240px;
-
-  &::placeholder {
-    color: rgba(255, 255, 255, 0.6);
-  }
-`
-
-const CreateButton = styled.button`
-  background: #007AFF;
-  color: white;
-  border: none;
-  border-radius: 6px;
-  padding: 8px 16px;
-  cursor: pointer;
-  font-size: 14px;
-
-  &:hover {
-    background: #0066CC;
-  }
-`
-
 interface PageHeaderProps {
   title: string
   showBackButton?: boolean
-  onSearch?: (value: string) => void
-  onCreateClick?: () => void
-  rightContent?: ReactNode
+  children?: ReactNode
 }
 
 export const PageHeader = ({ 
   title, 
   showBackButton,
-  onSearch, 
-  onCreateClick,
-  rightContent
+  children
 }: PageHeaderProps) => {
   const navigate = useNavigate()
 
@@ -101,20 +70,7 @@ export const PageHeader = ({
         <Title>{title}</Title>
       </TitleSection>
       
-      <Actions>
-        {onSearch && (
-          <SearchInput 
-            placeholder="Поиск проекта..." 
-            onChange={(e) => onSearch(e.target.value)}
-          />
-        )}
-        {onCreateClick && (
-          <CreateButton onClick={onCreateClick}>
-            + Новый проект
-          </CreateButton>
-        )}
-        {rightContent}
-      </Actions>
+      {children && <Actions>{children}</Actions>}
     </Container>
   )
 } 
