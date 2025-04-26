@@ -1,8 +1,9 @@
-import React, { useState} from 'react'
+import React, { useState } from 'react'
 import styled from 'styled-components'
 import { DeleteButton } from '../../../../atoms/DeleteButton/DeleteButton'
 import { TaskPanel } from '../TaskPanel/TaskPanel'
-import { CheckIcon } from "../../../../atoms/Icon/icons.tsx";
+import { Task } from "../../../../../api/services"
+import { TaskStatus } from '../TaskStatus/TaskStatus'
 
 const TaskWrapper = styled.div`
   width: 100%;
@@ -42,26 +43,6 @@ const TaskWrapper = styled.div`
 
   &:last-child {
     margin-bottom: 0;
-  }
-`
-
-const TaskStatus = styled.div`
-  width: 16%;
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items: center;
-  height: inherit;
-  background: inherit;
-  border-right: inherit;
-  transition: 
-          color 0.2s ease-in-out, 
-          background 0.2s ease-in-out,
-          width 0.2s ease-in-out,
-          height 0.2s ease-in-out;
-  
-  &:hover {
-    background: ${({ theme }) => theme.colors.surfaceHover};
   }
 `
 
@@ -129,74 +110,59 @@ const TaskTitle = styled.h3`
 `
 
 interface TaskProps {
-  id: number;
-  name: string;
-  description?: string;
-  status?: boolean;
-  onDelete: (id: number) => void;
-  onUpdate?: (id: number, data: { name?: string; description?: string, status?: boolean }) => void;
+  task: Task;
+  onDelete: (id: string) => void;
+  onUpdate?: (id: string, data: { name?: string; description?: string, status?: boolean }) => void;
 }
 
-export const Task: React.FC<TaskProps> = ({
-  id,
-  name,
-  description,
-  status,
+export const TaskCard: React.FC<TaskProps> = ({
+  task,
   onDelete,
   onUpdate
 }) => {
   const [isPanelOpen, setIsPanelOpen] = useState(false);
-  const [stateIconBefore, setStateIconBefore] = useState({color: status ? 'green' : 'red', size: 24});
-  const [stateIconAfter, setStateIconAfter] = useState({color: 'gray', size: 0});
+  const [isStatusUpdating, setIsStatusUpdating] = useState(false);
+
   const handleClick = () => {
     setIsPanelOpen(true);
   };
 
   const handleDeleteClick = (e: React.MouseEvent) => {
     e.stopPropagation();
-    onDelete(id);
+    onDelete(task.id);
   };
 
-  const handleUpdateStatus = () => {
-    console.log("Текущий статус: ", status);
-    console.log("Ожидаемый статус: ", !status);
-    onUpdate?.(id, { status: !status });
-  }
-
-  const handleStatusHover = () => {
-    setStateIconBefore({color: 'gray', size: 0});
-    setStateIconAfter({color: !status ? 'green' : 'red', size: 24});
-  }
-
-  const handleStatusUnHover = () => {
-    setStateIconBefore({color: status ? 'green' : 'red', size: 24});
-    setStateIconAfter({color: 'gray', size: 0});
-  }
+  const handleStatusChange = async () => {
+    setIsStatusUpdating(true);
+    try {
+      await onUpdate?.(task.id, { status: !task.status });
+    } finally {
+      setIsStatusUpdating(false);
+    }
+  };
 
   return (
     <>
       <TaskWrapper>
-        <TaskStatus
-          onClick={handleUpdateStatus}
-          onMouseEnter={handleStatusHover}
-          onMouseLeave={handleStatusUnHover}
-        >
-          <CheckIcon size={stateIconBefore.size} color={stateIconBefore.color} />
-          <CheckIcon size={stateIconAfter.size} color={stateIconAfter.color} />
-        </TaskStatus>
+        <TaskStatus 
+          status={task.status} 
+          onStatusChange={handleStatusChange}
+          isLoading={isStatusUpdating}
+        />
 
         <TaskInfo onClick={handleClick}>
           <TaskHeader>
             <TaskTitleWrapper>
-              <TaskTitle>{name}</TaskTitle>
+              <TaskTitle>{task.name}</TaskTitle>
             </TaskTitleWrapper>
             <TaskActions>
               <DeleteButton onClick={handleDeleteClick} />
             </TaskActions>
           </TaskHeader>
-          {description && (
+          {task.description && (
             <TaskContent>
-              <TaskDescription>{description}</TaskDescription>
+              <TaskDescription>{task.description}</TaskDescription>
+              <TaskDescription>{task.deadline}</TaskDescription>
             </TaskContent>
           )}
         </TaskInfo>
@@ -205,7 +171,7 @@ export const Task: React.FC<TaskProps> = ({
       <TaskPanel
         isOpen={isPanelOpen}
         onClose={() => setIsPanelOpen(false)}
-        task={{ id, name, description }}
+        task={task}
         onUpdateTask={onUpdate}
       />
     </>

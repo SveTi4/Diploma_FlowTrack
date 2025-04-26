@@ -2,7 +2,7 @@ export type TaskStatus = 'todo' | 'in_progress' | 'done';
 export type TaskPriority = 'low' | 'medium' | 'high';
 
 export interface Task {
-  id: string;
+  id: number;
   name: string;
   description?: string;
   status: boolean;
@@ -25,7 +25,7 @@ export interface UpdateTaskDto {
   name?: string;
   description?: string;
   status?: boolean;
-  column_id?: number;
+  column_id: number;
   deadline?: string | null;
 }
 

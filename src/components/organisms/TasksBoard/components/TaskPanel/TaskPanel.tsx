@@ -2,6 +2,7 @@ import React from 'react'
 import styled from 'styled-components'
 import { SidePanel } from '../../../../molecules/SidePanel/SidePanel'
 import { EditableTitleComponent } from '../../../ColumnsBoard/components/EditableTitle/EditableTitle'
+import {Task} from "../../../../../api/services";
 
 const Section = styled.div`
   background: ${({ theme }) => theme.colors.surface};
@@ -47,11 +48,7 @@ const SubtasksList = styled.div`
 interface TaskPanelProps {
   isOpen: boolean;
   onClose: () => void;
-  task?: {
-    id: number;
-    name: string;
-    description?: string;
-  };
+  task?: Task;
   onUpdateTask?: (id: number, data: { name?: string; description?: string }) => void;
 }
 

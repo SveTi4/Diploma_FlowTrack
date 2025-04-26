@@ -4,14 +4,14 @@ import { useDispatch, useSelector } from 'react-redux'
 import { AppDispatch, RootState } from '../../../store'
 import { deleteTask, fetchTasks, updateTask } from '../../../store/tasks/tasksSlice'
 import { Loader } from '../../atoms/Loader/Loader'
-import { Task } from './components/Task/Task'
+import { TaskCard } from './components/Task/Task'
 
 const TasksContainer = styled.div`
   width: 100%;
 `
 
 interface TasksBoardProps {
-  column_id: number
+  column_id: string
 }
 
 export const TasksBoard: React.FC<TasksBoardProps> = ({ column_id }) => {
@@ -28,12 +28,12 @@ export const TasksBoard: React.FC<TasksBoardProps> = ({ column_id }) => {
     }
   }, [column_id, dispatch])
 
-  const handleDeleteTask = (taskId: number) => {
+  const handleDeleteTask = (taskId: string) => {
     dispatch(deleteTask({ id: taskId, column_id }))
   }
 
-  const handleUpdateTask = (taskId: number, data: { name?: string; description?: string }) => {
-    dispatch(updateTask({ id: taskId, data: { ...data, column_id } }))
+  const handleUpdateTask = async (taskId: string, data: { name?: string; description?: string; status?: boolean }) => {
+    return dispatch(updateTask({ id: taskId, data: { ...data, column_id } })).unwrap()
   }
 
   if (loading && !columnTasks) return <Loader size="medium" />
@@ -43,12 +43,9 @@ export const TasksBoard: React.FC<TasksBoardProps> = ({ column_id }) => {
   return (
     <TasksContainer>
       {columnTasks.items.map(task => (
-        <Task
+        <TaskCard
           key={task.id}
-          id={Number(task.id)}
-          name={task.name}
-          status={task.status}
-          description={task.description}
+          task={task}
           onDelete={handleDeleteTask}
           onUpdate={handleUpdateTask}
         />

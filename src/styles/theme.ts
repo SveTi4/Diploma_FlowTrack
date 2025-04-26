@@ -119,10 +119,10 @@ export const darkTheme: DefaultTheme = {
   }
 }
 
-// В будущем можно добавить светлую тему
-export const lightTheme: DefaultTheme = {
-  // ... конфигурация светлой темы
-}
+// // В будущем можно добавить светлую тему
+// export const lightTheme: DefaultTheme = {
+//   // ... конфигурация светлой темы
+// }
 
 export const theme = {
   colors: {
