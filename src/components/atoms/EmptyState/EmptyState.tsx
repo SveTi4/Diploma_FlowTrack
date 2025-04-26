@@ -7,7 +7,7 @@ const Container = styled.div`
   justify-content: center;
   height: 100%;
   padding: 48px;
-  color: ${({ theme }) => theme.colors.light};
+  color: ${({ theme }) => theme.colors.text};
   opacity: 0.6;
   text-align: center;
 `

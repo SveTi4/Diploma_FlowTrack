@@ -41,7 +41,7 @@ const Overlay = styled.div<{ isOpen: boolean }>`
 `
 
 const ModalContainer = styled.div<{ isOpen: boolean }>`
-  background: ${({ theme }) => theme.colors.sidebar_bg};
+  background: ${({ theme }) => theme.colors.surface};
   border-radius: 12px;
   padding: 24px;
   width: 100%;
@@ -81,7 +81,7 @@ const ModalHeader = styled.div`
 `
 
 const ModalTitle = styled.h2`
-  color: ${({ theme }) => theme.colors.light};
+  color: ${({ theme }) => theme.colors.text};
   font-size: 20px;
   font-weight: 500;
 `
@@ -104,7 +104,7 @@ const CloseButton = styled.button`
   svg {
     width: 20px;
     height: 20px;
-    stroke: ${({ theme }) => theme.colors.light};
+    stroke: ${({ theme }) => theme.colors.text};
   }
 `
 
