@@ -11,7 +11,7 @@ const TasksContainer = styled.div`
 `
 
 interface TasksBoardProps {
-  column_id: string
+  column_id: number
 }
 
 export const TasksBoard: React.FC<TasksBoardProps> = ({ column_id }) => {
@@ -28,11 +28,11 @@ export const TasksBoard: React.FC<TasksBoardProps> = ({ column_id }) => {
     }
   }, [column_id, dispatch])
 
-  const handleDeleteTask = (taskId: string) => {
+  const handleDeleteTask = (taskId: number) => {
     dispatch(deleteTask({ id: taskId, column_id }))
   }
 
-  const handleUpdateTask = async (taskId: string, data: { name?: string; description?: string; status?: boolean }) => {
+  const handleUpdateTask = async (taskId: number, data: { name?: string; description?: string; status?: boolean }) => {
     return dispatch(updateTask({ id: taskId, data: { ...data, column_id } })).unwrap()
   }
 
