@@ -8,7 +8,9 @@ import { AppDispatch } from '../../../store'
 import { Loader } from "../../atoms/Loader/Loader.tsx"
 import { TasksBoard } from '../TasksBoard/TasksBoard'
 import { createTask } from '../../../store/tasks/tasksSlice'
-import { DeleteButton } from '../../atoms/DeleteButton/DeleteButton'
+import { IconButton } from '../../atoms/IconButton/IconButton.tsx'
+import {Button} from "../../atoms/Button/Button.tsx";
+import {EmptyState} from "../../atoms/EmptyState/EmptyState.tsx";
 
 const BoardHeader = styled.div`
   display: flex;
@@ -22,28 +24,6 @@ const BoardTitle = styled.h2`
   font-weight: 500;
   color: ${({ theme }) => theme.colors.text};
   margin: 0;
-`
-
-const AddColumnButton = styled.button`
-  background: none;
-  border: none;
-  color: ${({ theme }) => theme.colors.text};
-  cursor: pointer;
-  padding: 8px;
-  display: flex;
-  align-items: center;
-  gap: 8px;
-  font-size: 14px;
-  
-  &:hover {
-    opacity: 0.8;
-  }
-
-  svg {
-    width: 16px;
-    height: 16px;
-    stroke: currentColor;
-  }
 `
 
 const ColumnsContainer = styled.div`
@@ -246,20 +226,33 @@ export const ColumnsBoard: React.FC<ColumnsBoardProps> = ({ project_id }) => {
 
   if (loading) return <Loader size="medium" />
   if (error) return <div>Ошибка: {error}</div>
-
+  if (columns.length === 0) {
+    return (
+      <EmptyState
+        icon={<PlusIcon size={48} />}
+        title={"У вас пока нет колонок"}
+        description={"Создайте свою первой колонку прямо сейчас!"}
+        buttonText="Создать колнку"
+        onButtonClick={() => dispatch(createColumn({
+          name: 'Новая колонка',
+          project_id: project_id
+        }))}
+      />
+    )
+  }
   return (
     <div>
       <BoardHeader>
         <BoardTitle>Колонки</BoardTitle>
-        <AddColumnButton
-            onClick={() => dispatch(createColumn({
-                name: 'Новая колонка',
-                project_id: project_id
-            }))}
+        <Button
+          onClick={() => dispatch(createColumn({
+            name: 'Новая колонка',
+            project_id: project_id
+          }))}
         >
           <PlusIcon size={16} />
-          Добавить колонку
-        </AddColumnButton>
+          Новая колонка
+        </Button>
       </BoardHeader>
       
       <ColumnsContainer>
@@ -272,7 +265,7 @@ export const ColumnsBoard: React.FC<ColumnsBoardProps> = ({ project_id }) => {
                   onSave={(newName) => handleUpdateColumnName(Number(column?.id), newName)}
                 />
               </ColumnTitleWrapper>
-              <DeleteButton onClick={() => dispatch(deleteColumn(Number(column?.id)))} />
+              <IconButton onClick={() => dispatch(deleteColumn(Number(column?.id)))} />
             </ColumnHeader>
             <AddTaskButton onClick={() => dispatch(createTask({
               name: 'Новая задача',

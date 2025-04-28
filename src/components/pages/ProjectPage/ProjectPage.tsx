@@ -5,14 +5,13 @@ import { useDispatch, useSelector } from 'react-redux'
 import styled from 'styled-components'
 import { PageHeader } from '../../molecules/PageHeader/PageHeader'
 import { ProgressBarComponent } from "../../atoms/ProgressBar/ProgressBar"
-import { InfoIcon } from "../../atoms/Icon/icons"
 import { AppDispatch, RootState } from '../../../store'
 import { fetchProject, deleteProject, clearCurrentProject } from '../../../store/projects/projectsSlice'
 import { ColumnsBoard } from '../../organisms/ColumnsBoard/ColumnsBoard'
 import { Loader } from "../../atoms/Loader/Loader.tsx"
 import { SidePanel } from '../../molecules/SidePanel/SidePanel'
 import { Section, SectionTitle } from '../../molecules/Section/Section'
-import { DeleteButton } from '../../atoms/DeleteButton/DeleteButton'
+import { IconButton } from '../../atoms/IconButton/IconButton.tsx'
 
 const Container = styled.div`
   min-height: 100vh;
@@ -45,30 +44,6 @@ const Chart = styled.div`
   background: ${({ theme }) => theme.colors.surface};
   border-radius: ${({ theme }) => theme.borderRadius.medium};
   padding: ${({ theme }) => theme.spacing.medium};
-`
-
-const HeaderButton = styled.button`
-  background: none;
-  border: none;
-  padding: 4px;
-  color: ${({ theme }) => theme.colors.textSecondary};
-  cursor: pointer;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  opacity: 0.6;
-  transition: all 0.2s ease;
-
-  &:hover {
-    opacity: 1;
-    color: ${({ theme }) => theme.colors.text};
-  }
-
-  svg {
-    width: 24px;
-    height: 24px;
-    stroke: currentColor;
-  }
 `
 
 export const ProjectPage: React.FC = () => {
@@ -111,10 +86,8 @@ export const ProjectPage: React.FC = () => {
         title={project.name}
         showBackButton>
           <>
-            <HeaderButton onClick={() => setIsInfoOpen(true)}>
-              <InfoIcon size={24} />
-            </HeaderButton>
-            <DeleteButton onClick={handleDelete} size={24} />
+            <IconButton onClick={() => setIsInfoOpen(true)} size={24} type={'info'}/>
+            <IconButton onClick={handleDelete} size={24} type={'delete'}/>
           </>
       </PageHeader>
 

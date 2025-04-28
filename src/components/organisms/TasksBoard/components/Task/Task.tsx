@@ -1,6 +1,6 @@
 import React, { useState } from 'react'
 import styled from 'styled-components'
-import { DeleteButton } from '../../../../atoms/DeleteButton/DeleteButton'
+import { IconButton } from '../../../../atoms/IconButton/IconButton.tsx'
 import { TaskPanel } from '../TaskPanel/TaskPanel'
 import { Task } from "../../../../../api/services"
 import { TaskStatus } from '../TaskStatus/TaskStatus'
@@ -156,7 +156,7 @@ export const TaskCard: React.FC<TaskProps> = ({
               <TaskTitle>{task.name}</TaskTitle>
             </TaskTitleWrapper>
             <TaskActions>
-              <DeleteButton onClick={handleDeleteClick} />
+              <IconButton onClick={handleDeleteClick} />
             </TaskActions>
           </TaskHeader>
           {task.description && (
