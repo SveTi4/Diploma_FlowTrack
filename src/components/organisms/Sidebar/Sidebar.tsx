@@ -15,6 +15,7 @@ const Container = styled.div<{ isCollapsed: boolean }>`
   width: ${({ isCollapsed }) => isCollapsed ? '84px' : '240px'};
   height: 100vh;
   background: ${({ theme }) => theme.colors.surface};
+  border-right: 1px solid ${({ theme }) => theme.colors.border};
   transition: all 0.3s ease;
   display: flex;
   flex-direction: column;
@@ -46,12 +47,12 @@ const NavItem = styled(NavLink)<{ isCollapsed?: boolean }>`
   }
 
   &:hover {
-    background: rgba(255, 255, 255, 0.1);
+    background: ${({ theme }) => theme.colors.backgroundHover};
   }
 
   &.active {
-    color: white;
-    background: rgba(255, 255, 255, 0.1);
+    color: ${({ theme }) => theme.colors.primary};
+    background: ${({ theme }) => theme.colors.backgroundHover};
   }
 `
 
@@ -60,7 +61,7 @@ const ProfileSection = styled(NavItem)`
   margin: 0;
   border-radius: 0;
   padding: 0 32px;
-  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+  border-bottom: 1px solid ${({ theme }) => theme.colors.border};
 
   ${Avatar} {
     opacity: 1;
@@ -74,7 +75,7 @@ const ProfileSection = styled(NavItem)`
 
 const BottomSection = styled.div`
   padding: 16px;
-  border-top: 1px solid rgba(255, 255, 255, 0.1);
+  border-top: 1px solid ${({ theme }) => theme.colors.border};
 `
 
 const BottomNavItem = styled(NavItem)`
