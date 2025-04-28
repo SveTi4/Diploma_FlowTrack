@@ -6,6 +6,9 @@ declare module 'styled-components' {
       // Основные цвета фона
       background: string
       surface: string
+      light: string
+      dark: string
+      ghost: string
       
       // Цвета текста
       text: string
@@ -66,6 +69,9 @@ export const darkTheme: DefaultTheme = {
     // Основные цвета фона
     background: '#191A1C', // Основной фон контента
     surface: '#121316',    // Фон для карточек, панелей
+    light: '#fff',
+    dark: '#000',
+    ghost: 'rgb(145,145,145)',
 
     // Цвета текста
     text: '#FFFFFF',
@@ -119,10 +125,67 @@ export const darkTheme: DefaultTheme = {
   }
 }
 
-// // В будущем можно добавить светлую тему
-// export const lightTheme: DefaultTheme = {
-//   // ... конфигурация светлой темы
-// }
+export const lightTheme: DefaultTheme = {
+  colors: {
+    // Основные цвета фона
+    background: '#FFFFFF',       // Белый фон
+    surface: '#F8FAFC',          // Светлый фон для компонентов
+    light: '#fff',
+    dark: '#000',
+    ghost: 'rgb(145,145,145)',
+
+    // Цвета текста
+    text: '#0F172A',             // Темно-синий как основной текст
+    textSecondary: '#64748B',    // Серо-синий для второстепенного текста
+
+    // Цвета границ
+    border: '#E2E8F0',          // Светло-серая граница
+
+    // Акцентные цвета
+    primary: '#3B82F6',         // Яркий синий
+    secondary: '#6366F1',       // Фиолетово-синий
+    error: '#EF4444',           // Красный для ошибок
+    success: '#22C55E',         // Зеленый для успеха
+    warning: '#F59E0B',         // Оранжевый для предупреждений
+    danger: '#DC2626',          // Темно-красный для опасных действий
+
+    // Состояния
+    primaryHover: '#2563EB',    // Темно-синий при наведении
+    backgroundHover: 'rgba(15, 23, 42, 0.03)',  // Легкое затемнение фона
+    surfaceHover: 'rgba(15, 23, 42, 0.05)'      // Легкое затемнение поверхностей
+  },
+
+  // Остальные параметры можно оставить общими для обеих тем
+  spacing: {
+    small: '8px',
+    medium: '16px',
+    large: '24px'
+  },
+
+  borderRadius: {
+    small: '8px',
+    medium: '12px',
+    large: '16px'
+  },
+
+  typography: {
+    fontFamily: "'Inter', sans-serif",
+    fontSize: {
+      xs: '12px',
+      sm: '14px',
+      md: '16px',
+      lg: '18px',
+      xl: '24px',
+      xxl: '32px'
+    },
+    fontWeight: {
+      regular: 400,
+      medium: 500,
+      semibold: 600,
+      bold: 700
+    }
+  }
+}
 
 export const theme = {
   colors: {
