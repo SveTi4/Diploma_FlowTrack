@@ -4,28 +4,28 @@ import { format } from 'date-fns'
 import { ru } from 'date-fns/locale'
 
 const Card = styled.div`
-  background: #27282A;
-  border: 1px solid #323336;
-  border-radius: 12px;
-  padding: 20px;
-  cursor: pointer;
-  transition: all 0.2s ease;
-    box-shadow: 0 0 32px 1px rgba(255, 255, 255, 0.06);
+    background: ${({ theme }) => theme.colors.surface};
+    border: 1px solid ${({theme}) => theme.colors.border};
+    border-radius: 12px;
+    padding: 20px;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    box-shadow: 0 0 24px 1px ${({ theme }) => theme.colors.border};
 
-  &:hover {
-    transform: translateY(-2px);
-    border-color: #3C3D42;
-  }
+    &:hover {
+        transform: translateY(-2px);
+        border-color: ${({ theme }) => theme.colors.primary};
+    }
 `
 
 const Title = styled.h3`
-  color: white;
+  color: ${({ theme }) => theme.colors.text};
   font-size: 18px;
   margin-bottom: 8px;
 `
 
 const Description = styled.p`
-  color: rgba(255, 255, 255, 0.6);
+  color: ${({ theme }) => theme.colors.textSecondary};
   font-size: 14px;
   line-height: 1.5;
   margin-bottom: 24px;
@@ -33,6 +33,7 @@ const Description = styled.p`
   -webkit-line-clamp: 2;
   -webkit-box-orient: vertical;
   overflow: hidden;
+  flex-grow: 1;
 `
 
 const Meta = styled.div`
@@ -42,7 +43,7 @@ const Meta = styled.div`
 `
 
 const Deadline = styled.div<{ isExpired?: boolean }>`
-  color: ${({ isExpired }) => isExpired ? '#FF6B6B' : 'rgba(255, 255, 255, 0.6)'};
+  color: ${({ isExpired, theme }) => isExpired ? theme.colors.danger : theme.colors.textSecondary};
   font-size: 12px;
   display: flex;
   align-items: center;

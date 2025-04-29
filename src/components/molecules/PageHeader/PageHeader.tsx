@@ -8,7 +8,7 @@ const Container = styled.div`
   align-items: center;
   padding: 0 32px;
   height: 80px;
-  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+  border-bottom: 1px solid ${({ theme }) => theme.colors.border};
 `
 
 const TitleSection = styled.div`
@@ -20,7 +20,7 @@ const TitleSection = styled.div`
 const BackButton = styled.button`
   background: none;
   border: none;
-  color: rgba(255, 255, 255, 0.6);
+  color: ${({ theme }) => theme.colors.textSecondary};
   cursor: pointer;
   padding: 4px;
   display: flex;
@@ -28,12 +28,13 @@ const BackButton = styled.button`
   font-size: 20px;
 
   &:hover {
-    color: white;
+    color: ${({ theme }) => theme.colors.textSecondary};
+    opacity: 0.8;
   }
 `
 
 const Title = styled.h1`
-  color: white;
+  color: ${({ theme }) => theme.colors.text};
   font-size: 24px;
   font-weight: 500;
 `

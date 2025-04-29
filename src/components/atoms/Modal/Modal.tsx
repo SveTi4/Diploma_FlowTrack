@@ -41,7 +41,7 @@ const Overlay = styled.div<{ isOpen: boolean }>`
 `
 
 const ModalContainer = styled.div<{ isOpen: boolean }>`
-  background: ${({ theme }) => theme.colors.surface};
+  background: ${({ theme }) => theme.colors.background};
   border-radius: 12px;
   padding: 24px;
   width: 100%;

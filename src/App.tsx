@@ -1,10 +1,9 @@
-import { ThemeProvider } from 'styled-components'
-import { darkTheme } from './styles/theme'
+import { ThemeProvider } from './contexts/ThemeContext'
 import { Router } from './Router'
 
 const App = () => {
   return (
-    <ThemeProvider theme={darkTheme}>
+    <ThemeProvider>
       <Router />
     </ThemeProvider>
   )

@@ -1,5 +1,6 @@
 import styled from 'styled-components'
 import { Sidebar } from '../../organisms/Sidebar/Sidebar'
+import {ThemeToggle} from "../../atoms/ThemeToggle/ThemeToggle.tsx";
 
 const Container = styled.div`
     display: flex;
@@ -32,6 +33,11 @@ const Content = styled.main`
         background: ${({ theme }) => theme.colors.surfaceHover};
     }
 `
+const ThemeToggleWrapper = styled.div`
+    position: absolute;
+    right: 48px;
+    bottom: 24px;
+`
 
 interface MainTemplateProps {
   children: React.ReactNode
@@ -44,6 +50,9 @@ export const MainTemplate = ({ children }: MainTemplateProps) => {
       <Content>
         {children}
       </Content>
+      <ThemeToggleWrapper>
+        <ThemeToggle />
+      </ThemeToggleWrapper>
     </Container>
   )
 } 

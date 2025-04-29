@@ -15,27 +15,31 @@ const getVariantStyles = (variant: ButtonProps['variant']) => {
     case 'primary':
       return css`
         background: ${({ theme }) => theme.colors.primary};
-        border: ${({ theme }) => theme.colors.primary} 1px solid;
-        color: white;
+        border: 1px solid ${({ theme }) => theme.colors.primary};
+        color: ${({ theme }) => theme.colors.light};
         &:hover:not(:disabled) {
-          background: ${({ theme }) => theme.colors.background};
+          background: transparent;
           color: ${({ theme }) => theme.colors.primary};
         }
       `
     case 'secondary':
       return css`
-        background: rgba(255, 255, 255, 0.1);
-        color: white;
+        background: transparent;
+        border: 1px solid ${({ theme }) => theme.colors.secondary};
+        color: ${({ theme }) => theme.colors.secondary};
         &:hover:not(:disabled) {
-          background: rgba(255, 255, 255, 0.15);
+          background: ${({ theme }) => theme.colors.secondary};
+          color: ${({ theme }) => theme.colors.light};
         }
       `
     case 'ghost':
       return css`
         background: transparent;
-        color: rgba(255, 255, 255, 0.8);
+        color: ${({ theme }) => theme.colors.ghost};
+        border: 1px solid ${({ theme }) => theme.colors.ghost};
         &:hover:not(:disabled) {
-          background: rgba(255, 255, 255, 0.1);
+          background: ${({ theme }) => theme.colors.ghost};
+          color: ${({ theme }) => theme.colors.light};
         }
       `
     default:

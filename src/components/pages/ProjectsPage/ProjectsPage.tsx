@@ -108,7 +108,7 @@ export const ProjectsPage = () => {
             placeholder="Поиск по названию или описанию..."
           />
           <ButtonGroup>
-            <Button variant="secondary" onClick={handleRefresh} disabled={isRefreshing}>
+            <Button variant="ghost" onClick={handleRefresh} disabled={isRefreshing}>
               <RefreshIcon size={16} />
               {isRefreshing ? 'Обновление...' : 'Обновить'}
             </Button>

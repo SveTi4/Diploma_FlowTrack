@@ -6,6 +6,9 @@ declare module 'styled-components' {
       // Основные цвета фона
       background: string
       surface: string
+      light: string
+      dark: string
+      ghost: string
       
       // Цвета текста
       text: string
@@ -28,7 +31,6 @@ declare module 'styled-components' {
       surfaceHover: string
     }
     
-    // Можно добавить другие параметры темы
     spacing: {
       small: string
       medium: string
@@ -40,113 +42,52 @@ declare module 'styled-components' {
       medium: string
       large: string
     }
+    
+    breakpoints: {
+      mobile: string
+      tablet: string
+      desktop: string
+      wide: string
+    }
 
     typography: {
-      fontFamily: string,
+      fontFamily: string
       fontSize: {
-        xs: string,
-        sm: string,
-        md: string,
-        lg: string,
-        xl: string,
+        xs: string
+        sm: string
+        md: string
+        lg: string
+        xl: string
         xxl: string
-      },
+      }
       fontWeight: {
-        regular: number,
-        medium: number,
-        semibold: number,
+        regular: number
+        medium: number
+        semibold: number
         bold: number
       }
+    }
+
+    shadows: {
+      sm: string
+      md: string
+      lg: string
+      xl: string
     }
   }
 }
 
-export const darkTheme: DefaultTheme = {
-  colors: {
-    // Основные цвета фона
-    background: '#191A1C', // Основной фон контента
-    surface: '#121316',    // Фон для карточек, панелей
-
-    // Цвета текста
-    text: '#FFFFFF',
-    textSecondary: 'rgba(255, 255, 255, 0.6)',
-
-    // Цвета границ
-    border: 'rgba(255, 255, 255, 0.1)',
-
-    // Акцентные цвета
-    primary: '#7B68EE',   // Можете заменить на ваш основной цвет
-    secondary: '#4F46E5',
-    error: '#FF5252',
-    success: '#22C55E',
-    warning: '#F59E0B',
-    danger: '#EF4444',
-
-    // Состояния
-    primaryHover: '#6B46C1',
-    surfaceHover: 'rgba(255, 255, 255, 0.1)', // Фон при наведении
-    backgroundHover: 'rgba(255, 255, 255, 0.1)'
-  },
-  
+// Базовые значения, общие для всех тем
+const baseTheme = {
   spacing: {
     small: '8px',
     medium: '16px',
     large: '24px'
   },
-  
   borderRadius: {
     small: '8px',
     medium: '12px',
     large: '16px'
-  },
-
-  typography: {
-    fontFamily: "'Inter', sans-serif",
-    fontSize: {
-      xs: '12px',
-      sm: '14px',
-      md: '16px',
-      lg: '18px',
-      xl: '24px',
-      xxl: '32px'
-    },
-    fontWeight: {
-      regular: 400,
-      medium: 500,
-      semibold: 600,
-      bold: 700
-    }
-  }
-}
-
-// // В будущем можно добавить светлую тему
-// export const lightTheme: DefaultTheme = {
-//   // ... конфигурация светлой темы
-// }
-
-export const theme = {
-  colors: {
-    primary: '#2563EB',
-    primaryHover: '#1D4ED8',
-    secondary: '#4F46E5',
-    background: '#121316',
-    surface: '#1E293B',
-    border: 'rgba(255, 255, 255, 0.1);',
-    light: '#F8FAFC',
-    dark: '#020617',
-    danger: '#EF4444',
-    success: '#22C55E',
-    warning: '#F59E0B',
-    disabled: '#475569',
-    input: '#1E293B'
-  },
-  spacing: {
-    xs: '4px',
-    sm: '8px',
-    md: '16px',
-    lg: '24px',
-    xl: '32px',
-    xxl: '48px'
   },
   breakpoints: {
     mobile: '320px',
@@ -177,6 +118,68 @@ export const theme = {
     lg: '0 10px 15px rgba(0, 0, 0, 0.1)',
     xl: '0 20px 25px rgba(0, 0, 0, 0.1)'
   }
-} as const
+}
 
-export type Theme = typeof theme 
+export const lightTheme: DefaultTheme = {
+  ...baseTheme,
+  colors: {
+    // Основные цвета фона
+    background: '#FFFFFF',
+    surface: '#F8FAFC',
+    light: '#fff',
+    dark: '#000',
+    ghost: 'rgb(145,145,145)',
+
+    // Цвета текста
+    text: '#0F172A',
+    textSecondary: '#64748B',
+
+    // Цвета границ
+    border: '#E2E8F0',
+
+    // Акцентные цвета
+    primary: '#3B82F6',
+    secondary: '#6366F1',
+    error: '#EF4444',
+    success: '#22C55E',
+    warning: '#F59E0B',
+    danger: '#DC2626',
+
+    // Состояния
+    primaryHover: '#2563EB',
+    backgroundHover: 'rgba(15, 23, 42, 0.03)',
+    surfaceHover: 'rgba(15, 23, 42, 0.05)'
+  }
+}
+
+export const darkTheme: DefaultTheme = {
+  ...baseTheme,
+  colors: {
+    // Основные цвета фона
+    background: '#191A1C',
+    surface: '#121316',
+    light: '#fff',
+    dark: '#000',
+    ghost: 'rgb(145,145,145)',
+
+    // Цвета текста
+    text: '#FFFFFF',
+    textSecondary: 'rgba(255, 255, 255, 0.6)',
+
+    // Цвета границ
+    border: 'rgba(255, 255, 255, 0.1)',
+
+    // Акцентные цвета
+    primary: '#7B68EE',
+    secondary: '#4F46E5',
+    error: '#FF5252',
+    success: '#22C55E',
+    warning: '#F59E0B',
+    danger: '#EF4444',
+
+    // Состояния
+    primaryHover: '#6B46C1',
+    backgroundHover: 'rgba(255, 255, 255, 0.1)',
+    surfaceHover: 'rgba(255, 255, 255, 0.1)'
+  }
+} 
