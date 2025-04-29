@@ -15,9 +15,9 @@ const StyledButton = styled.button<{ $size?: number, $color: string }>`
 
   &:hover {
     opacity: 1;
-    color: ${({ theme, $color }) => $color == 'danger' 
+    color: ${({ theme, $color }) => $color === 'danger' 
             ? theme.colors.danger 
-            : $color && 'warning' 
+            : $color === 'warning' 
                     ? theme.colors.warning 
                     : theme.colors.ghost
     };
