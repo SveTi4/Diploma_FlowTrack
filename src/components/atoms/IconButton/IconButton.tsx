@@ -30,13 +30,13 @@ const StyledButton = styled.button<{ $size?: number, $color: string }>`
   }
 `
 
-interface DeleteButtonProps {
+interface IconButtonProps {
   onClick: (e: React.MouseEvent) => void;
   size?: number;
   type?: 'delete' | 'info' | 'reload';
 }
 
-export const IconButton: React.FC<DeleteButtonProps> = ({ onClick, size = 16 , type='delete' }) => {
+export const IconButton: React.FC<IconButtonProps> = ({ onClick, size = 16 , type='delete' }) => {
   switch (type) {
     case 'delete':
       return (
