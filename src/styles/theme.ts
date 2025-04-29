@@ -182,4 +182,6 @@ export const darkTheme: DefaultTheme = {
     backgroundHover: 'rgba(255, 255, 255, 0.1)',
     surfaceHover: 'rgba(255, 255, 255, 0.1)'
   }
-} 
+}
+
+export type Theme = DefaultTheme 
