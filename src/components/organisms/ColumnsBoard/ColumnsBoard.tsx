@@ -10,7 +10,7 @@ import { TasksBoard } from '../TasksBoard/TasksBoard'
 import { createTask } from '../../../store/tasks/tasksSlice'
 import { IconButton } from '../../atoms/IconButton/IconButton.tsx'
 import {Button} from "../../atoms/Button/Button.tsx";
-import {EmptyState} from "../../atoms/EmptyState/EmptyState.tsx";
+import {EmptyState} from "../../molecules/EmptyState/EmptyState.tsx";
 
 const BoardHeader = styled.div`
   display: flex;

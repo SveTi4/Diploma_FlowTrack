@@ -1,6 +1,6 @@
 import { useState } from 'react'
 import styled from 'styled-components'
-import { Modal } from '../../../atoms/Modal/Modal'
+import { Modal } from '../../../molecules/Modal/Modal'
 import { Button } from '../../../atoms/Button/Button'
 
 const Form = styled.form`

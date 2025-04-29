@@ -1,6 +1,6 @@
 import React from 'react'
 import styled from 'styled-components'
-import { SidePanel } from '../../../../molecules/SidePanel/SidePanel'
+import { SidePanel } from '../../../SidePanel/SidePanel'
 import { EditableTitleComponent } from '../../../ColumnsBoard/components/EditableTitle/EditableTitle'
 import {Task} from "../../../../../api/services";
 

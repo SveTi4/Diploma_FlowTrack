@@ -9,7 +9,7 @@ import { AppDispatch, RootState } from '../../../store'
 import { fetchProject, deleteProject, clearCurrentProject } from '../../../store/projects/projectsSlice'
 import { ColumnsBoard } from '../../organisms/ColumnsBoard/ColumnsBoard'
 import { Loader } from "../../atoms/Loader/Loader.tsx"
-import { SidePanel } from '../../molecules/SidePanel/SidePanel'
+import { SidePanel } from '../../organisms/SidePanel/SidePanel'
 import { Section, SectionTitle } from '../../molecules/Section/Section'
 import { IconButton } from '../../atoms/IconButton/IconButton.tsx'
 
