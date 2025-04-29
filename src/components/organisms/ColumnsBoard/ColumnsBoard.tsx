@@ -232,7 +232,7 @@ export const ColumnsBoard: React.FC<ColumnsBoardProps> = ({ project_id }) => {
         icon={<PlusIcon size={48} />}
         title={"У вас пока нет колонок"}
         description={"Создайте свою первой колонку прямо сейчас!"}
-        buttonText="Создать колнку"
+        buttonText="Создать колонку"
         onButtonClick={() => dispatch(createColumn({
           name: 'Новая колонка',
           project_id: project_id
