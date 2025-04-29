@@ -1,6 +1,6 @@
 import React, { ReactNode } from 'react'
 import styled from 'styled-components'
-import { CloseIcon } from '../../atoms/Icon/icons'
+import { CloseIcon } from '../../atoms/Icon/icons.tsx'
 
 const Panel = styled.div<{ isOpen: boolean }>`
   position: fixed;

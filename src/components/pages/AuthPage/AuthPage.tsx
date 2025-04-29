@@ -1,5 +1,5 @@
 import styled from 'styled-components'
-import { RegisterForm } from '../../molecules/RegisterForm/RegisterForm'
+import { LoginForm } from '../../molecules/LoginForm/LoginForm.tsx'
 
 const Container = styled.div`
   display: flex;
@@ -9,10 +9,10 @@ const Container = styled.div`
   background: ${({ theme }) => theme.colors.background};
 `
 
-export const RegisterPage = () => {
+export const AuthPage = () => {
   return (
     <Container>
-      <RegisterForm />
+      <LoginForm />
     </Container>
   )
 } 
