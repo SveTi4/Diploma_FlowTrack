@@ -12,13 +12,6 @@ import { Loader } from '../../atoms/Loader/Loader'
 import { SearchInput } from '../../atoms/SearchInput/SearchInput'
 import { fetchProjects, createProject } from '../../../store/projects/projectsSlice'
 
-const Container = styled.div`
-  padding: 0;
-  height: 100%;
-  display: flex;
-  flex-direction: column;
-`
-
 const Content = styled.div`
   padding: 32px;
   flex: 1;
@@ -85,12 +78,12 @@ export const ProjectsPage = () => {
 
   if (loading && !isRefreshing) {
     return (
-      <Container>
+      <>
         <PageHeader title="Мои проекты" />
         <Content>
           <Loader size="large" />
         </Content>
-      </Container>
+      </>
     )
   }
 
@@ -99,7 +92,7 @@ export const ProjectsPage = () => {
   }
 
   return (
-    <Container>
+    <>
       <PageHeader title="Мои проекты">
         <HeaderContent>
           <SearchInput 
@@ -146,6 +139,6 @@ export const ProjectsPage = () => {
         onClose={() => setIsCreateModalOpen(false)}
         onSubmit={handleCreateProject}
       />
-    </Container>
+    </>
   )
 }
