@@ -2,7 +2,7 @@ import React from 'react'
 import styled from 'styled-components'
 import { TrashIcon } from '../../../../atoms/Icon/icons'
 import { TasksBoard } from '../../../TasksBoard/TasksBoard'
-import { EditableTitleComponent } from '../EditableTitle/EditableTitle'
+import { EditableTitleComponent } from '../../../../molecules/EditableTitle/EditableTitle'
 
 const ColumnWrapper = styled.div`
   width: 360px;

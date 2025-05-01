@@ -3,7 +3,9 @@ import styled from 'styled-components'
 import { IconButton } from '../../../../atoms/IconButton/IconButton.tsx'
 import { TaskPanel } from '../TaskPanel/TaskPanel'
 import { Task } from "../../../../../api/services"
-import { TaskStatus } from '../TaskStatus/TaskStatus'
+import { TaskStatus } from '../../../../atoms/TaskStatus/TaskStatus'
+import { format } from 'date-fns'
+import { ru } from 'date-fns/locale'
 
 const TaskWrapper = styled.div`
   width: 100%;
@@ -141,6 +143,12 @@ export const TaskCard: React.FC<TaskProps> = ({
     }
   };
 
+  // const isExpired = task.deadline ? new Date(task.deadline) < new Date() : false
+  
+  const formattedDeadline = task.deadline 
+    ? format(new Date(task.deadline), 'd MMMM yyyy', { locale: ru })
+    : 'Нет дедлайна'
+
   return (
     <>
       <TaskWrapper>
@@ -162,7 +170,7 @@ export const TaskCard: React.FC<TaskProps> = ({
           {task.description && (
             <TaskContent>
               <TaskDescription>{task.description}</TaskDescription>
-              <TaskDescription>{task.deadline}</TaskDescription>
+              <TaskDescription>Дедлайн: {formattedDeadline}</TaskDescription>
             </TaskContent>
           )}
         </TaskInfo>

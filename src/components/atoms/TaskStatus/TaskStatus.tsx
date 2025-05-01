@@ -1,6 +1,6 @@
 import React from 'react';
 import styled from 'styled-components';
-import { CheckIcon } from "../../../../atoms/Icon/icons";
+import { CheckIcon } from "../Icon/icons.tsx";
 
 const StatusWrapper = styled.div`
   width: 16%;
