@@ -14,14 +14,14 @@ interface TasksByColumn {
 
 interface TasksState {
   tasksByColumn: TasksByColumn
-  loading: boolean
-  error: string | null
+  loadingByColumn: { [column_id: number]: boolean },
+  errorByColumn: { [column_id: number]: string | null }
 }
 
 const initialState: TasksState = {
   tasksByColumn: {},
-  loading: false,
-  error: null
+  loadingByColumn: {},
+  errorByColumn: {}
 }
 
 export const fetchTasks = createAsyncThunk(
@@ -58,6 +58,18 @@ export const updateTask = createAsyncThunk(
   }
 )
 
+export const changeColumn = createAsyncThunk(
+  'tasks/changeColumn',
+  async ({ taskId, old_column_id, new_column_id }: { taskId: number, old_column_id: number, new_column_id: number }) => {
+    const response = await services.tasks.updateTask(taskId, { column_id: new_column_id })
+    return {
+      response,
+      old_column_id,
+      new_column_id
+    }
+  }
+)
+
 export const deleteTask = createAsyncThunk(
   'tasks/deleteTask',
   async ({ id, column_id }: { id: number, column_id: number }) => {
@@ -72,13 +84,13 @@ const tasksSlice = createSlice({
   reducers: {},
   extraReducers: (builder) => {
     builder
-      .addCase(fetchTasks.pending, (state) => {
-        state.loading = true
-        state.error = null
+      .addCase(fetchTasks.pending, (state, action) => {
+        state.loadingByColumn[action.meta.arg.column_id] = true
+        state.errorByColumn[action.meta.arg.column_id] = null
       })
       .addCase(fetchTasks.fulfilled, (state, action) => {
         const { column_id, data } = action.payload
-        state.loading = false
+        state.loadingByColumn[column_id] = false
         state.tasksByColumn[column_id] = {
           items: data.items,
           total: data.total || 0,
@@ -88,16 +100,16 @@ const tasksSlice = createSlice({
         }
       })
       .addCase(fetchTasks.rejected, (state, action) => {
-        state.loading = false
-        state.error = action.error.message || 'Произошла ошибка при загрузке задач'
+        state.loadingByColumn[action.meta.arg.column_id] = false
+        state.errorByColumn[action.meta.arg.column_id] = action.error.message || 'Произошла ошибка при загрузке задач'
       })
-      .addCase(createTask.pending, (state) => {
-        state.loading = true
-        state.error = null
+      .addCase(createTask.pending, (state, action) => {
+        state.loadingByColumn[action.meta.arg.column_id] = true
+        state.errorByColumn[action.meta.arg.column_id] = null
       })
       .addCase(createTask.fulfilled, (state, action) => {
         const { response, column_id } = action.payload
-        state.loading = false
+        state.loadingByColumn[column_id] = false
         if (response && response.data) {
           const columnTasks = state.tasksByColumn[column_id] || { items: [], total: 0, page: 1, limit: 10, totalPages: 1 }
           state.tasksByColumn[column_id] = {
@@ -108,16 +120,16 @@ const tasksSlice = createSlice({
         }
       })
       .addCase(createTask.rejected, (state, action) => {
-        state.loading = false
-        state.error = action.error.message || 'Произошла ошибка при добавлении задачи'
+        state.loadingByColumn[action.meta.arg.column_id] = false
+        state.errorByColumn[action.meta.arg.column_id] = action.error.message || 'Произошла ошибка при добавлении задачи'
       })
-      .addCase(updateTask.pending, (state) => {
-        state.loading = true
-        state.error = null
+      .addCase(updateTask.pending, (state, action) => {
+        state.loadingByColumn[action.meta.arg.data.column_id] = true
+        state.errorByColumn[action.meta.arg.data.column_id] = null
       })
       .addCase(updateTask.fulfilled, (state, action) => {
         const { response, column_id } = action.payload
-        state.loading = false
+        state.loadingByColumn[column_id] = false
         const columnTasks = state.tasksByColumn[column_id]
         if (columnTasks) {
           const index = columnTasks.items.findIndex(item => Number(item.id) === Number(response.data.id))
@@ -127,16 +139,43 @@ const tasksSlice = createSlice({
         }
       })
       .addCase(updateTask.rejected, (state, action) => {
-        state.loading = false
-        state.error = action.error.message || 'Произошла ошибка при обновлении задачи'
+        state.loadingByColumn[action.meta.arg.data.column_id] = false
+        state.errorByColumn[action.meta.arg.data.column_id] = action.error.message || 'Произошла ошибка при обновлении задачи'
       })
-      .addCase(deleteTask.pending, (state) => {
-        state.loading = true
-        state.error = null
+      .addCase(changeColumn.pending, (state, action) => {
+        state.loadingByColumn[action.meta.arg.old_column_id] = true
+        state.errorByColumn[action.meta.arg.old_column_id] = null
+
+        state.loadingByColumn[action.meta.arg.new_column_id] = true
+        state.errorByColumn[action.meta.arg.new_column_id] = null
+      })
+      .addCase(changeColumn.fulfilled, (state, action) => {
+        const { response, old_column_id, new_column_id } = action.payload
+        state.loadingByColumn[old_column_id] = false
+        state.loadingByColumn[new_column_id] = false
+
+        const oldColumnTasks = state.tasksByColumn[old_column_id]
+        const newColumnTasks = state.tasksByColumn[new_column_id]
+        if (oldColumnTasks) {
+          oldColumnTasks.items = oldColumnTasks.items.filter(item => Number(item.id) !== response.data.id)
+        }
+        if (newColumnTasks) {
+          newColumnTasks.items.push(response.data)
+        }
+      })
+      .addCase(changeColumn.rejected, (state, action) => {
+        state.loadingByColumn[action.meta.arg.old_column_id] = false
+        state.loadingByColumn[action.meta.arg.new_column_id] = false
+        state.errorByColumn[action.meta.arg.old_column_id] = action.error.message || 'Произошла ошибка при перемещении задачи'
+        state.errorByColumn[action.meta.arg.new_column_id] = action.error.message || 'Произошла ошибка при перемещении задачи'
+      })
+      .addCase(deleteTask.pending, (state, action) => {
+        state.loadingByColumn[action.meta.arg.column_id] = true
+        state.errorByColumn[action.meta.arg.column_id] = null
       })
       .addCase(deleteTask.fulfilled, (state, action) => {
         const { id, column_id } = action.payload
-        state.loading = false
+        state.loadingByColumn[action.payload.column_id] = false
         const columnTasks = state.tasksByColumn[column_id]
         if (columnTasks) {
           columnTasks.items = columnTasks.items.filter(item => Number(item.id) !== id)
@@ -144,8 +183,8 @@ const tasksSlice = createSlice({
         }
       })
       .addCase(deleteTask.rejected, (state, action) => {
-        state.loading = false
-        state.error = action.error.message || 'Произошла ошибка при удалении задачи'
+        state.loadingByColumn[action.meta.arg.column_id] = false
+        state.errorByColumn[action.meta.arg.column_id] = action.error.message || 'Произошла ошибка при удалении задачи'
       })
   }
 })

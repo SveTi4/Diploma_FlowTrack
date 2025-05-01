@@ -12,19 +12,14 @@ import { Loader } from "../../atoms/Loader/Loader.tsx"
 import { SidePanel } from '../../organisms/SidePanel/SidePanel'
 import { Section, SectionTitle } from '../../molecules/Section/Section'
 import { IconButton } from '../../atoms/IconButton/IconButton.tsx'
-
-const Container = styled.div`
-  min-height: 100vh;
-  display: flex;
-  flex-direction: column;
-  position: relative;
-  overflow-x: hidden;
-`
+import { DragDropContext, DropResult } from 'react-beautiful-dnd'
+import { changeColumn } from '../../../store/tasks/tasksSlice.ts'
 
 const MainContent = styled.div`
   flex: 1;
-  padding: 24px;
+  padding: 32px;
   width: 100%;
+  height: calc(100vh - 80px);
 `
 
 const Description = styled.div`
@@ -76,12 +71,30 @@ export const ProjectPage: React.FC = () => {
     }
   }
 
+  const handleDragEnd = async (result: DropResult) => {
+    const { source, destination, draggableId } = result
+    console.log(source)
+    console.log(destination)
+    console.log(draggableId)
+    // Если нет destination или задача перетаскивается в ту же колонку
+    if (!destination || source.droppableId === destination.droppableId) {
+      console.log("Колонка не изменилась")
+      return
+    }
+    console.log(`Перемещение задачи ${draggableId} из ${source.droppableId} в ${destination.droppableId}`)
+    await dispatch(changeColumn({
+      taskId: Number(draggableId),
+      old_column_id: Number(source.droppableId),
+      new_column_id: Number(destination.droppableId)
+    }))   
+  }
+
   if (projectLoading) return <Loader size="large"  fullscreen={true} />
   if (projectError) return <div>Ошибка: {projectError}</div>
   if (!project) return <div>Проект не найден</div>
 
   return (
-    <Container>
+    <>
       <PageHeader 
         title={project.name}
         showBackButton>
@@ -92,7 +105,9 @@ export const ProjectPage: React.FC = () => {
       </PageHeader>
 
       <MainContent>
-        <ColumnsBoard project_id={project.id} />
+        <DragDropContext onDragEnd={handleDragEnd}>
+          <ColumnsBoard project_id={project.id} />
+        </DragDropContext>
       </MainContent>
 
       <SidePanel
@@ -115,6 +130,6 @@ export const ProjectPage: React.FC = () => {
           <Chart>График будет добавлен позже</Chart>
         </Section>
       </SidePanel>
-    </Container>
+    </>
   )
 } 

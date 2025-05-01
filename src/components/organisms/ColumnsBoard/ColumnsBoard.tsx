@@ -32,7 +32,6 @@ const ColumnsContainer = styled.div`
   padding: 24px 0;
   overflow-x: auto;
   width: 100%;
-  min-height: calc(100vh - 200px);
   
   /* Стилизация скроллбара */
   &::-webkit-scrollbar {
@@ -58,6 +57,7 @@ const Column = styled.div`
   width: 360px;
   flex: 0 0 360px;
   height: fit-content;
+  max-height: 75vh;
   background: ${({ theme }) => theme.colors.surface};
   border: 1px solid ${({ theme }) => theme.colors.border};
   border-radius: ${({ theme }) => theme.borderRadius.medium};
@@ -113,14 +113,6 @@ const AddTaskButton = styled.button`
     height: 20px;
     stroke: currentColor;
   }
-`
-
-const ColumnContent = styled.div`
-  padding: 16px;
-  min-height: 100px;
-  display: flex;
-  flex-direction: column;
-  gap: 12px;
 `
 
 const EditableTitle = styled.input`
@@ -277,9 +269,9 @@ export const ColumnsBoard: React.FC<ColumnsBoardProps> = ({ project_id }) => {
               <PlusIcon size={16} />
               Добавить задачу
             </AddTaskButton>
-            <ColumnContent>
-              <TasksBoard column_id={Number(column?.id)} />
-            </ColumnContent>
+
+            <TasksBoard column_id={Number(column?.id)} />
+
           </Column>
         ))}
       </ColumnsContainer>

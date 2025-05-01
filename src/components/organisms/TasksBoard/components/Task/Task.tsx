@@ -6,6 +6,7 @@ import { Task } from "../../../../../api/services"
 import { TaskStatus } from '../../../../atoms/TaskStatus/TaskStatus'
 import { format } from 'date-fns'
 import { ru } from 'date-fns/locale'
+import {Draggable} from "react-beautiful-dnd";
 
 const TaskWrapper = styled.div`
   width: 100%;
@@ -113,12 +114,14 @@ const TaskTitle = styled.h3`
 
 interface TaskProps {
   task: Task;
+  index: number
   onDelete: (id: number) => void;
   onUpdate?: (id: number, data: { name?: string; description?: string, status?: boolean }) => void;
 }
 
 export const TaskCard: React.FC<TaskProps> = ({
   task,
+  index,
   onDelete,
   onUpdate
 }) => {
@@ -151,30 +154,36 @@ export const TaskCard: React.FC<TaskProps> = ({
 
   return (
     <>
-      <TaskWrapper>
-        <TaskStatus 
-          status={task.status} 
-          onStatusChange={handleStatusChange}
-          isLoading={isStatusUpdating}
-        />
+      <Draggable draggableId={task.id.toString()} index={index}>
+        {(provided) => (
+          <div ref={provided.innerRef} {...provided.draggableProps} {...provided.dragHandleProps}>
+            <TaskWrapper>
+              <TaskStatus
+                status={task.status}
+                onStatusChange={handleStatusChange}
+                isLoading={isStatusUpdating}
+              />
 
-        <TaskInfo onClick={handleClick}>
-          <TaskHeader>
-            <TaskTitleWrapper>
-              <TaskTitle>{task.name}</TaskTitle>
-            </TaskTitleWrapper>
-            <TaskActions>
-              <IconButton onClick={handleDeleteClick} />
-            </TaskActions>
-          </TaskHeader>
-          {task.description && (
-            <TaskContent>
-              <TaskDescription>{task.description}</TaskDescription>
-              <TaskDescription>Дедлайн: {formattedDeadline}</TaskDescription>
-            </TaskContent>
-          )}
-        </TaskInfo>
-      </TaskWrapper>
+              <TaskInfo onClick={handleClick}>
+                <TaskHeader>
+                  <TaskTitleWrapper>
+                    <TaskTitle>{task.name}</TaskTitle>
+                  </TaskTitleWrapper>
+                  <TaskActions>
+                    <IconButton onClick={handleDeleteClick} />
+                  </TaskActions>
+                </TaskHeader>
+                {task.description && (
+                  <TaskContent>
+                    <TaskDescription>{task.description}</TaskDescription>
+                    <TaskDescription>Дедлайн: {formattedDeadline}</TaskDescription>
+                  </TaskContent>
+                )}
+              </TaskInfo>
+            </TaskWrapper>
+          </div>
+        )}
+      </Draggable>
 
       <TaskPanel
         isOpen={isPanelOpen}

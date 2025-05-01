@@ -4,7 +4,7 @@ import {ThemeToggle} from "../../atoms/ThemeToggle/ThemeToggle.tsx";
 
 const Container = styled.div`
     display: flex;
-    min-height: 100vh;
+    height: 100vh;
     background: ${({ theme }) => theme.colors.surface};
     color: ${({ theme }) => theme.colors.text};
 `
