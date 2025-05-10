@@ -13,7 +13,7 @@ import { SidePanel } from '../../organisms/SidePanel/SidePanel'
 import { Section, SectionTitle } from '../../molecules/Section/Section'
 import { IconButton } from '../../atoms/IconButton/IconButton.tsx'
 import { DragDropContext, DropResult } from 'react-beautiful-dnd'
-import { changeColumn } from '../../../store/tasks/tasksSlice.ts'
+import { changeColumn, moveTask } from '../../../store/tasks/tasksSlice.ts'
 
 const MainContent = styled.div`
   flex: 1;
@@ -72,21 +72,41 @@ export const ProjectPage: React.FC = () => {
   }
 
   const handleDragEnd = async (result: DropResult) => {
-    const { source, destination, draggableId } = result
+    const { source, destination, draggableId, type } = result
+
     console.log(source)
     console.log(destination)
     console.log(draggableId)
-    // Если нет destination или задача перетаскивается в ту же колонку
-    if (!destination || source.droppableId === destination.droppableId) {
-      console.log("Колонка не изменилась")
-      return
+    console.log(type)
+
+    if (type === 'column') {
+      console.log("перетаскивается колонка!")
     }
-    console.log(`Перемещение задачи ${draggableId} из ${source.droppableId} в ${destination.droppableId}`)
-    await dispatch(changeColumn({
-      taskId: Number(draggableId),
-      old_column_id: Number(source.droppableId),
-      new_column_id: Number(destination.droppableId)
-    }))   
+    else {
+      // Если нет destination или задача перетаскивается в ту же колонку
+      if (!destination || source.droppableId === destination?.droppableId) {
+        if (source.index === destination?.index) {
+          console.log(`Колонка не изменилась, задача осталась на позиции ${source.index}`)
+          return
+        } else {
+          console.log(`Колонка не изменилась, но задача перемещена c позиции ${source.index} в позицию ${destination?.index}`)
+          await dispatch(moveTask({
+            id: Number(draggableId),
+            position: Number(destination?.index),
+            column_id: Number(source.droppableId)
+          }))
+          return
+        }
+      }
+      console.log(`Задача ${draggableId} из колонки ${source.droppableId} перемщается в колнку ${destination?.droppableId}, с позиции ${source.index} в позицию ${destination?.index}`)
+      await dispatch(changeColumn({
+        taskId: Number(draggableId),
+        old_column_id: Number(source.droppableId),
+        new_column_id: Number(destination?.droppableId),
+        position: Number(destination?.index)
+      }))
+    }
+
   }
 
   if (projectLoading) return <Loader size="large"  fullscreen={true} />
