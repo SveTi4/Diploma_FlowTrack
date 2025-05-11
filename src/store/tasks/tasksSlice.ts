@@ -132,7 +132,7 @@ const tasksSlice = createSlice({
           const columnTasks = state.tasksByColumn[column_id] || { items: [], total: 0, page: 1, limit: 10, totalPages: 1 }
           state.tasksByColumn[column_id] = {
             ...columnTasks,
-            items: [...columnTasks.items, response.data],
+            items: [response.data, ...columnTasks.items.map(t => ({ ...t, position: t.position + 1 }))],
             total: columnTasks.total + 1
           }
         }
@@ -165,12 +165,6 @@ const tasksSlice = createSlice({
         const { id, position, column_id } = action.meta.arg
         const column = state.tasksByColumn[column_id]
         if (!column) return
-
-        // Сохраняем оригинальное состояние для отката
-        // action.meta.arg.originalState = {
-        //   items: [...column.items],
-        //   total: column.total
-        // }
 
         const currentIndex = column.items.findIndex(t => t.id === id)
         if (currentIndex === -1) return
@@ -210,11 +204,7 @@ const tasksSlice = createSlice({
 
       .addCase(moveTask.rejected, (state, action) => {
         const { column_id } = action.meta.arg
-        // if (originalState && state.tasksByColumn[column_id]) {
-        //   // Восстанавливаем оригинальное состояние
-        //   state.tasksByColumn[column_id].items = originalState.items
-        //   state.tasksByColumn[column_id].total = originalState.total
-        // }
+
         state.loadingByColumn[column_id] = false
         state.errorByColumn[column_id] = action.error.message || 'Ошибка перемещения задачи'
       })

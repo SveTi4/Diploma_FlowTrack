@@ -19,7 +19,6 @@ export interface CreateTaskDto {
   description: string;
   column_id: number;
   deadline: string | null;
-  status: boolean;
 }
 
 export interface UpdateTaskDto {
