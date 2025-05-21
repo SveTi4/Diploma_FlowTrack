@@ -1,5 +1,5 @@
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit'
-import {CreateProjectDto, Project , services} from "../../api/services";
+import {CreateProjectDto, Project, UpdateProjectDto, services} from "../../api/services";
 import {ApiResponse} from "../../api/types/response.types.ts";
 // import {ApiResponse} from "../../api/types/response.types.ts";
 
@@ -56,6 +56,13 @@ export const deleteProject = createAsyncThunk(
   }
 )
 
+export const updateProject = createAsyncThunk(
+  'projects/updateProject',
+  async ({ id, data }: { id: number; data: UpdateProjectDto }): Promise<ApiResponse<Project>> => {
+    return await services.projects.updateProject(id.toString(), data)
+  }
+)
+
 const projectsSlice = createSlice({
   name: 'projects',
   initialState,
@@ -102,6 +109,15 @@ const projectsSlice = createSlice({
         state.items = state.items.filter(project => project.id !== action.payload)
         if (state.currentProject?.id === action.payload) {
           state.currentProject = null
+        }
+      })
+      .addCase(updateProject.fulfilled, (state, action) => {
+        if (state.currentProject?.id === action.payload.data.id) {
+          state.currentProject = action.payload.data
+        }
+        const index = state.items.findIndex(project => project.id === action.payload.data.id)
+        if (index !== -1) {
+          state.items[index] = action.payload.data
         }
       })
   }
