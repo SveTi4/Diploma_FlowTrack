@@ -1,10 +1,13 @@
 import { ThemeProvider } from './contexts/ThemeContext'
+import { PanelProvider } from './contexts/PanelContext'
 import { Router } from './Router'
 
 const App = () => {
   return (
     <ThemeProvider>
-      <Router />
+      <PanelProvider>
+        <Router />
+      </PanelProvider>
     </ThemeProvider>
   )
 }
