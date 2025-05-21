@@ -4,6 +4,7 @@ export type TaskPriority = 'low' | 'medium' | 'high';
 export interface Task {
   id: number;
   name: string;
+  position: number;
   description?: string;
   status: boolean;
   archived: boolean;
@@ -18,11 +19,11 @@ export interface CreateTaskDto {
   description: string;
   column_id: number;
   deadline: string | null;
-  status: boolean;
 }
 
 export interface UpdateTaskDto {
   name?: string;
+  position?: number;
   description?: string;
   status?: boolean;
   column_id: number;

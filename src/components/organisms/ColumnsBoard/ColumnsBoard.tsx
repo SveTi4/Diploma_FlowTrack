@@ -263,8 +263,7 @@ export const ColumnsBoard: React.FC<ColumnsBoardProps> = ({ project_id }) => {
               name: 'Новая задача',
               column_id: Number(column?.id),
               description: 'Тестовое описание',
-              deadline: null,
-              status: false
+              deadline: null
             }))}>
               <PlusIcon size={16} />
               Добавить задачу

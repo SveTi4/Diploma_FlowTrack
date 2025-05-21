@@ -31,42 +31,42 @@ export const Router = () => {
           <Route path="/stats" element={
             <MainTemplate>
               <PageHeader title={'Статистика'}>
-                Когда-нибудь тут будет статичстика
+                Тут пока что пусто
               </PageHeader>
             </MainTemplate>
           } />
           <Route path="/guides" element={
             <MainTemplate>
               <PageHeader title={'Гайды'}>
-                Если мне будет не лень то может и гайды появятся
+                Тут пока что пусто
               </PageHeader>
             </MainTemplate>
           } />
           <Route path="/notifications" element={
             <MainTemplate>
               <PageHeader title={'Уведомления'}>
-                Ууууу, этот пункт вообще покрыт тайной
+                Тут пока что пусто
               </PageHeader>
             </MainTemplate>
           } />
           <Route path="/archive" element={
             <MainTemplate>
               <PageHeader title={'Архив'}>
-                Туть будет то, что ты "СЛУЧАЙНО" удалил/а, но оно оказалось жизненно необходимым
+                Тут пока что пусто
               </PageHeader>
             </MainTemplate>
           } />
           <Route path="/support" element={
             <MainTemplate>
               <PageHeader title={'Поддержка'}>
-                Увы, тебе уже ничего не поможет...
+                Тут пока что пусто
               </PageHeader>
             </MainTemplate>
           } />
           <Route path="/profile" element={
             <MainTemplate>
               <PageHeader title={'Профиль'} >
-                Профиль - база, позже появится, отвечаю
+                Тут пока что пусто
               </PageHeader>
             </MainTemplate>
           } />

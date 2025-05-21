@@ -42,27 +42,25 @@ export const TasksBoard: React.FC<TasksBoardProps> = ({ column_id }) => {
     return dispatch(updateTask({ id: taskId, data: { ...data, column_id } })).unwrap()
   }
 
-  if (loadingByColumn[column_id] || !columnTasks) return <Loader size="medium" />
+  if (loadingByColumn[column_id] && !columnTasks) return <Loader size="medium" />
   if (errorByColumn[column_id]) return <div>Ошибка: {errorByColumn[column_id]}</div>
   if (!columnTasks?.items) return null
 
   return (
-    <Droppable droppableId={String(column_id)}>
+    <Droppable type="task" droppableId={String(column_id)}>
       {(provided) => (
-        <div ref={provided.innerRef} {...provided.droppableProps}>
-          <TasksContainer>
-            {columnTasks.items.map((task, index) => (
+          <TasksContainer ref={provided.innerRef} {...provided.droppableProps}>
+            {columnTasks.items.map((task) => (
               <TaskCard
                 key={task.id}
                 task={task}
-                index={index}
+                index={task.position}
                 onDelete={handleDeleteTask}
                 onUpdate={handleUpdateTask}
               />
             ))}
+            {provided.placeholder}
           </TasksContainer>
-          {provided.placeholder}
-        </div>
       )}
     </Droppable>
   )

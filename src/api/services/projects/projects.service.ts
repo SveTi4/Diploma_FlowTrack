@@ -36,7 +36,11 @@ export class ProjectsService extends BaseService<Project> {
 
   // Обновление проекта
   async updateProject(id: string, data: UpdateProjectDto): Promise<ApiResponse<Project>> {
-    return this.update(id, data)
+    const response = await this.patch(id, data)
+    return {
+      data: response.data,
+      status: response.status
+    }
   }
 
   // Удаление проекта
