@@ -7,7 +7,7 @@ import { format } from 'date-fns'
 import { ru } from 'date-fns/locale'
 import { Draggable } from "react-beautiful-dnd"
 import { usePanel } from '../../../../../contexts/PanelContext'
-import { EditableTitleComponent } from '../../../../molecules/EditableTitle/EditableTitle'
+import { EditableTitle } from '../../../../molecules/EditableTitle/EditableTitle.tsx'
 import { EditableDescription } from '../../../../molecules/EditableDescription/EditableDescription'
 import { EditableDate } from '../../../../molecules/EditableDate/EditableDate'
 import { Section, SectionTitle } from '../../../../molecules/Section/Section'
@@ -280,13 +280,13 @@ export const TaskCard: React.FC<TaskProps> = ({
     openPanel({
       type: 'task',
       title: (
-        <EditableTitleComponent
+        <EditableTitle
           value={task.name}
           onSave={(newName) => {
             onUpdate?.(task.id, { name: newName });
             updatePanel({
               title: (
-                <EditableTitleComponent
+                <EditableTitle
                   value={newName}
                   onSave={(newName) => onUpdate?.(task.id, { name: newName })}
                 />

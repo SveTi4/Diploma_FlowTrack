@@ -15,7 +15,7 @@ import { DragDropContext, DropResult } from 'react-beautiful-dnd'
 import { changeColumn, moveTask } from '../../../store/tasks/tasksSlice.ts'
 import { moveColumn } from "../../../store/columns/columnsSlice.ts";
 import { usePanel } from '../../../contexts/PanelContext'
-import { EditableTitleComponent } from '../../molecules/EditableTitle/EditableTitle'
+import { EditableTitle } from '../../molecules/EditableTitle/EditableTitle.tsx'
 import { EditableDescription } from '../../molecules/EditableDescription/EditableDescription'
 
 const MainContent = styled.div`
@@ -160,7 +160,7 @@ export const ProjectPage: React.FC = () => {
     openPanel({
       type: 'project',
       title: (
-        <EditableTitleComponent
+        <EditableTitle
           value={project.name}
           onSave={async (newName) => {
             await dispatch(updateProject({ 
@@ -170,7 +170,7 @@ export const ProjectPage: React.FC = () => {
             
             updatePanel({
               title: (
-                <EditableTitleComponent
+                <EditableTitle
                   value={newName}
                   onSave={(newName) => dispatch(updateProject({ 
                     id: project.id, 
