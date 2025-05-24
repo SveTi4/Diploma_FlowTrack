@@ -1,87 +1,72 @@
-import React, { useState, KeyboardEvent } from 'react'
-import styled from 'styled-components'
-
-const EditableInput = styled.input`
-  background: none;
-  border: none;
-  font-size: 16px;
-  font-weight: 500;
-  color: ${({ theme }) => theme.colors.text};
-  width: 100%;
-  padding: 0;
-  margin: 0;
-  
-  &:focus {
-    outline: none;
-    border-bottom: 1px solid ${({ theme }) => theme.colors.primary};
-  }
-  
-  &:hover {
-    border-bottom: 1px solid ${({ theme }) => theme.colors.border};
-  }
-`
-
-const Title = styled.h3`
-  font-size: 16px;
-  font-weight: 500;
-  color: ${({ theme }) => theme.colors.text};
-  margin: 0;
-  cursor: pointer;
-
-  &:hover {
-    opacity: 0.8;
-  }
-`
+import React, { useState } from 'react'
+import { IconButton } from '../../atoms/IconButton/IconButton'
+import { TitleWrapper, Title, EditableInput } from './EditableTitle.styles'
 
 interface EditableTitleProps {
-  value: string;
-  onSave: (newValue: string) => void;
+  value: string
+  onSave: (newValue: string) => void
+  placeholder?: string
+  className?: string
 }
 
-export const EditableTitleComponent: React.FC<EditableTitleProps> = ({ value, onSave }) => {
-  const [isEditing, setIsEditing] = useState(false);
-  const [editedValue, setEditedValue] = useState(value);
+export const EditableTitle: React.FC<EditableTitleProps> = ({
+  value,
+  onSave,
+  placeholder = 'Введите название',
+  className
+}) => {
+  const [isEditing, setIsEditing] = useState(false)
+  const [editedValue, setEditedValue] = useState(value)
 
-  const handleDoubleClick = () => {
-    setIsEditing(true);
-  };
+  React.useEffect(() => {
+    setEditedValue(value)
+  }, [value])
 
-  const handleBlur = () => {
-    if (editedValue.trim() !== value) {
-      onSave(editedValue.trim());
+  const handleEdit = () => {
+    setIsEditing(true)
+  }
+
+  const handleSave = () => {
+    if (editedValue !== value) {
+      onSave(editedValue)
     }
-    setIsEditing(false);
-  };
+    setIsEditing(false)
+  }
 
-  const handleKeyDown = (e: KeyboardEvent<HTMLInputElement>) => {
+  const handleCancel = () => {
+    setEditedValue(value)
+    setIsEditing(false)
+  }
+
+  const handleKeyDown = (e: React.KeyboardEvent) => {
     if (e.key === 'Enter') {
-      if (editedValue.trim() !== value) {
-        onSave(editedValue.trim());
-      }
-      setIsEditing(false);
+      handleSave()
+    } else if (e.key === 'Escape') {
+      handleCancel()
     }
-    if (e.key === 'Escape') {
-      setEditedValue(value);
-      setIsEditing(false);
-    }
-  };
-
-  if (isEditing) {
-    return (
-      <EditableInput
-        type="text"
-        value={editedValue}
-        onChange={(e) => setEditedValue(e.target.value)}
-        onBlur={handleBlur}
-        onKeyDown={handleKeyDown}
-        autoFocus
-      />
-    );
   }
 
   return (
-    <Title onDoubleClick={handleDoubleClick}>
-      {value}
-    </Title>
-  );
-}; 
+    <TitleWrapper className={className}>
+      {isEditing ? (
+        <>
+          <EditableInput
+            type="text"
+            value={editedValue}
+            onChange={(e) => setEditedValue(e.target.value)}
+            onKeyDown={handleKeyDown}
+            placeholder={placeholder}
+            autoFocus
+          />
+          <IconButton onClick={handleSave} type="save" />
+          <IconButton onClick={handleCancel} type="cancel" />
+        </>
+      ) : (
+        <>
+          <Title>{value || placeholder}</Title>
+          <IconButton onClick={handleEdit} type="edit" />
+        </>
+      )}
+    </TitleWrapper>
+  )
+} 
