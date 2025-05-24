@@ -1,5 +1,4 @@
 import React, { useEffect, memo } from 'react'
-import styled from 'styled-components'
 import { useDispatch, useSelector } from 'react-redux'
 import { RootState } from '../../../store'
 import { PlusIcon } from '../../atoms/Icon/icons'
@@ -10,49 +9,9 @@ import { createTask } from '../../../store/tasks/tasksSlice'
 import { Button } from "../../atoms/Button/Button.tsx"
 import { EmptyState } from "../../molecules/EmptyState/EmptyState.tsx"
 import { Droppable } from "react-beautiful-dnd"
-import { ColumnComponent } from './components/Column/Column'
+import { Column } from './components/Column/Column'
 import { selectColumnsByProject } from '../../../store/columns/columnsSlice'
-
-const BoardHeader = styled.div`
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  margin-bottom: 24px;
-`
-
-const BoardTitle = styled.h2`
-  font-size: 18px;
-  font-weight: 500;
-  color: ${({ theme }) => theme.colors.text};
-  margin: 0;
-`
-
-const ColumnsContainer = styled.div`
-  display: flex;
-  gap: 24px;
-  padding: 24px 0;
-  overflow-x: auto;
-  width: 100%;
-  
-  /* Стилизация скроллбара */
-  &::-webkit-scrollbar {
-    height: 8px;
-  }
-
-  &::-webkit-scrollbar-track {
-    background: ${({ theme }) => theme.colors.surface};
-    border-radius: ${({ theme }) => theme.borderRadius.small};
-  }
-
-  &::-webkit-scrollbar-thumb {
-    background: ${({ theme }) => theme.colors.border};
-    border-radius: ${({ theme }) => theme.borderRadius.small};
-  }
-
-  &::-webkit-scrollbar-thumb:hover {
-    background: ${({ theme }) => theme.colors.surfaceHover};
-  }
-`
+import { BoardHeader, BoardTitle, ColumnsContainer } from './ColumnsBoard.styles'
 
 interface ColumnsBoardProps {
   project_id: number
@@ -121,7 +80,7 @@ export const ColumnsBoard: React.FC<ColumnsBoardProps> = memo(({ project_id }) =
         {provided => (
           <ColumnsContainer ref={provided.innerRef} {...provided.droppableProps}>
             {columns?.map(column => (
-              <ColumnComponent
+              <Column
                 key={column.id}
                 column={column}
                 onUpdateName={handleUpdateColumnName}
