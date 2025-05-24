@@ -149,3 +149,27 @@ export const UnlockIcon = ({ size, color }: { size?: number; color?: string }) =
     </svg>
   </Icon>
 )
+
+export const EditIcon = ({ size, color }: { size?: number; color?: string }) => (
+  <Icon size={size} color={color}>
+    <svg viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
+      <path d="M11.3333 2.66667C11.5083 2.49167 11.7167 2.35417 11.9458 2.2625C12.175 2.17083 12.4208 2.12667 12.6667 2.13333C12.9125 2.14 13.1542 2.1975 13.3775 2.3025C13.6008 2.4075 13.8017 2.5575 13.9667 2.73333C14.1417 2.90833 14.2792 3.11667 14.3708 3.34583C14.4625 3.575 14.5067 3.82083 14.5 4.06667C14.4933 4.3125 14.4358 4.55417 14.3308 4.7775C14.2258 5.00083 14.0758 5.20167 13.9 5.36667L5.06667 14.2L2 15L2.8 11.9333L11.3333 2.66667Z" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
+    </svg>
+  </Icon>
+)
+
+export const SaveIcon = ({ size, color }: { size?: number; color?: string }) => (
+  <Icon size={size} color={color}>
+    <svg viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
+      <path d="M13.3333 4L6 11.3333L2.66667 8" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+    </svg>
+  </Icon>
+)
+
+export const CancelIcon = ({ size, color }: { size?: number; color?: string }) => (
+  <Icon size={size} color={color}>
+    <svg viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
+      <path d="M12 4L4 12M4 4L12 12" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+    </svg>
+  </Icon>
+)
