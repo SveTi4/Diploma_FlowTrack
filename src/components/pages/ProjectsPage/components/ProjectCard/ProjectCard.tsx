@@ -54,8 +54,25 @@ export const ProjectCard = ({ project, searchQuery = '' }: ProjectCardProps) => 
   const formattedCreatedAt = format(new Date(project.created_at), 'd MMM', { locale: ru })
   const formattedUpdatedAt = format(new Date(project.updated_at), 'd MMM', { locale: ru })
 
+  const handleClick = () => {
+    navigate(`/projects/${project.id}`)
+  }
+
+  const handleKeyDown = (e: React.KeyboardEvent) => {
+    if (e.key === 'Enter' || e.key === ' ') {
+      e.preventDefault()
+      handleClick()
+    }
+  }
+
   return (
-    <Card onClick={() => navigate(`/projects/${project.id}`)}>
+    <Card 
+      onClick={handleClick}
+      onKeyDown={handleKeyDown}
+      tabIndex={0}
+      role="button"
+      aria-label={`Проект ${project.name}`}
+    >
       <Title>
         {highlightMatch(project.name, searchQuery)}
         {project.archived && <ArchiveIcon size={16} />}

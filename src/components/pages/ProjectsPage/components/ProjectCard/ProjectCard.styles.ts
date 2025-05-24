@@ -19,6 +19,17 @@ export const Card = styled.div`
     border-color: ${({ theme }) => theme.colors.primary};
     box-shadow: 0 6px 16px ${({ theme }) => theme.colors.primary}40;
   }
+
+  &:focus {
+    outline: none;
+    border-color: ${({ theme }) => theme.colors.primary};
+    box-shadow: 0 0 0 2px ${({ theme }) => theme.colors.primary}40;
+  }
+
+  &:focus:not(:focus-visible) {
+    border-color: ${({theme}) => theme.colors.border};
+    box-shadow: 0 4px 12px ${({ theme }) => theme.colors.border};
+  }
 `
 
 export const Title = styled.h3`
