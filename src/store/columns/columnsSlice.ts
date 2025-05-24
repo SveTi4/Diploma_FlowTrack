@@ -10,6 +10,7 @@ interface ColumnsState {
   totalPages: number
   loading: boolean
   error: string | null
+  movingColumnId: number | null
 }
 
 const initialState: ColumnsState = {
@@ -20,6 +21,7 @@ const initialState: ColumnsState = {
   totalPages: 0,
   loading: false,
   error: null,
+  movingColumnId: null
 }
 
 export const fetchColumns = createAsyncThunk(
@@ -28,7 +30,6 @@ export const fetchColumns = createAsyncThunk(
     const response = await services.columns.getColumns(project_id, params)
     console.log('API Response columns:', response)
     return response
-    // return await services.columns.getColumns(projectId, params)
   }
 )
 
@@ -48,6 +49,23 @@ export const updateColumn = createAsyncThunk(
   }
 )
 
+export const moveColumn = createAsyncThunk(
+  'columns/moveColumn',
+  async ({ id, position }: { id: number; position: number }, { getState }) => {
+    const currentState = getState() as { columns: ColumnsState }
+    const originalColumns = currentState.columns.items
+
+    const response = await services.columns.updateColumn(id, {
+      position: position
+    })
+    return {
+      response,
+      id,
+      originalColumns
+    }
+  }
+)
+
 export const deleteColumn = createAsyncThunk(
   'columns/deleteColumn',
   async (id: number) => {
@@ -59,11 +77,7 @@ export const deleteColumn = createAsyncThunk(
 const columnsSlice = createSlice({
   name: 'columns',
   initialState,
-  reducers: {
-    createColumn1: () => {
-      console.log("Create column")
-    }
-  },
+  reducers: {},
   extraReducers: (builder) => {
     builder
       .addCase(fetchColumns.pending, (state) => {
@@ -71,12 +85,11 @@ const columnsSlice = createSlice({
         state.error = null
       })
       .addCase(fetchColumns.fulfilled, (state, action) => {
-        console.log('Action payload columns:', action.payload)
         state.loading = false
         state.items = action.payload.data.items
         state.total = action.payload.data.total || 0
         state.page = action.payload.data.page || 1
-        state.limit = action.payload.data.limit || 10
+        state.limit = action.payload.data.limit || 999
         state.totalPages = action.payload.data.totalPages || 0
       })
       .addCase(fetchColumns.rejected, (state, action) => {
@@ -126,8 +139,50 @@ const columnsSlice = createSlice({
         state.loading = false
         state.error = action.error.message || 'Произошла ошибка при обновлении колонки'
       })
+      .addCase(moveColumn.pending, (state, action) => {
+        const { id, position } = action.meta.arg
+        state.movingColumnId = id
+        
+        // Оптимистичное обновление
+        const currentIndex = state.items.findIndex(item => Number(item.id) === id)
+        if (currentIndex === -1) return
+
+        const newItems = [...state.items]
+        const [movedColumn] = newItems.splice(currentIndex, 1)
+        
+        // Просто вставляем колонку на новую позицию (учитывая что позиции 1-based)
+        const targetIndex = Math.min(Math.max(0, position - 1), newItems.length)
+        newItems.splice(targetIndex, 0, movedColumn)
+
+        // Обновляем позиции всех колонок (1-based)
+        state.items = newItems.map((item, idx) => ({
+          ...item,
+          position: idx + 1
+        }))
+      })
+      .addCase(moveColumn.fulfilled, (state, action) => {
+        state.movingColumnId = null
+        const { response, id } = action.payload
+        const index = state.items.findIndex(item => Number(item.id) === Number(id))
+        if (index !== -1) {
+          // Обновляем только перемещенную колонку
+          state.items[index] = response.data
+        }
+      })
+      .addCase(moveColumn.rejected, (state, action) => {
+        state.movingColumnId = null
+        state.error = action.error.message || 'Произошла ошибка при перемещении колонки'
+        
+        // Восстанавливаем исходный порядок
+        const payload = action.payload as { originalColumns: Column[] } | undefined
+        if (payload?.originalColumns) {
+          state.items = payload.originalColumns.map((item, idx) => ({
+            ...item,
+            position: idx + 1
+          }))
+        }
+      })
   }
 })
 
-export const { createColumn1 } = columnsSlice.actions
 export default columnsSlice.reducer

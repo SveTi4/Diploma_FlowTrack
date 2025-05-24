@@ -13,6 +13,7 @@ import { Section, SectionTitle } from '../../molecules/Section/Section'
 import { IconButton } from '../../atoms/IconButton/IconButton.tsx'
 import { DragDropContext, DropResult } from 'react-beautiful-dnd'
 import { changeColumn, moveTask } from '../../../store/tasks/tasksSlice.ts'
+import { moveColumn } from "../../../store/columns/columnsSlice.ts";
 import { usePanel } from '../../../contexts/PanelContext'
 import { EditableTitleComponent } from '../../molecules/EditableTitle/EditableTitle'
 import { EditableDescription } from '../../molecules/EditableDescription/EditableDescription'
@@ -76,6 +77,16 @@ export const ProjectPage: React.FC = () => {
 
     if (type === 'column') {
       console.log("перетаскивается колонка!")
+      if (!destination || source.index === destination?.index) {
+        console.log(`Позиция колонки не изменилась, колонка осталась на позиции ${source.index}`)
+      }
+      else {
+        console.log(`Позиция колонки изменилась, колонка перемещается c позиции ${source.index} в позицию ${destination?.index}`)
+        await dispatch(moveColumn({
+          id: Number(draggableId),
+          position: Number(destination?.index)
+        }))
+      }
     }
     else {
       // Если нет destination или задача перетаскивается в ту же колонку

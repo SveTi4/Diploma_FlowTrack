@@ -11,6 +11,7 @@ import { createTask } from '../../../store/tasks/tasksSlice'
 import { IconButton } from '../../atoms/IconButton/IconButton.tsx'
 import {Button} from "../../atoms/Button/Button.tsx";
 import {EmptyState} from "../../molecules/EmptyState/EmptyState.tsx";
+import {Draggable, Droppable} from "react-beautiful-dnd";
 
 const BoardHeader = styled.div`
   display: flex;
@@ -200,7 +201,7 @@ interface ColumnsBoardProps {
 
 export const ColumnsBoard: React.FC<ColumnsBoardProps> = ({ project_id }) => {
   const dispatch = useDispatch<AppDispatch>()
-  const { items: columns, loading, error } = useSelector((state: RootState) => state.columns)
+  const { items: columns, loading, error, movingColumnId } = useSelector((state: RootState) => state.columns)
 
   useEffect(() => {
     dispatch(fetchColumns({ 
@@ -216,7 +217,7 @@ export const ColumnsBoard: React.FC<ColumnsBoardProps> = ({ project_id }) => {
     }));
   };
 
-  if (loading) return <Loader size="medium" />
+  if (loading && !movingColumnId) return <Loader size="medium" />
   if (error) return <div>Ошибка: {error}</div>
   if (columns.length === 0) {
     return (
@@ -246,34 +247,54 @@ export const ColumnsBoard: React.FC<ColumnsBoardProps> = ({ project_id }) => {
           Новая колонка
         </Button>
       </BoardHeader>
-      
-      <ColumnsContainer>
-        {columns?.map(column => (
-          <Column key={column?.id}>
-            <ColumnHeader>
-              <ColumnTitleWrapper>
-                <EditableTitleComponent
-                  value={column?.name || 'Без названия'}
-                  onSave={(newName) => handleUpdateColumnName(Number(column?.id), newName)}
-                />
-              </ColumnTitleWrapper>
-              <IconButton onClick={() => dispatch(deleteColumn(Number(column?.id)))} />
-            </ColumnHeader>
-            <AddTaskButton onClick={() => dispatch(createTask({
-              name: 'Новая задача',
-              column_id: Number(column?.id),
-              description: 'Тестовое описание',
-              deadline: null
-            }))}>
-              <PlusIcon size={16} />
-              Добавить задачу
-            </AddTaskButton>
+      <Droppable droppableId="column" direction="horizontal" type="column">
+        {provided => (
+          <ColumnsContainer ref={provided.innerRef} {...provided.droppableProps}>
+            {columns?.map(column => (
+              <Draggable 
+                key={column.id.toString()} 
+                draggableId={column.id.toString()} 
+                index={Number(column?.position)}
+              >
+                {(provided, snapshot) => (
+                  <Column 
+                    key={column?.id} 
+                    ref={provided.innerRef} 
+                    {...provided.draggableProps} 
+                    {...provided.dragHandleProps}
+                    style={{
+                      ...provided.draggableProps.style,
+                      opacity: snapshot.isDragging ? 0.8 : 1
+                    }}
+                  >
+                    <ColumnHeader>
+                      <ColumnTitleWrapper>
+                        <EditableTitleComponent
+                          value={column?.name || 'Без названия'}
+                          onSave={(newName) => handleUpdateColumnName(Number(column?.id), newName)}
+                        />
+                      </ColumnTitleWrapper>
+                      <IconButton onClick={() => dispatch(deleteColumn(Number(column?.id)))} />
+                    </ColumnHeader>
+                    <AddTaskButton onClick={() => dispatch(createTask({
+                      name: 'Новая задача',
+                      column_id: Number(column?.id),
+                      description: 'Тестовое описание',
+                      deadline: null
+                    }))}>
+                      <PlusIcon size={16} />
+                      Добавить задачу
+                    </AddTaskButton>
 
-            <TasksBoard column_id={Number(column?.id)} />
-
-          </Column>
-        ))}
-      </ColumnsContainer>
+                    <TasksBoard column_id={Number(column?.id)} />
+                  </Column>
+                )}
+              </Draggable>
+            ))}
+            {provided.placeholder}
+          </ColumnsContainer>
+        )}
+      </Droppable>
     </div>
   )
 } 
