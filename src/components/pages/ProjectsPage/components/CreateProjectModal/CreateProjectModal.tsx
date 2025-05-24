@@ -1,7 +1,7 @@
 import { useState } from 'react'
 import styled from 'styled-components'
-import { Modal } from '../../../molecules/Modal/Modal'
-import { Button } from '../../../atoms/Button/Button'
+import { Modal } from '../../../../molecules/Modal/Modal.tsx'
+import { Button } from '../../../../atoms/Button/Button.tsx'
 
 const Form = styled.form`
   display: flex;
