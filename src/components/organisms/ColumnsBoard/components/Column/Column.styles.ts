@@ -3,8 +3,9 @@ import styled from 'styled-components'
 export const ColumnWrapper = styled.div`
   width: 360px;
   flex: 0 0 360px;
-  height: fit-content;
   max-height: 75vh;
+  display: flex;
+  flex-direction: column;
   background: ${({ theme }) => theme.colors.surface};
   border: 1px solid ${({ theme }) => theme.colors.border};
   border-radius: ${({ theme }) => theme.borderRadius.medium};

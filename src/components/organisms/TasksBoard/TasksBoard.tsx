@@ -10,10 +10,10 @@ import { Droppable } from "react-beautiful-dnd";
 const TasksContainer = styled.div`
   width: 100%;
   padding: 16px;
-  min-height: 100px;
   display: flex;
   flex-direction: column;
   gap: 12px;
+  overflow-y: auto;
 `
 
 interface TasksBoardProps {

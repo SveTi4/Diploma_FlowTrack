@@ -20,6 +20,7 @@ export const ColumnsContainer = styled.div`
   padding: 24px 0;
   overflow-x: auto;
   width: 100%;
+  align-items: flex-start;
   
   /* Стилизация скроллбара */
   &::-webkit-scrollbar {
