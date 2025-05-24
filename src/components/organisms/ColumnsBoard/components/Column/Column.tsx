@@ -1,16 +1,25 @@
 import React from 'react'
 import styled from 'styled-components'
-import { TrashIcon } from '../../../../atoms/Icon/icons'
+import { Draggable } from 'react-beautiful-dnd'
 import { TasksBoard } from '../../../TasksBoard/TasksBoard'
+import { IconButton } from '../../../../atoms/IconButton/IconButton'
+import { PlusIcon } from '../../../../atoms/Icon/icons'
 import { EditableTitleComponent } from '../../../../molecules/EditableTitle/EditableTitle'
 
-const ColumnWrapper = styled.div`
+const Column = styled.div`
   width: 360px;
   flex: 0 0 360px;
   height: fit-content;
+  max-height: 75vh;
   background: ${({ theme }) => theme.colors.surface};
   border: 1px solid ${({ theme }) => theme.colors.border};
-  border-radius: 12px;
+  border-radius: ${({ theme }) => theme.borderRadius.medium};
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
+  transition: box-shadow 0.2s ease;
+  
+  &:hover {
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+  }
 `
 
 const ColumnHeader = styled.div`
@@ -19,6 +28,9 @@ const ColumnHeader = styled.div`
   display: flex;
   align-items: center;
   justify-content: space-between;
+  background: ${({ theme }) => theme.colors.background};
+  border-top-left-radius: ${({ theme }) => theme.borderRadius.medium};
+  border-top-right-radius: ${({ theme }) => theme.borderRadius.medium};
 `
 
 const ColumnTitleWrapper = styled.div`
@@ -27,82 +39,84 @@ const ColumnTitleWrapper = styled.div`
   align-items: center;
 `
 
-const DeleteColumnButton = styled.button`
-  background: none;
-  border: none;
-  padding: 4px;
-  color: ${({ theme }) => theme.colors.textSecondary};
-  cursor: pointer;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  opacity: 0.6;
-  transition: all 0.2s ease;
-
-  &:hover {
-    opacity: 1;
-    color: ${({ theme }) => theme.colors.error};
-  }
-
-  svg {
-    width: 16px;
-    height: 16px;
-    stroke: currentColor;
-  }
-`
-
 const AddTaskButton = styled.button`
   background: none;
   display: flex;
   justify-content: center;
-  padding: 0;
+  gap: 8px;
   width: 100%;
   height: 48px;
   align-items: center;
+  border: none;
   border-bottom: 1px solid ${({ theme }) => theme.colors.border};
+  color: ${({ theme }) => theme.colors.textSecondary};
+  cursor: pointer;
+  transition: all 0.2s ease;
+  font-size: 14px;
+  font-weight: 500;
   
   &:hover {
-    background: ${({ theme }) => theme.colors.backgroundHover};
+    background: ${({ theme }) => theme.colors.surfaceHover};
+    color: ${({ theme }) => theme.colors.primary};
+  }
+
+  svg {
+    width: 20px;
+    height: 20px;
+    stroke: currentColor;
   }
 `
 
-const ColumnContent = styled.div`
-  padding: 16px;
-`
-
 interface ColumnProps {
-  id: number;
-  name: string;
-  onDelete: (id: number) => void;
-  onUpdateName: (id: number, newName: string) => void;
+  column: {
+    id: string | number
+    name: string
+    position: number
+  }
+  onUpdateName: (id: number, newName: string) => void
+  onDelete: (id: number) => void
+  onCreateTask: (columnId: number) => void
 }
 
-export const Column: React.FC<ColumnProps> = ({
-  id,
-  name,
+export const ColumnComponent: React.FC<ColumnProps> = ({
+  column,
+  onUpdateName,
   onDelete,
-  onUpdateName
+  onCreateTask
 }) => {
   return (
-    <ColumnWrapper>
-      <ColumnHeader>
-        <ColumnTitleWrapper>
-          <EditableTitleComponent
-            value={name}
-            onSave={(newName) => onUpdateName(id, newName)}
-          />
-        </ColumnTitleWrapper>
-        <DeleteColumnButton onClick={() => onDelete(id)}>
-          <TrashIcon size={16} />
-        </DeleteColumnButton>
-      </ColumnHeader>
-      <AddTaskButton>
-        <TrashIcon size={24} />
-        Add task
-      </AddTaskButton>
-      <ColumnContent>
-        <TasksBoard column_id={id} />
-      </ColumnContent>
-    </ColumnWrapper>
+    <Draggable 
+      key={column.id.toString()} 
+      draggableId={column.id.toString()} 
+      index={Number(column.position)}
+    >
+      {(provided, snapshot) => (
+        <Column 
+          ref={provided.innerRef} 
+          {...provided.draggableProps} 
+          {...provided.dragHandleProps}
+          style={{
+            ...provided.draggableProps.style,
+            opacity: snapshot.isDragging ? 0.8 : 1
+          }}
+        >
+          <ColumnHeader>
+            <ColumnTitleWrapper>
+              <EditableTitleComponent
+                value={column.name || 'Без названия'}
+                onSave={(newName: string) => onUpdateName(Number(column.id), newName)}
+              />
+            </ColumnTitleWrapper>
+            <IconButton onClick={() => onDelete(Number(column.id))} />
+          </ColumnHeader>
+          <AddTaskButton onClick={() => onCreateTask(Number(column.id))}>
+            <PlusIcon size={16} />
+            Добавить задачу
+          </AddTaskButton>
+
+          <TasksBoard column_id={Number(column.id)} />
+        </Column>
+      )}
+    </Draggable>
   )
-} 
+}
