@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { memo } from 'react'
 import styled from 'styled-components'
 import { Draggable } from 'react-beautiful-dnd'
 import { TasksBoard } from '../../../TasksBoard/TasksBoard'
@@ -78,7 +78,7 @@ interface ColumnProps {
   onCreateTask: (columnId: number) => void
 }
 
-export const ColumnComponent: React.FC<ColumnProps> = ({
+export const ColumnComponent: React.FC<ColumnProps> = memo(({
   column,
   onUpdateName,
   onDelete,
@@ -88,7 +88,7 @@ export const ColumnComponent: React.FC<ColumnProps> = ({
     <Draggable 
       key={column.id.toString()} 
       draggableId={column.id.toString()} 
-      index={Number(column.position)}
+      index={column.position - 1}
     >
       {(provided, snapshot) => (
         <Column 
@@ -119,4 +119,4 @@ export const ColumnComponent: React.FC<ColumnProps> = ({
       )}
     </Draggable>
   )
-}
+})

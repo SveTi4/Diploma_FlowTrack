@@ -1,4 +1,5 @@
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit'
+import { createSelector } from '@reduxjs/toolkit'
 import {Column, CreateColumnDto, services, UpdateColumnDto} from "../../api/services";
 import {ApiResponse} from "../../api/types/response.types.ts";
 
@@ -184,5 +185,28 @@ const columnsSlice = createSlice({
       })
   }
 })
+
+// Базовые селекторы
+const selectColumnsState = (state: { columns: ColumnsState }) => state.columns
+
+// Мемоизированные селекторы
+export const selectColumnsByProject = createSelector(
+  [selectColumnsState, (_, projectId: number) => projectId],
+  (columnsState, projectId) => 
+    columnsState.items
+      .filter(column => column.project_id === projectId)
+      .sort((a, b) => a.position - b.position)
+)
+
+export const selectColumnById = createSelector(
+  [selectColumnsState, (_, id: number) => id],
+  (columnsState, id) => 
+    columnsState.items.find(column => Number(column.id) === id)
+)
+
+export const selectIsColumnMoving = createSelector(
+  [selectColumnsState, (_, id: number) => id],
+  (columnsState, id) => columnsState.movingColumnId === id
+)
 
 export default columnsSlice.reducer

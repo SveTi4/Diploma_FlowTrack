@@ -84,7 +84,7 @@ export const ProjectPage: React.FC = () => {
         console.log(`Позиция колонки изменилась, колонка перемещается c позиции ${source.index} в позицию ${destination?.index}`)
         await dispatch(moveColumn({
           id: Number(draggableId),
-          position: Number(destination?.index)
+          position: Number(destination?.index) + 1
         }))
       }
     }

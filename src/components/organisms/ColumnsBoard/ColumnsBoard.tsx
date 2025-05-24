@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react'
+import React, { useEffect, memo } from 'react'
 import styled from 'styled-components'
 import { useDispatch, useSelector } from 'react-redux'
 import { RootState } from '../../../store'
@@ -11,6 +11,7 @@ import { Button } from "../../atoms/Button/Button.tsx"
 import { EmptyState } from "../../molecules/EmptyState/EmptyState.tsx"
 import { Droppable } from "react-beautiful-dnd"
 import { ColumnComponent } from './components/Column/Column'
+import { selectColumnsByProject } from '../../../store/columns/columnsSlice'
 
 const BoardHeader = styled.div`
   display: flex;
@@ -57,9 +58,10 @@ interface ColumnsBoardProps {
   project_id: number
 }
 
-export const ColumnsBoard: React.FC<ColumnsBoardProps> = ({ project_id }) => {
+export const ColumnsBoard: React.FC<ColumnsBoardProps> = memo(({ project_id }) => {
   const dispatch = useDispatch<AppDispatch>()
-  const { items: columns, loading, error, movingColumnId } = useSelector((state: RootState) => state.columns)
+  const { loading, error, movingColumnId } = useSelector((state: RootState) => state.columns)
+  const columns = useSelector((state: RootState) => selectColumnsByProject(state, project_id))
 
   useEffect(() => {
     dispatch(fetchColumns({ 
@@ -133,4 +135,4 @@ export const ColumnsBoard: React.FC<ColumnsBoardProps> = ({ project_id }) => {
       </Droppable>
     </div>
   )
-} 
+}) 
