@@ -1,6 +1,6 @@
 import styled from 'styled-components'
 
-export const Column = styled.div`
+export const ColumnWrapper = styled.div`
   width: 360px;
   flex: 0 0 360px;
   height: fit-content;
