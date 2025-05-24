@@ -27,7 +27,10 @@ export const Title = styled.h3`
   margin-bottom: 8px;
   display: flex;
   align-items: center;
-  gap: 8px;
+`
+
+export const HighlightedText = styled.span`
+  color: ${({ theme }) => theme.colors.primary};
 `
 
 export const Description = styled.p<{ isEmpty?: boolean }>`

@@ -77,7 +77,11 @@ const ProjectsList = React.memo(({ projects, searchQuery, onCreateClick }: Proje
   return (
     <ProjectsGrid>
       {projects.map(project => (
-        <ProjectCard key={project.id} project={project} />
+        <ProjectCard 
+          key={project.id} 
+          project={project} 
+          searchQuery={searchQuery}
+        />
       ))}
     </ProjectsGrid>
   )

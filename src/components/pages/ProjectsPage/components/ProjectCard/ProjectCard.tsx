@@ -13,7 +13,8 @@ import {
   TimeBlock,
   TimeIcon,
   TimeText,
-  TimeDate
+  TimeDate,
+  HighlightedText
 } from './ProjectCard.styles'
 import { useTimeInfo } from '../../../../../hooks/useTimeInfo'
 import { ArchiveIcon } from '../../../../atoms/Icon/icons'
@@ -31,10 +32,22 @@ interface Project {
 
 interface ProjectCardProps {
   project: Project
+  searchQuery?: string
+}
+
+const highlightMatch = (text: string, query: string) => {
+  if (!query) return text
+
+  const parts = text.split(new RegExp(`(${query})`, 'gi'))
+  return parts.map((part, i) => 
+    part.toLowerCase() === query.toLowerCase() ? 
+      <HighlightedText key={i}>{part}</HighlightedText> : 
+      part
+  )
 }
 
 // Main component
-export const ProjectCard = ({ project }: ProjectCardProps) => {
+export const ProjectCard = ({ project, searchQuery = '' }: ProjectCardProps) => {
   const navigate = useNavigate()
   const { formattedDate, timeLeft, timeIcon, isExpired } = useTimeInfo(project.deadline)
 
@@ -44,7 +57,7 @@ export const ProjectCard = ({ project }: ProjectCardProps) => {
   return (
     <Card onClick={() => navigate(`/projects/${project.id}`)}>
       <Title>
-        {project.name}
+        {highlightMatch(project.name, searchQuery)}
         {project.archived && <ArchiveIcon size={16} />}
       </Title>
       <Description isEmpty={!project.description}>

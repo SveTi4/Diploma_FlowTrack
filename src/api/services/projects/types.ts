@@ -11,10 +11,10 @@ export interface Project {
   progress?: number;
   status?: ProjectStatus;
   priority?: ProjectPriority;
-  created_at?: string;
-  updated_at?: string;
+  created_at: string;
+  updated_at: string;
   tags?: string[];
-  archived?: boolean;
+  archived: boolean;
 }
 
 export interface CreateProjectDto {
