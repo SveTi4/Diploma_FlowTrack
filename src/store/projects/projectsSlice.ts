@@ -25,9 +25,16 @@ const initialState: ProjectsState = {
   error: null
 }
 
+interface FetchProjectsParams {
+  page: number
+  limit: number
+  search?: string
+  archived?: boolean
+}
+
 export const fetchProjects = createAsyncThunk(
   'projects/fetchProjects',
-  async (params: { page: number; limit: number }) => {
+  async (params: FetchProjectsParams) => {
     const response = await services.projects.getProjects(params)
     console.log('API Response:', response)
     return response

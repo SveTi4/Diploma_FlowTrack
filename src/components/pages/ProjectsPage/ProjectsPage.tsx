@@ -1,5 +1,5 @@
-import styled from 'styled-components'
-import { useState, useEffect, useMemo } from 'react'
+import React from 'react'
+import { useState, useEffect } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import { AppDispatch, RootState } from '../../../store'
 import { PageHeader } from '../../molecules/PageHeader/PageHeader'
@@ -11,30 +11,77 @@ import { EmptyState } from '../../molecules/EmptyState/EmptyState'
 import { Loader } from '../../atoms/Loader/Loader'
 import { SearchInput } from '../../atoms/SearchInput/SearchInput'
 import { fetchProjects, createProject } from '../../../store/projects/projectsSlice'
+import { Project } from '../../../api/services/projects/types'
+import { Content, ProjectsGrid, ButtonGroup, HeaderContent } from './ProjectsPage.styles'
 
-const Content = styled.div`
-  padding: 32px;
-  flex: 1;
-  overflow: auto;
-`
+interface ProjectsHeaderProps {
+  searchQuery: string
+  onSearchChange: (value: string) => void
+  onRefresh: () => void
+  onCreateClick: () => void
+  isRefreshing: boolean
+}
 
-const ProjectsGrid = styled.div`
-  display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
-  gap: 48px;
-  margin-top: 24px;
-`
+const ProjectsHeader = React.memo(({ 
+  searchQuery, 
+  onSearchChange, 
+  onRefresh, 
+  onCreateClick,
+  isRefreshing 
+}: ProjectsHeaderProps) => {
+  return (
+    <PageHeader title="Мои проекты">
+      <HeaderContent>
+        <SearchInput 
+          value={searchQuery}
+          onChange={onSearchChange}
+          placeholder="Поиск по названию или описанию..."
+        />
+        <ButtonGroup>
+          <Button variant="ghost" onClick={onRefresh} disabled={isRefreshing}>
+            <RefreshIcon size={16} />
+            {isRefreshing ? 'Обновление...' : 'Обновить'}
+          </Button>
+          <Button onClick={onCreateClick}>
+            <PlusIcon size={16} />
+            Создать проект
+          </Button>
+        </ButtonGroup>
+      </HeaderContent>
+    </PageHeader>
+  )
+})
 
-const ButtonGroup = styled.div`
-  display: flex;
-  gap: 8px;
-`
+interface ProjectsListProps {
+  projects: Project[]
+  searchQuery: string
+  onCreateClick: () => void
+}
 
-const HeaderContent = styled.div`
-  display: flex;
-  gap: 16px;
-  align-items: center;
-`
+const ProjectsList = React.memo(({ projects, searchQuery, onCreateClick }: ProjectsListProps) => {
+  if (projects.length === 0) {
+    return (
+      <EmptyState
+        icon={<PlusIcon size={48} />}
+        title={searchQuery ? "Проекты не найдены" : "У вас пока нет проектов"}
+        description={searchQuery 
+          ? "Попробуйте изменить параметры поиска"
+          : "Создайте свой первый проект, чтобы начать работу"
+        }
+        buttonText="Создать проект"
+        onButtonClick={onCreateClick}
+      />
+    )
+  }
+
+  return (
+    <ProjectsGrid>
+      {projects.map(project => (
+        <ProjectCard key={project.id} project={project} />
+      ))}
+    </ProjectsGrid>
+  )
+})
 
 export const ProjectsPage = () => {
   const dispatch = useDispatch<AppDispatch>()
@@ -49,37 +96,54 @@ export const ProjectsPage = () => {
 
   const handleRefresh = async () => {
     setIsRefreshing(true)
-    await dispatch(fetchProjects({ page, limit }))
+    await dispatch(fetchProjects({ 
+      page, 
+      limit,
+      search: searchQuery,
+      archived: false
+    }))
     setIsRefreshing(false)
+  }
+
+  const handleSearch = (value: string) => {
+    setSearchQuery(value)
+    dispatch(fetchProjects({ 
+      page, 
+      limit,
+      search: value,
+      archived: false
+    }))
   }
 
   const handleCreateProject = async (project: { name: string; description: string; deadline: string | null }) => {
     try {
       await dispatch(createProject(project)).unwrap()
       setIsCreateModalOpen(false)
+      handleRefresh()
     } catch (err) {
       console.error('Error creating project:', err)
     }
   }
 
-  const filteredProjects = useMemo(() => {
-    if (!searchQuery) return projects
-
-    const query = searchQuery.toLowerCase()
-    return projects.filter(project => 
-      project.name.toLowerCase().includes(query) ||
-      project.description?.toLowerCase().includes(query)
-    )
-  }, [projects, searchQuery])
-
   useEffect(() => {
-    dispatch(fetchProjects({ page, limit }))
-  }, [dispatch, page])
+    dispatch(fetchProjects({ 
+      page, 
+      limit,
+      search: searchQuery,
+      archived: false
+    }))
+  }, [dispatch, page, limit, searchQuery])  
 
   if (loading && !isRefreshing) {
     return (
       <>
-        <PageHeader title="Мои проекты" />
+        <ProjectsHeader
+          searchQuery={searchQuery}
+          onSearchChange={handleSearch}
+          onRefresh={handleRefresh}
+          onCreateClick={() => setIsCreateModalOpen(true)}
+          isRefreshing={isRefreshing}
+        />
         <Content>
           <Loader size="large" />
         </Content>
@@ -93,45 +157,20 @@ export const ProjectsPage = () => {
 
   return (
     <>
-      <PageHeader title="Мои проекты">
-        <HeaderContent>
-          <SearchInput 
-            value={searchQuery}
-            onChange={setSearchQuery}
-            placeholder="Поиск по названию или описанию..."
-          />
-          <ButtonGroup>
-            <Button variant="ghost" onClick={handleRefresh} disabled={isRefreshing}>
-              <RefreshIcon size={16} />
-              {isRefreshing ? 'Обновление...' : 'Обновить'}
-            </Button>
-            <Button onClick={() => setIsCreateModalOpen(true)}>
-              <PlusIcon size={16} />
-              Создать проект
-            </Button>
-          </ButtonGroup>
-        </HeaderContent>
-      </PageHeader>
+      <ProjectsHeader
+        searchQuery={searchQuery}
+        onSearchChange={handleSearch}
+        onRefresh={handleRefresh}
+        onCreateClick={() => setIsCreateModalOpen(true)}
+        isRefreshing={isRefreshing}
+      />
 
       <Content>
-        {filteredProjects.length === 0 ? (
-          <EmptyState
-            icon={<PlusIcon size={48} />}
-            title={searchQuery ? "Проекты не найдены" : "У вас пока нет проектов"}
-            description={searchQuery 
-              ? "Попробуйте изменить параметры поиска"
-              : "Создайте свой первый проект, чтобы начать работу"
-            }
-            buttonText="Создать проект"
-            onButtonClick={() => setIsCreateModalOpen(true)}
-          />
-        ) : (
-          <ProjectsGrid>
-            {filteredProjects.map(project => (
-              <ProjectCard key={project.id} project={project} />
-            ))}
-          </ProjectsGrid>
-        )}
+        <ProjectsList
+          projects={projects}
+          searchQuery={searchQuery}
+          onCreateClick={() => setIsCreateModalOpen(true)}
+        />
       </Content>
 
       <CreateProjectModal
