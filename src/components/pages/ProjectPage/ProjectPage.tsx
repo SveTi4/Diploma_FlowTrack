@@ -2,7 +2,6 @@ import React from 'react'
 import { useEffect } from 'react'
 import { useParams, useNavigate } from 'react-router-dom'
 import { useDispatch, useSelector } from 'react-redux'
-import styled from 'styled-components'
 import { PageHeader } from '../../molecules/PageHeader/PageHeader'
 import { ProgressBarComponent } from "../../atoms/ProgressBar/ProgressBar"
 import { AppDispatch, RootState } from '../../../store'
@@ -17,25 +16,7 @@ import { moveColumn } from "../../../store/columns/columnsSlice.ts";
 import { usePanel } from '../../../contexts/PanelContext'
 import { EditableTitle } from '../../molecules/EditableTitle/EditableTitle.tsx'
 import { EditableDescription } from '../../molecules/EditableDescription/EditableDescription'
-
-const MainContent = styled.div`
-  flex: 1;
-  padding: 32px;
-  width: 100%;
-  height: calc(100vh - 80px);
-`
-
-const Chart = styled.div`
-  width: 100%;
-  min-height: 200px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  color: ${({ theme }) => theme.colors.textSecondary};
-  background: ${({ theme }) => theme.colors.surface};
-  border-radius: ${({ theme }) => theme.borderRadius.medium};
-  padding: ${({ theme }) => theme.spacing.medium};
-`
+import { MainContent, Chart } from './ProjectPage.styles.ts'
 
 export const ProjectPage: React.FC = () => {
   const { id } = useParams<{ id: string }>()
