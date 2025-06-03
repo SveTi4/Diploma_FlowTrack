@@ -1,5 +1,5 @@
 import React, { ReactNode } from 'react'
-import { CloseIcon } from '../../atoms/Icon/icons.tsx'
+import { CloseIcon } from '../../atoms'
 import {
   Panel,
   Header,

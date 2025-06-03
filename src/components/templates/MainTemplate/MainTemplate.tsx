@@ -1,5 +1,5 @@
 import { Sidebar } from '../../organisms/Sidebar/Sidebar'
-import {ThemeToggle} from "../../atoms/ThemeToggle/ThemeToggle.tsx";
+import {ThemeToggle} from "../../atoms";
 import { Container, Content, ThemeToggleWrapper } from './MainTemplate.styles.ts';
 
 interface MainTemplateProps {

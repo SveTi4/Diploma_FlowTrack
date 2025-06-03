@@ -1,16 +1,12 @@
 import React, { useEffect, memo } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
-import { RootState } from '../../../store'
-import { PlusIcon } from '../../atoms/Icon/icons'
-import { createColumn, deleteColumn, fetchColumns, updateColumn } from '../../../store/columns/columnsSlice'
-import { AppDispatch } from '../../../store'
-import { Loader } from "../../atoms/Loader/Loader.tsx"
+import { RootState, AppDispatch } from '../../../store'
+import { PlusIcon, Loader, Button } from '../../atoms'
+import { createColumn, deleteColumn, fetchColumns, updateColumn, selectColumnsByProject } from '../../../store/columns/columnsSlice'
 import { createTask } from '../../../store/tasks/tasksSlice'
-import { Button } from "../../atoms/Button/Button.tsx"
-import { EmptyState } from "../../molecules/EmptyState/EmptyState.tsx"
+import { EmptyState } from "../../molecules"
 import { Droppable } from "react-beautiful-dnd"
 import { Column } from './components/Column/Column'
-import { selectColumnsByProject } from '../../../store/columns/columnsSlice'
 import { BoardHeader, BoardTitle, ColumnsContainer } from './ColumnsBoard.styles'
 
 interface ColumnsBoardProps {

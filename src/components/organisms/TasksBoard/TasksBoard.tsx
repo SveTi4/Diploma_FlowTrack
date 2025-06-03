@@ -2,7 +2,7 @@ import React, { useEffect } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import { AppDispatch, RootState } from '../../../store'
 import { deleteTask, fetchTasks, updateTask } from '../../../store/tasks/tasksSlice'
-import { Loader } from '../../atoms/Loader/Loader'
+import { Loader } from '../../atoms'
 import { TaskCard } from './components/Task/Task'
 import { Droppable } from "react-beautiful-dnd"
 import { TasksContainer } from './TasksBoard.styles'

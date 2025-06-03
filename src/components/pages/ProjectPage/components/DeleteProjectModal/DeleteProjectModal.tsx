@@ -1,6 +1,6 @@
 import React from 'react'
-import { Modal } from '../../../../molecules/Modal/Modal'
-import { Button } from '../../../../atoms/Button/Button'
+import { Modal } from '../../../../molecules'
+import { Button } from '../../../../atoms'
 import {
   Content,
   WarningText,

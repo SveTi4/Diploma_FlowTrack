@@ -1,7 +1,6 @@
 import React from 'react'
-import { Section, SectionTitle } from '../../../../molecules/Section/Section'
-import { ProgressBarComponent } from "../../../../atoms/ProgressBar/ProgressBar"
-import { EditableDescription } from '../../../../molecules/EditableDescription/EditableDescription'
+import { Section, SectionTitle, EditableDescription } from '../../../../molecules'
+import { ProgressBarComponent } from "../../../../atoms"
 import { Chart } from './ProjectInfoPanel.styles'
 import { Project } from '../../../../../api/services'
 import { AppDispatch } from '../../../../../store'

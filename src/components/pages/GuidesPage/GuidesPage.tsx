@@ -1,4 +1,4 @@
-import { PagePlaceholder } from '../../atoms/PagePlaceholder/PagePlaceholder'
+import { PagePlaceholder } from '../../atoms'
 
 export const GuidesPage = () => (
   <PagePlaceholder title="Гайды" />

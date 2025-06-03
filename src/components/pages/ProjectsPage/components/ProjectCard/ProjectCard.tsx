@@ -17,7 +17,7 @@ import {
   HighlightedText
 } from './ProjectCard.styles'
 import { useTimeInfo } from '../../../../../hooks/useTimeInfo'
-import { ArchiveIcon } from '../../../../atoms/Icon/icons'
+import { ArchiveIcon } from '../../../../atoms'
 
 // Types
 interface Project {

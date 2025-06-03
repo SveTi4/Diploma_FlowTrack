@@ -1,15 +1,11 @@
 import React, { useState } from 'react'
-import { IconButton } from '../../../../atoms/IconButton/IconButton.tsx'
+import { IconButton, TaskStatus } from '../../../../atoms'
 import { Task } from "../../../../../api/services"
-import { TaskStatus } from '../../../../atoms/TaskStatus/TaskStatus'
 import { format } from 'date-fns'
 import { ru } from 'date-fns/locale'
 import { Draggable } from "react-beautiful-dnd"
 import { usePanel } from '../../../../../contexts/PanelContext'
-import { EditableTitle } from '../../../../molecules/EditableTitle/EditableTitle.tsx'
-import { EditableDescription } from '../../../../molecules/EditableDescription/EditableDescription'
-import { EditableDate } from '../../../../molecules/EditableDate/EditableDate'
-import { Section } from '../../../../molecules/Section/Section'
+import { EditableTitle, EditableDescription, EditableDate, Section } from '../../../../molecules'
 import {
   TaskWrapper,
   TaskInfo,

@@ -10,7 +10,7 @@ import {
   UnlockIcon,
   ArrowRightIcon,
   ArrowLeftIcon
-} from '../../atoms/Icon/icons'
+} from '../../atoms'
 import {
   Avatar,
   Container,

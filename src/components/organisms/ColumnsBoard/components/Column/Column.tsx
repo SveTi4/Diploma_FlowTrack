@@ -1,9 +1,8 @@
 import React, { memo } from 'react'
 import { Draggable } from 'react-beautiful-dnd'
 import { TasksBoard } from '../../../TasksBoard/TasksBoard'
-import { IconButton } from '../../../../atoms/IconButton/IconButton'
-import { PlusIcon } from '../../../../atoms/Icon/icons'
-import { EditableTitle } from '../../../../molecules/EditableTitle/EditableTitle.tsx'
+import { IconButton, PlusIcon } from '../../../../atoms'
+import { EditableTitle } from '../../../../molecules'
 import { ColumnWrapper, ColumnHeader, ColumnTitleWrapper, AddTaskButton } from './Column.styles'
 
 interface ColumnProps {

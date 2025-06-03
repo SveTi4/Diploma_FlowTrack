@@ -1,5 +1,5 @@
 import React, { useState } from 'react'
-import { IconButton } from '../../atoms/IconButton/IconButton'
+import { IconButton } from '../../atoms'
 import { TitleWrapper, Title, EditableInput } from './EditableTitle.styles'
 
 interface EditableTitleProps {

@@ -1,2 +1,11 @@
-// Здесь будут экспорты всех атомарных компонентов
-export {} 
+export { Button } from './Button/Button'
+export { Icon } from './Icon/Icon'
+export * from './Icon/icons'
+export { IconButton } from './IconButton/IconButton'
+export { Input } from './Input/Input'
+export { Loader } from './Loader/Loader'
+export { PagePlaceholder } from './PagePlaceholder/PagePlaceholder'
+export { ProgressBarComponent } from './ProgressBar/ProgressBar'
+export { SearchInput} from './SearchInput/SearchInput.tsx';
+export { TaskStatus } from './TaskStatus/TaskStatus'
+export { ThemeToggle } from './ThemeToggle/ThemeToggle'

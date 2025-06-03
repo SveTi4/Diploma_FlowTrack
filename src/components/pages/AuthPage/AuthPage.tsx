@@ -1,5 +1,5 @@
 import styled from 'styled-components'
-import { LoginForm } from '../../molecules/Forms/LoginForm.tsx'
+import { LoginForm } from '../../molecules/'
 
 const Container = styled.div`
   display: flex;
