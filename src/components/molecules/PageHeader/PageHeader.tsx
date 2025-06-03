@@ -1,49 +1,12 @@
-import styled from 'styled-components'
 import { useNavigate } from 'react-router-dom'
 import { ReactNode } from 'react'
-
-const Container = styled.div`
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  padding: 0 32px;
-  height: 80px;
-  border-bottom: 1px solid ${({ theme }) => theme.colors.border};
-`
-
-const TitleSection = styled.div`
-  display: flex;
-  align-items: center;
-  gap: 16px;
-`
-
-const BackButton = styled.button`
-  background: none;
-  border: none;
-  color: ${({ theme }) => theme.colors.textSecondary};
-  cursor: pointer;
-  padding: 4px;
-  display: flex;
-  align-items: center;
-  font-size: 20px;
-
-  &:hover {
-    color: ${({ theme }) => theme.colors.textSecondary};
-    opacity: 0.8;
-  }
-`
-
-const Title = styled.h1`
-  color: ${({ theme }) => theme.colors.text};
-  font-size: 24px;
-  font-weight: 500;
-`
-
-const Actions = styled.div`
-  display: flex;
-  gap: 16px;
-  align-items: center;
-`
+import {
+  Container,
+  TitleSection,
+  BackButton,
+  Title,
+  Actions
+} from './PageHeader.styles'
 
 interface PageHeaderProps {
   title: string
