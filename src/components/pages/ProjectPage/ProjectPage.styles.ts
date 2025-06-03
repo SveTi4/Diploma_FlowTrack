@@ -1,10 +1,9 @@
 import styled from 'styled-components'
 
 export const MainContent = styled.div`
-  flex: 1;
-  padding: 32px;
-  width: 100%;
-  height: calc(100vh - 80px);
+  padding: 24px;
+  height: calc(100vh - 64px);
+  overflow-y: auto;
 `
 
 export const Chart = styled.div`

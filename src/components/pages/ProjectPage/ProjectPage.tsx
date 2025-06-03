@@ -3,21 +3,19 @@ import { useEffect, useState } from 'react'
 import { useParams, useNavigate } from 'react-router-dom'
 import { useDispatch, useSelector } from 'react-redux'
 import { PageHeader } from '../../molecules/PageHeader/PageHeader'
-import { ProgressBarComponent } from "../../atoms/ProgressBar/ProgressBar"
 import { AppDispatch, RootState } from '../../../store'
 import { fetchProject, deleteProject, clearCurrentProject, updateProject } from '../../../store/projects/projectsSlice'
 import { ColumnsBoard } from '../../organisms/ColumnsBoard/ColumnsBoard'
 import { Loader } from "../../atoms/Loader/Loader.tsx"
-import { Section, SectionTitle } from '../../molecules/Section/Section'
 import { IconButton } from '../../atoms/IconButton/IconButton.tsx'
 import { DragDropContext, DropResult } from 'react-beautiful-dnd'
 import { changeColumn, moveTask } from '../../../store/tasks/tasksSlice.ts'
-import { moveColumn } from "../../../store/columns/columnsSlice.ts";
+import { moveColumn } from "../../../store/columns/columnsSlice.ts"
 import { usePanel } from '../../../contexts/PanelContext'
 import { EditableTitle } from '../../molecules/EditableTitle/EditableTitle.tsx'
-import { EditableDescription } from '../../molecules/EditableDescription/EditableDescription'
-import { MainContent, Chart } from './ProjectPage.styles.ts'
+import { MainContent } from './ProjectPage.styles.ts'
 import { DeleteProjectModal } from './components/DeleteProjectModal/DeleteProjectModal'
+import { ProjectInfoPanel } from './components/ProjectInfoPanel/ProjectInfoPanel'
 
 export const ProjectPage: React.FC = () => {
   const { id } = useParams<{ id: string }>()
@@ -71,92 +69,38 @@ export const ProjectPage: React.FC = () => {
   const handleDragEnd = async (result: DropResult) => {
     const { source, destination, draggableId, type } = result
 
-    console.log(source)
-    console.log(destination)
-    console.log(draggableId)
-    console.log(type)
-
     if (type === 'column') {
-      console.log("перетаскивается колонка!")
-      if (!destination || source.index === destination?.index) {
-        console.log(`Позиция колонки не изменилась, колонка осталась на позиции ${source.index}`)
-      }
-      else {
-        console.log(`Позиция колонки изменилась, колонка перемещается c позиции ${source.index} в позицию ${destination?.index}`)
-        await dispatch(moveColumn({
+      if (!destination || source.index === destination?.index) return
+      
+      await dispatch(moveColumn({
+        id: Number(draggableId),
+        position: Number(destination?.index) + 1
+      }))
+    } else {
+      if (!destination) return
+
+      if (source.droppableId === destination.droppableId) {
+        if (source.index === destination.index) return
+        
+        await dispatch(moveTask({
           id: Number(draggableId),
-          position: Number(destination?.index) + 1
+          position: Number(destination.index),
+          column_id: Number(source.droppableId)
         }))
+        return
       }
-    }
-    else {
-      // Если нет destination или задача перетаскивается в ту же колонку
-      if (!destination || source.droppableId === destination?.droppableId) {
-        if (source.index === destination?.index) {
-          console.log(`Колонка не изменилась, задача осталась на позиции ${source.index}`)
-          return
-        } else {
-          console.log(`Колонка не изменилась, но задача перемещена c позиции ${source.index} в позицию ${destination?.index}`)
-          await dispatch(moveTask({
-            id: Number(draggableId),
-            position: Number(destination?.index),
-            column_id: Number(source.droppableId)
-          }))
-          return
-        }
-      }
-      console.log(`Задача ${draggableId} из колонки ${source.droppableId} перемщается в колнку ${destination?.droppableId}, с позиции ${source.index} в позицию ${destination?.index}`)
+
       await dispatch(changeColumn({
         taskId: Number(draggableId),
         old_column_id: Number(source.droppableId),
-        new_column_id: Number(destination?.droppableId),
-        position: Number(destination?.index)
+        new_column_id: Number(destination.droppableId),
+        position: Number(destination.index)
       }))
     }
-
   }
 
-  const renderPanelContent = (currentProject: typeof project) => {
-    if (!currentProject) return null;
-    
-    return (
-      <>
-        <Section>
-          <SectionTitle>Общий прогресс</SectionTitle>
-          <ProgressBarComponent progress={currentProject.progress ?? 0} timeLeft={''} />
-        </Section>
-
-        <Section>
-          <SectionTitle>Описание</SectionTitle>
-          <EditableDescription
-            value={currentProject.description || ''}
-            onSave={async (newDescription) => {
-              await dispatch(updateProject({ 
-                id: currentProject.id, 
-                data: { description: newDescription } 
-              })).unwrap();
-              
-              updatePanel({
-                content: renderPanelContent({ 
-                  ...currentProject, 
-                  description: newDescription 
-                })
-              });
-            }}
-            placeholder="Добавьте описание проекта..."
-          />
-        </Section>
-
-        <Section>
-          <SectionTitle>График продуктивности</SectionTitle>
-          <Chart>График будет добавлен позже</Chart>
-        </Section>
-      </>
-    );
-  };
-
   const handleOpenProjectInfo = () => {
-    if (!project) return;
+    if (!project) return
 
     openPanel({
       type: 'project',
@@ -183,7 +127,7 @@ export const ProjectPage: React.FC = () => {
           }}
         />
       ),
-      content: renderPanelContent(project)
+      content: <ProjectInfoPanel project={project} dispatch={dispatch} updatePanel={updatePanel} />
     });
   };
 
