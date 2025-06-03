@@ -1,25 +1,11 @@
-import styled from 'styled-components'
 import { ReactNode } from 'react'
+import { IconWrapper } from './Icon.styles'
 
 interface IconProps {
   size?: number
   color?: string
   children: ReactNode
 }
-
-const IconWrapper = styled.div<{ size: number, color?: string }>`
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  width: ${({ size }) => size}px;
-  height: ${({ size }) => size}px;
-  color: ${({ color }) => color || 'inherit'};
-  
-  svg {
-    width: inherit;
-    height: 100%;
-  }
-`
 
 export const Icon = ({ size = 24, color, children }: IconProps) => {
   return (
