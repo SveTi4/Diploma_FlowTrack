@@ -1,5 +1,5 @@
 import styled from 'styled-components'
-import { RegisterForm } from '../../molecules/RegisterForm/RegisterForm.tsx'
+import { RegisterForm } from '../../molecules/Forms/RegisterForm.tsx'
 
 const Container = styled.div`
   display: flex;
