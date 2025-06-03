@@ -61,10 +61,11 @@ export const TaskCard: React.FC<TaskProps> = ({
             </CardHeader>
             <EditableDescription
               value={currentTask.description || ''}
-              onSave={(newDescription) => {
-                onUpdate?.(currentTask.id, { description: newDescription });
+              onSave={async (newDescription) => {
+                await onUpdate?.(currentTask.id, { description: newDescription });
+                const updatedTask = { ...currentTask, description: newDescription };
                 updatePanel({
-                  content: renderPanelContent({ ...currentTask, description: newDescription })
+                  content: renderPanelContent(updatedTask)
                 });
               }}
               placeholder="Добавьте описание задачи..."
@@ -83,10 +84,11 @@ export const TaskCard: React.FC<TaskProps> = ({
             </CardHeader>
             <EditableDate
               value={currentTask.deadline}
-              onSave={(newDeadline) => {
-                onUpdate?.(currentTask.id, { deadline: newDeadline });
+              onSave={async (newDeadline) => {
+                await onUpdate?.(currentTask.id, { deadline: newDeadline });
+                const updatedTask = { ...currentTask, deadline: newDeadline };
                 updatePanel({
-                  content: renderPanelContent({ ...currentTask, deadline: newDeadline })
+                  content: renderPanelContent(updatedTask)
                 });
               }}
               placeholder="Установите дедлайн"
@@ -101,7 +103,18 @@ export const TaskCard: React.FC<TaskProps> = ({
               </svg>
               Создана
             </CardHeader>
-            <CardValue>{format(new Date(currentTask.created_at), 'd MMMM yyyy', { locale: ru })}</CardValue>
+            <CardValue>
+              {(() => {
+                console.log('Created at:', currentTask.created_at);
+                const date = new Date(currentTask.created_at);
+                const utcDate = new Date(Date.UTC(
+                  date.getUTCFullYear(),
+                  date.getUTCMonth(),
+                  date.getUTCDate()
+                ));
+                return format(utcDate, 'd MMMM yyyy', { locale: ru });
+              })()}
+            </CardValue>
           </InfoCard>
 
           <InfoCard>
@@ -112,20 +125,31 @@ export const TaskCard: React.FC<TaskProps> = ({
               </svg>
               Изменена
             </CardHeader>
-            <CardValue>{format(new Date(currentTask.updated_at), 'd MMMM yyyy', { locale: ru })}</CardValue>
+            <CardValue>
+              {(() => {
+                console.log('Updated at:', currentTask.updated_at);
+                const date = new Date(currentTask.updated_at);
+                const utcDate = new Date(Date.UTC(
+                  date.getUTCFullYear(),
+                  date.getUTCMonth(),
+                  date.getUTCDate()
+                ));
+                return format(utcDate, 'd MMMM yyyy', { locale: ru });
+              })()}
+            </CardValue>
           </InfoCard>
         </InfoCards>
       </Section>
 
-      <Section>
-        <SectionTitle>Подзадачи</SectionTitle>
-        <SubtasksList>
-          <SubtaskItem>
-            <TaskStatus status={false} onStatusChange={() => {}} />
-            <SubtaskName>Пример подзадачи</SubtaskName>
-          </SubtaskItem>
-        </SubtasksList>
-      </Section>
+      {/*<Section>*/}
+      {/*  <SectionTitle>Подзадачи</SectionTitle>*/}
+      {/*  <SubtasksList>*/}
+      {/*    <SubtaskItem>*/}
+      {/*      <TaskStatus status={false} onStatusChange={() => {}} />*/}
+      {/*      <SubtaskName>Пример подзадачи</SubtaskName>*/}
+      {/*    </SubtaskItem>*/}
+      {/*  </SubtasksList>*/}
+      {/*</Section>*/}
     </>
   );
 
@@ -135,15 +159,29 @@ export const TaskCard: React.FC<TaskProps> = ({
       title: (
         <EditableTitle
           value={task.name}
-          onSave={(newName) => {
-            onUpdate?.(task.id, { name: newName });
+          onSave={async (newName) => {
+            await onUpdate?.(task.id, { name: newName });
+            const updatedTask = { ...task, name: newName };
             updatePanel({
               title: (
                 <EditableTitle
                   value={newName}
-                  onSave={(newName) => onUpdate?.(task.id, { name: newName })}
+                  onSave={async (newName) => {
+                    await onUpdate?.(task.id, { name: newName });
+                    const updatedTask = { ...task, name: newName };
+                    updatePanel({
+                      title: (
+                        <EditableTitle
+                          value={newName}
+                          onSave={(newName) => onUpdate?.(task.id, { name: newName })}
+                        />
+                      ),
+                      content: renderPanelContent(updatedTask)
+                    });
+                  }}
                 />
-              )
+              ),
+              content: renderPanelContent(updatedTask)
             });
           }}
         />
@@ -161,6 +199,10 @@ export const TaskCard: React.FC<TaskProps> = ({
     setIsStatusUpdating(true);
     try {
       await onUpdate?.(task.id, { status: !task.status });
+      const updatedTask = { ...task, status: !task.status };
+      updatePanel({
+        content: renderPanelContent(updatedTask)
+      });
     } finally {
       setIsStatusUpdating(false);
     }
