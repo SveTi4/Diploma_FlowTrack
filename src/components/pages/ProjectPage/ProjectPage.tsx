@@ -1,5 +1,5 @@
 import React from 'react'
-import { useEffect } from 'react'
+import { useEffect, useState } from 'react'
 import { useParams, useNavigate } from 'react-router-dom'
 import { useDispatch, useSelector } from 'react-redux'
 import { PageHeader } from '../../molecules/PageHeader/PageHeader'
@@ -17,12 +17,14 @@ import { usePanel } from '../../../contexts/PanelContext'
 import { EditableTitle } from '../../molecules/EditableTitle/EditableTitle.tsx'
 import { EditableDescription } from '../../molecules/EditableDescription/EditableDescription'
 import { MainContent, Chart } from './ProjectPage.styles.ts'
+import { DeleteProjectModal } from './components/DeleteProjectModal/DeleteProjectModal'
 
 export const ProjectPage: React.FC = () => {
   const { id } = useParams<{ id: string }>()
   const navigate = useNavigate()
   const dispatch = useDispatch<AppDispatch>()
   const { openPanel, updatePanel } = usePanel()
+  const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false)
   
   const { currentProject: project, loading: projectLoading, error: projectError } = useSelector((state: RootState) => state.projects)
 
@@ -37,8 +39,26 @@ export const ProjectPage: React.FC = () => {
     }
   }, [id, dispatch])
 
+  const handleDeleteClick = () => {
+    setIsDeleteModalOpen(true)
+  }
+
+  const handleArchive = async () => {
+    if (!project) return
+
+    try {
+      await dispatch(updateProject({ 
+        id: project.id, 
+        data: { archived: true } 
+      })).unwrap()
+      navigate('/projects')
+    } catch (error) {
+      console.error('Error archiving project:', error)
+    }
+  }
+
   const handleDelete = async () => {
-    if (!project || !window.confirm('Вы уверены, что хотите удалить проект?')) return
+    if (!project) return
 
     try {
       await dispatch(deleteProject(project.id)).unwrap()
@@ -178,7 +198,7 @@ export const ProjectPage: React.FC = () => {
         showBackButton>
           <>
             <IconButton onClick={handleOpenProjectInfo} size={24} type={'info'}/>
-            <IconButton onClick={handleDelete} size={24} type={'delete'}/>
+            <IconButton onClick={handleDeleteClick} size={24} type={'delete'}/>
           </>
       </PageHeader>
 
@@ -187,6 +207,14 @@ export const ProjectPage: React.FC = () => {
           <ColumnsBoard project_id={project.id} />
         </DragDropContext>
       </MainContent>
+
+      <DeleteProjectModal
+        isOpen={isDeleteModalOpen}
+        onClose={() => setIsDeleteModalOpen(false)}
+        onArchive={handleArchive}
+        onDelete={handleDelete}
+        projectName={project.name}
+      />
     </>
   )
 } 

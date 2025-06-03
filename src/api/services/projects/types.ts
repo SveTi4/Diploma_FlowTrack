@@ -34,6 +34,7 @@ export interface UpdateProjectDto {
   teamSize?: number;
   progress?: number;
   tags?: string[];
+  archived?: boolean;
 }
 
 export interface ProjectFilters {
