@@ -9,7 +9,7 @@ import { usePanel } from '../../../../../contexts/PanelContext'
 import { EditableTitle } from '../../../../molecules/EditableTitle/EditableTitle.tsx'
 import { EditableDescription } from '../../../../molecules/EditableDescription/EditableDescription'
 import { EditableDate } from '../../../../molecules/EditableDate/EditableDate'
-import { Section, SectionTitle } from '../../../../molecules/Section/Section'
+import { Section } from '../../../../molecules/Section/Section'
 import {
   TaskWrapper,
   TaskInfo,
@@ -24,10 +24,7 @@ import {
   DescriptionCard,
   DeadlineCard,
   CardHeader,
-  CardValue,
-  SubtasksList,
-  SubtaskItem,
-  SubtaskName
+  CardValue
 } from './Task.styles'
 
 interface TaskProps {
@@ -50,28 +47,6 @@ export const TaskCard: React.FC<TaskProps> = ({
     <>
       <Section>
         <InfoCards>
-          <DescriptionCard>
-            <CardHeader>
-              <svg width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
-                <path d="M13.3333 2H2.66667C2.29848 2 2 2.29848 2 2.66667V13.3333C2 13.7015 2.29848 14 2.66667 14H13.3333C13.7015 14 14 13.7015 14 13.3333V2.66667C14 2.29848 13.7015 2 13.3333 2Z" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
-                <path d="M5.33333 2V14" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
-                <path d="M2 5.33334H14" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
-              </svg>
-              Описание
-            </CardHeader>
-            <EditableDescription
-              value={currentTask.description || ''}
-              onSave={async (newDescription) => {
-                await onUpdate?.(currentTask.id, { description: newDescription });
-                const updatedTask = { ...currentTask, description: newDescription };
-                updatePanel({
-                  content: renderPanelContent(updatedTask)
-                });
-              }}
-              placeholder="Добавьте описание задачи..."
-            />
-          </DescriptionCard>
-
           <DeadlineCard>
             <CardHeader>
               <svg width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -138,18 +113,30 @@ export const TaskCard: React.FC<TaskProps> = ({
               })()}
             </CardValue>
           </InfoCard>
+          <DescriptionCard>
+            <CardHeader>
+              <svg width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <path d="M13.3333 2H2.66667C2.29848 2 2 2.29848 2 2.66667V13.3333C2 13.7015 2.29848 14 2.66667 14H13.3333C13.7015 14 14 13.7015 14 13.3333V2.66667C14 2.29848 13.7015 2 13.3333 2Z" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
+                <path d="M5.33333 2V14" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
+                <path d="M2 5.33334H14" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
+              </svg>
+              Описание
+            </CardHeader>
+
+            <EditableDescription
+              value={currentTask.description || ''}
+              onSave={async (newDescription) => {
+                await onUpdate?.(currentTask.id, { description: newDescription });
+                const updatedTask = { ...currentTask, description: newDescription };
+                updatePanel({
+                  content: renderPanelContent(updatedTask)
+                });
+              }}
+              placeholder="Добавьте описание задачи..."
+            />
+          </DescriptionCard>
         </InfoCards>
       </Section>
-
-      {/*<Section>*/}
-      {/*  <SectionTitle>Подзадачи</SectionTitle>*/}
-      {/*  <SubtasksList>*/}
-      {/*    <SubtaskItem>*/}
-      {/*      <TaskStatus status={false} onStatusChange={() => {}} />*/}
-      {/*      <SubtaskName>Пример подзадачи</SubtaskName>*/}
-      {/*    </SubtaskItem>*/}
-      {/*  </SubtasksList>*/}
-      {/*</Section>*/}
     </>
   );
 

@@ -1,20 +1,11 @@
 import React, { useEffect } from 'react'
-import styled from 'styled-components'
 import { useDispatch, useSelector } from 'react-redux'
 import { AppDispatch, RootState } from '../../../store'
 import { deleteTask, fetchTasks, updateTask } from '../../../store/tasks/tasksSlice'
 import { Loader } from '../../atoms/Loader/Loader'
 import { TaskCard } from './components/Task/Task'
-import { Droppable } from "react-beautiful-dnd";
-
-const TasksContainer = styled.div`
-  width: 100%;
-  padding: 16px;
-  display: flex;
-  flex-direction: column;
-  gap: 12px;
-  overflow-y: auto;
-`
+import { Droppable } from "react-beautiful-dnd"
+import { TasksContainer } from './TasksBoard.styles'
 
 interface TasksBoardProps {
   column_id: number
