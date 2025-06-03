@@ -5,17 +5,14 @@ import { useDispatch, useSelector } from 'react-redux'
 import { PageHeader } from '../../molecules/PageHeader/PageHeader'
 import { AppDispatch, RootState } from '../../../store'
 import { fetchProject, deleteProject, clearCurrentProject, updateProject } from '../../../store/projects/projectsSlice'
-import { ColumnsBoard } from '../../organisms/ColumnsBoard/ColumnsBoard'
 import { Loader } from "../../atoms/Loader/Loader.tsx"
 import { IconButton } from '../../atoms/IconButton/IconButton.tsx'
-import { DragDropContext, DropResult } from 'react-beautiful-dnd'
-import { changeColumn, moveTask } from '../../../store/tasks/tasksSlice.ts'
-import { moveColumn } from "../../../store/columns/columnsSlice.ts"
 import { usePanel } from '../../../contexts/PanelContext'
 import { EditableTitle } from '../../molecules/EditableTitle/EditableTitle.tsx'
 import { MainContent } from './ProjectPage.styles.ts'
 import { DeleteProjectModal } from './components/DeleteProjectModal/DeleteProjectModal'
 import { ProjectInfoPanel } from './components/ProjectInfoPanel/ProjectInfoPanel'
+import { ProjectBoard } from './components/ProjectBoard/ProjectBoard'
 
 export const ProjectPage: React.FC = () => {
   const { id } = useParams<{ id: string }>()
@@ -63,39 +60,6 @@ export const ProjectPage: React.FC = () => {
       navigate('/projects')
     } catch (error) {
       console.error('Error deleting project:', error)
-    }
-  }
-
-  const handleDragEnd = async (result: DropResult) => {
-    const { source, destination, draggableId, type } = result
-
-    if (type === 'column') {
-      if (!destination || source.index === destination?.index) return
-      
-      await dispatch(moveColumn({
-        id: Number(draggableId),
-        position: Number(destination?.index) + 1
-      }))
-    } else {
-      if (!destination) return
-
-      if (source.droppableId === destination.droppableId) {
-        if (source.index === destination.index) return
-        
-        await dispatch(moveTask({
-          id: Number(draggableId),
-          position: Number(destination.index),
-          column_id: Number(source.droppableId)
-        }))
-        return
-      }
-
-      await dispatch(changeColumn({
-        taskId: Number(draggableId),
-        old_column_id: Number(source.droppableId),
-        new_column_id: Number(destination.droppableId),
-        position: Number(destination.index)
-      }))
     }
   }
 
@@ -147,9 +111,7 @@ export const ProjectPage: React.FC = () => {
       </PageHeader>
 
       <MainContent>
-        <DragDropContext onDragEnd={handleDragEnd}>
-          <ColumnsBoard project_id={project.id} />
-        </DragDropContext>
+        <ProjectBoard projectId={project.id} dispatch={dispatch} />
       </MainContent>
 
       <DeleteProjectModal
