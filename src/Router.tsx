@@ -7,12 +7,13 @@ import { RegisterPage } from './components/pages/RegisterPage/RegisterPage'
 import { MainTemplate } from './components/templates/MainTemplate/MainTemplate'
 import { ProjectsPage } from "./components/pages/ProjectsPage/ProjectsPage"
 import { ProjectPage } from "./components/pages/ProjectPage/ProjectPage"
+import { ArchivePage } from "./components/pages/ArchivePage/ArchivePage"
 import { PageHeader } from "./components/molecules/PageHeader/PageHeader"
 
 export const Router = () => {
   return (
     <Provider store={store}>
-      {/* @ts-ignore */}
+      {/* @ts-expect-error GlobalStyles использует styled-components, который не имеет типов */}
       <GlobalStyles />
       <BrowserRouter>
         <Routes>
@@ -51,9 +52,7 @@ export const Router = () => {
           } />
           <Route path="/archive" element={
             <MainTemplate>
-              <PageHeader title={'Архив'}>
-                Тут пока что пусто
-              </PageHeader>
+              <ArchivePage />
             </MainTemplate>
           } />
           <Route path="/support" element={

@@ -1,5 +1,5 @@
-import { PagePlaceholder } from '../../atoms'
+import { ProjectsList } from '../../organisms/ProjectsList/ProjectsList'
 
-export const ArchivePage = () => (
-  <PagePlaceholder title="Архив" />
-) 
+export const ArchivePage = () => {
+  return <ProjectsList />
+} 

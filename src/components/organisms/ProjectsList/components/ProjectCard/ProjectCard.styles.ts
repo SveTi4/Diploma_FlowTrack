@@ -32,12 +32,29 @@ export const Card = styled.div`
   }
 `
 
+export const CardHeader = styled.div`
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  margin-bottom: 16px;
+`
+
+export const CardContent = styled.div`
+  flex: 1;
+  margin-bottom: 16px;
+`
+
+export const CardFooter = styled.div`
+  margin-top: auto;
+`
+
 export const Title = styled.h3`
   color: ${({ theme }) => theme.colors.text};
   font-size: 18px;
-  margin-bottom: 8px;
+  margin: 0;
   display: flex;
   align-items: center;
+  gap: 8px;
 `
 
 export const HighlightedText = styled.span`
@@ -48,12 +65,11 @@ export const Description = styled.p<{ isEmpty?: boolean }>`
   color: ${({ theme }) => theme.colors.textSecondary};
   font-size: 14px;
   line-height: 1.5;
-  margin-bottom: 24px;
+  margin: 0;
   display: -webkit-box;
   -webkit-line-clamp: 2;
   -webkit-box-orient: vertical;
   overflow: hidden;
-  flex-grow: 1;
   font-style: ${({ isEmpty }) => isEmpty ? 'italic' : 'normal'};
 `
 
@@ -61,14 +77,12 @@ export const Meta = styled.div`
   display: flex;
   flex-direction: column;
   gap: 12px;
-  margin-top: auto;
 `
 
 export const MetaInfo = styled.div`
   display: flex;
   align-items: center;
   gap: 8px;
-  margin-top: 8px;
   font-size: 11px;
   color: ${({ theme }) => theme.colors.textSecondary};
 `
@@ -139,4 +153,10 @@ export const TimeText = styled.div`
 export const TimeDate = styled.span`
   font-size: 12px;
   color: ${({ theme }) => theme.colors.textSecondary};
+`
+
+export const CardActions = styled.div`
+  display: flex;
+  gap: 8px;
+  align-items: center;
 ` 

@@ -1,4 +1,3 @@
-import { useNavigate } from 'react-router-dom'
 import { format } from 'date-fns'
 import { ru } from 'date-fns/locale'
 import {
@@ -19,9 +18,8 @@ import {
   CardContent,
   CardFooter,
   CardActions
-} from '../../../../organisms/ProjectsList/components/ProjectCard/ProjectCard.styles'
+} from './ArchivedProjectCard.styles'
 import { useTimeInfo } from '../../../../../hooks/useTimeInfo'
-import { ArchiveIcon } from '../../../../atoms'
 import { IconButton } from '../../../../atoms/IconButton/IconButton'
 
 // Types
@@ -35,21 +33,11 @@ interface Project {
   archived: boolean
 }
 
-interface ProjectCardProps {
+interface ArchivedProjectCardProps {
   project: Project
   searchQuery?: string
-  actions?: {
-    primary: {
-      type: 'delete' | 'info' | 'reload' | 'edit' | 'save' | 'cancel'
-      text: string
-      onClick: () => void
-    }
-    secondary?: {
-      type: 'delete' | 'info' | 'reload' | 'edit' | 'save' | 'cancel'
-      text: string
-      onClick: () => void
-    }
-  }
+  onRestore: (project: Project) => void
+  onDelete: (project: Project) => void
 }
 
 const highlightMatch = (text: string, query: string) => {
@@ -64,58 +52,45 @@ const highlightMatch = (text: string, query: string) => {
 }
 
 // Main component
-export const ProjectCard = ({ project, searchQuery = '', actions }: ProjectCardProps) => {
-  const navigate = useNavigate()
+export const ArchivedProjectCard = ({ 
+  project, 
+  searchQuery = '', 
+  onRestore, 
+  onDelete 
+}: ArchivedProjectCardProps) => {
   const { formattedDate, timeLeft, timeIcon, isExpired } = useTimeInfo(project.deadline)
 
   const formattedCreatedAt = format(new Date(project.created_at), 'd MMM', { locale: ru })
   const formattedUpdatedAt = format(new Date(project.updated_at), 'd MMM', { locale: ru })
 
-  const handleClick = () => {
-    navigate(`/projects/${project.id}`)
-  }
-
-  const handleKeyDown = (e: React.KeyboardEvent) => {
-    if (e.key === 'Enter' || e.key === ' ') {
-      e.preventDefault()
-      handleClick()
-    }
-  }
-
-  const handleActionClick = (e: React.MouseEvent, action: () => void) => {
+  const handleRestore = (e: React.MouseEvent) => {
     e.stopPropagation()
-    action()
+    onRestore(project)
+  }
+
+  const handleDelete = (e: React.MouseEvent) => {
+    e.stopPropagation()
+    onDelete(project)
   }
 
   return (
-    <Card 
-      onClick={handleClick}
-      onKeyDown={handleKeyDown}
-      tabIndex={0}
-      role="button"
-      aria-label={`Проект ${project.name}`}
-    >
+    <Card>
       <CardHeader>
         <Title>
           {highlightMatch(project.name, searchQuery)}
-          {project.archived && <ArchiveIcon size={16} />}
         </Title>
-        {actions && (
-          <CardActions>
-            {actions.secondary && (
-              <IconButton
-                type={actions.secondary.type}
-                onClick={(e) => handleActionClick(e, actions.secondary!.onClick)}
-                size={16}
-              />
-            )}
-            <IconButton
-              type={actions.primary.type}
-              onClick={(e) => handleActionClick(e, actions.primary.onClick)}
-              size={16}
-            />
-          </CardActions>
-        )}
+        <CardActions>
+          <IconButton
+            type="reload"
+            onClick={handleRestore}
+            size={16}
+          />
+          <IconButton
+            type="delete"
+            onClick={handleDelete}
+            size={16}
+          />
+        </CardActions>
       </CardHeader>
       <CardContent>
         <Description isEmpty={!project.description}>
@@ -146,4 +121,4 @@ export const ProjectCard = ({ project, searchQuery = '', actions }: ProjectCardP
       </CardFooter>
     </Card>
   )
-}
+} 

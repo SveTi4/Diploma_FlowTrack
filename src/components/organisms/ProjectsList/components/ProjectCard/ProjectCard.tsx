@@ -17,12 +17,9 @@ import {
   HighlightedText,
   CardHeader,
   CardContent,
-  CardFooter,
-  CardActions
-} from '../../../../organisms/ProjectsList/components/ProjectCard/ProjectCard.styles'
+  CardFooter
+} from './ProjectCard.styles'
 import { useTimeInfo } from '../../../../../hooks/useTimeInfo'
-import { ArchiveIcon } from '../../../../atoms'
-import { IconButton } from '../../../../atoms/IconButton/IconButton'
 
 // Types
 interface Project {
@@ -38,18 +35,6 @@ interface Project {
 interface ProjectCardProps {
   project: Project
   searchQuery?: string
-  actions?: {
-    primary: {
-      type: 'delete' | 'info' | 'reload' | 'edit' | 'save' | 'cancel'
-      text: string
-      onClick: () => void
-    }
-    secondary?: {
-      type: 'delete' | 'info' | 'reload' | 'edit' | 'save' | 'cancel'
-      text: string
-      onClick: () => void
-    }
-  }
 }
 
 const highlightMatch = (text: string, query: string) => {
@@ -64,7 +49,10 @@ const highlightMatch = (text: string, query: string) => {
 }
 
 // Main component
-export const ProjectCard = ({ project, searchQuery = '', actions }: ProjectCardProps) => {
+export const ProjectCard = ({ 
+  project, 
+  searchQuery = ''
+}: ProjectCardProps) => {
   const navigate = useNavigate()
   const { formattedDate, timeLeft, timeIcon, isExpired } = useTimeInfo(project.deadline)
 
@@ -82,11 +70,6 @@ export const ProjectCard = ({ project, searchQuery = '', actions }: ProjectCardP
     }
   }
 
-  const handleActionClick = (e: React.MouseEvent, action: () => void) => {
-    e.stopPropagation()
-    action()
-  }
-
   return (
     <Card 
       onClick={handleClick}
@@ -98,24 +81,7 @@ export const ProjectCard = ({ project, searchQuery = '', actions }: ProjectCardP
       <CardHeader>
         <Title>
           {highlightMatch(project.name, searchQuery)}
-          {project.archived && <ArchiveIcon size={16} />}
         </Title>
-        {actions && (
-          <CardActions>
-            {actions.secondary && (
-              <IconButton
-                type={actions.secondary.type}
-                onClick={(e) => handleActionClick(e, actions.secondary!.onClick)}
-                size={16}
-              />
-            )}
-            <IconButton
-              type={actions.primary.type}
-              onClick={(e) => handleActionClick(e, actions.primary.onClick)}
-              size={16}
-            />
-          </CardActions>
-        )}
       </CardHeader>
       <CardContent>
         <Description isEmpty={!project.description}>
