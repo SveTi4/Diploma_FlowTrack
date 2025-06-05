@@ -94,8 +94,6 @@ export const CloseButton = styled.button`
   }
 
   svg {
-    width: 20px;
-    height: 20px;
-    stroke: ${({ theme }) => theme.colors.text};
+    color: ${({ theme }) => theme.colors.text};
   }
 ` 

@@ -6,6 +6,7 @@ import {
   ModalTitle,
   CloseButton
 } from './Modal.styles'
+import {CloseIcon} from "../../atoms";
 
 interface ModalProps {
   isOpen: boolean
@@ -39,9 +40,7 @@ export const Modal = ({ isOpen, onClose, title, children }: ModalProps) => {
         <ModalHeader>
           <ModalTitle>{title}</ModalTitle>
           <CloseButton onClick={onClose}>
-            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-              <path d="M6 18L18 6M6 6L18 18" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
-            </svg>
+            <CloseIcon size={24} />
           </CloseButton>
         </ModalHeader>
         {children}

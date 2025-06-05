@@ -1,5 +1,13 @@
 import React, { useState } from 'react'
-import { IconButton, TaskStatus } from '../../../../atoms'
+import {
+  CalendarIcon,
+  TimeIcon,
+  IconButton,
+  TaskStatus,
+  CreatedAtIcon,
+  UpdatedAtIcon,
+  DescriptionIcon
+} from '../../../../atoms'
 import { Task } from "../../../../../api/services"
 import { format } from 'date-fns'
 import { ru } from 'date-fns/locale'
@@ -45,12 +53,7 @@ export const TaskCard: React.FC<TaskProps> = ({
         <InfoCards>
           <DeadlineCard>
             <CardHeader>
-              <svg width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
-                <path d="M12.6667 2.66667H3.33333C2.59695 2.66667 2 3.26362 2 4V13.3333C2 14.0697 2.59695 14.6667 3.33333 14.6667H12.6667C13.403 14.6667 14 14.0697 14 13.3333V4C14 3.26362 13.403 2.66667 12.6667 2.66667Z" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
-                <path d="M10.6667 1.33334V4.00001" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
-                <path d="M5.33333 1.33334V4.00001" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
-                <path d="M2 6.66667H14" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
-              </svg>
+              <CalendarIcon size={16} />
               Дедлайн
             </CardHeader>
             <EditableDate
@@ -68,10 +71,7 @@ export const TaskCard: React.FC<TaskProps> = ({
 
           <InfoCard>
             <CardHeader>
-              <svg width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
-                <path d="M8 14.6667C11.6819 14.6667 14.6667 11.6819 14.6667 8.00001C14.6667 4.31811 11.6819 1.33334 8 1.33334C4.3181 1.33334 1.33333 4.31811 1.33333 8.00001C1.33333 11.6819 4.3181 14.6667 8 14.6667Z" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
-                <path d="M8 4V8L10.6667 9.33333" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
-              </svg>
+              <CreatedAtIcon size={16} />
               Создана
             </CardHeader>
             <CardValue>
@@ -90,10 +90,7 @@ export const TaskCard: React.FC<TaskProps> = ({
 
           <InfoCard>
             <CardHeader>
-              <svg width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
-                <path d="M8 14.6667C11.6819 14.6667 14.6667 11.6819 14.6667 8.00001C14.6667 4.31811 11.6819 1.33334 8 1.33334C4.3181 1.33334 1.33333 4.31811 1.33333 8.00001C1.33333 11.6819 4.3181 14.6667 8 14.6667Z" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
-                <path d="M8 4V8L10.6667 9.33333" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
-              </svg>
+              <UpdatedAtIcon size={16} />
               Изменена
             </CardHeader>
             <CardValue>
@@ -111,11 +108,7 @@ export const TaskCard: React.FC<TaskProps> = ({
           </InfoCard>
           <DescriptionCard>
             <CardHeader>
-              <svg width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
-                <path d="M13.3333 2H2.66667C2.29848 2 2 2.29848 2 2.66667V13.3333C2 13.7015 2.29848 14 2.66667 14H13.3333C13.7015 14 14 13.7015 14 13.3333V2.66667C14 2.29848 13.7015 2 13.3333 2Z" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
-                <path d="M5.33333 2V14" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
-                <path d="M2 5.33334H14" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
-              </svg>
+              <DescriptionIcon size={16} />
               Описание
             </CardHeader>
 
