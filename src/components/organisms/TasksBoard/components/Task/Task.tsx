@@ -1,7 +1,6 @@
 import React, { useState } from 'react'
 import {
   CalendarIcon,
-  TimeIcon,
   IconButton,
   TaskStatus,
   CreatedAtIcon,

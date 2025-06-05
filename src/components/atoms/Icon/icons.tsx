@@ -1,5 +1,4 @@
 import { Icon } from './Icon'
-import React from "react";
 
 export const PlusIcon = ({ size, color }: { size?: number; color?: string }) => (
   <Icon size={size} color={color}>
