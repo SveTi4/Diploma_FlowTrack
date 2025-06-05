@@ -10,9 +10,6 @@ export const PlusIcon = ({ size, color }: { size?: number; color?: string }) => 
 
 export const CheckIcon = ({ size, color }: { size?: number; color?: string }) => (
   <Icon size={size} color={color}>
-    {/*<svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">*/}
-    {/*  <path d="M20 6L9 17L4 12" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>*/}
-    {/*</svg>*/}
     <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
       <path
         d="M17.2803 9.28033C17.5732 8.98744 17.5732 8.51256 17.2803 8.21967C16.9874 7.92678 16.5126 7.92678 16.2197 8.21967L10.25 14.1893L7.78033 11.7197C7.48744 11.4268 7.01256 11.4268 6.71967 11.7197C6.42678 12.0126 6.42678 12.4874 6.71967 12.7803L9.71967 15.7803C10.0126 16.0732 10.4874 16.0732 10.7803 15.7803L17.2803 9.28033Z"
@@ -21,7 +18,6 @@ export const CheckIcon = ({ size, color }: { size?: number; color?: string }) =>
             d="M12 1C5.92487 1 1 5.92487 1 12C1 18.0751 5.92487 23 12 23C18.0751 23 23 18.0751 23 12C23 5.92487 18.0751 1 12 1ZM2.5 12C2.5 6.75329 6.75329 2.5 12 2.5C17.2467 2.5 21.5 6.75329 21.5 12C21.5 17.2467 17.2467 21.5 12 21.5C6.75329 21.5 2.5 17.2467 2.5 12Z"
             fill="currentColor"/>
     </svg>
-
   </Icon>
 )
 
@@ -170,6 +166,15 @@ export const CancelIcon = ({ size, color }: { size?: number; color?: string }) =
   <Icon size={size} color={color}>
     <svg viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
       <path d="M12 4L4 12M4 4L12 12" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+    </svg>
+  </Icon>
+)
+
+export const BackIcon = ({ size, color }: { size?: number; color?: string }) => (
+  <Icon size={size} color={color}>
+    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+      <path d="M19 12H5M5 12L12 19M5 12L12 5" stroke="currentColor" strokeWidth="2" strokeLinecap="round"
+            strokeLinejoin="round"/>
     </svg>
   </Icon>
 )
