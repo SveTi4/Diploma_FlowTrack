@@ -2,8 +2,9 @@ import styled from 'styled-components'
 
 export const Content = styled.div`
   padding: 32px;
-  flex: 1;
   overflow: auto;
+  overflow: scroll;
+  height: 100%;
 `
 
 export const ProjectsGrid = styled.div`
