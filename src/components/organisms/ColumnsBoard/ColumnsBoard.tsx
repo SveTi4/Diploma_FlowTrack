@@ -36,7 +36,7 @@ export const ColumnsBoard: React.FC<ColumnsBoardProps> = memo(({ project_id }) =
     dispatch(createTask({
       name: 'Новая задача',
       column_id: columnId,
-      description: 'Тестовое описание',
+      description: '',
       deadline: null
     }))
   }

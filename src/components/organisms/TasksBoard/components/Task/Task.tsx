@@ -215,10 +215,10 @@ export const TaskCard: React.FC<TaskProps> = ({
                   <IconButton onClick={handleDeleteClick} />
                 </TaskActions>
               </TaskHeader>
-              {task.description && (
+              {(task.description || task.deadline) && (
                 <TaskContent>
-                  <TaskDescription>{task.description}</TaskDescription>
-                  <TaskDescription>Дедлайн: {formattedDeadline}</TaskDescription>
+                  {task.description && <TaskDescription>Описание: {task.description}</TaskDescription>}
+                  {task.deadline && <TaskDescription>Дедлайн: {formattedDeadline}</TaskDescription>}
                 </TaskContent>
               )}
             </TaskInfo>
