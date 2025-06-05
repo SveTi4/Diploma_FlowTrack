@@ -47,6 +47,7 @@ export const Title = styled.h2`
   font-weight: 500;
   color: ${({ theme }) => theme.colors.text};
   margin: 0;
+  width: 100%;
 `
 
 export const Content = styled.div`

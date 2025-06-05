@@ -63,8 +63,8 @@ export const EditableTitle: React.FC<EditableTitleProps> = ({
         </>
       ) : (
         <>
-          <Title>{value || placeholder}</Title>
           <IconButton onClick={handleEdit} type="edit" />
+          <Title>{value || placeholder}</Title>
         </>
       )}
     </TitleWrapper>
