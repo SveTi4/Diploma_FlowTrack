@@ -40,7 +40,7 @@ export const AddTaskButton = styled.button`
   justify-content: center;
   gap: 8px;
   width: 100%;
-  height: 48px;
+  min-height: 48px;
   align-items: center;
   border: none;
   border-bottom: 1px solid ${({ theme }) => theme.colors.border};
