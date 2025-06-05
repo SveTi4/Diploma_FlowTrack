@@ -48,7 +48,7 @@ export const TaskInfo = styled.div`
 `
 
 export const TaskHeader = styled.div`
-  padding: 16px;
+  padding: 8px 16px;
   display: flex;
   align-items: center;
   justify-content: space-between;
