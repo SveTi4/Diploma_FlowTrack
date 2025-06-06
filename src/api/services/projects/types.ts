@@ -53,4 +53,28 @@ export interface ProjectStats {
   archivedProjects: number;
   averageProgress: number;
   projectsByPriority: Record<ProjectPriority, number>;
+}
+
+export interface ProjectProgress {
+  total_tasks: number;
+  done_tasks: number;
+  days_elapsed: number;
+  days_left: number | null;
+  v_real: number;
+  v_req: number | null;
+  percent_done: number;
+  projected_finish_date: string | null;
+  status: 'green' | 'yellow' | 'red';
+}
+
+export interface BurndownDataPoint {
+  day: string;
+  remains: number;
+}
+
+export interface ProjectBurndownData {
+  data: BurndownDataPoint[];
+  totalTasks: number;
+  daysElapsed: number;
+  daysLeft: number | null;
 } 

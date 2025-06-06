@@ -1,11 +1,13 @@
 import { BaseService } from '../base/base.service'
 import {ApiResponse, PaginationParams, PaginatedResponse} from '../../types/response.types'
-
+import { mockProgress, mockBurndownData } from './mockData'
 import {
   Project,
   CreateProjectDto,
   UpdateProjectDto,
   ProjectFilters,
+  ProjectProgress,
+  ProjectBurndownData
 } from './types'
 
 export class ProjectsService extends BaseService<Project> {
@@ -46,5 +48,30 @@ export class ProjectsService extends BaseService<Project> {
   // Удаление проекта
   async deleteProject(id: number): Promise<void> {
     await this.delete(id.toString())
+  }
+
+  // Получение прогресса проекта
+  async getProjectProgress(projectId: number): Promise<ApiResponse<ProjectProgress>> {
+    // TODO: Заменить на реальный API-запрос, когда бэкенд будет готов
+    console.log('Fetching project progress for id:', projectId)
+    return {
+      data: mockProgress,
+      status: 200
+    }
+  }
+
+  // Получение данных бёрндауна
+  async getProjectBurndown(projectId: number): Promise<ApiResponse<ProjectBurndownData>> {
+    // TODO: Заменить на реальный API-запрос, когда бэкенд будет готов
+    console.log('Fetching project burndown for id:', projectId)
+    return {
+      data: {
+        data: mockBurndownData,
+        totalTasks: mockProgress.total_tasks,
+        daysElapsed: mockProgress.days_elapsed,
+        daysLeft: mockProgress.days_left
+      },
+      status: 200
+    }
   }
 }
