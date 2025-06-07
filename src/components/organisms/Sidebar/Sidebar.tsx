@@ -33,7 +33,7 @@ export const Sidebar = () => {
   const [isLocked, setIsLocked] = useState(true)
   const [isHovered, setIsHovered] = useState(false)
   const isMobile = useMediaQuery('(max-width: 767px)')
-  const { logout } = useAuth()
+  const { logout, username } = useAuth()
   const navigate = useNavigate()
 
   useEffect(() => {
@@ -66,7 +66,7 @@ export const Sidebar = () => {
       onMouseLeave={handleMouseLeave}
     >
       <ProfileSection isCollapsed={isCollapsed}>
-        <UserName>Username</UserName>
+        <UserName>{username || 'Гость'}</UserName>
         <IconButton type="logout" size={20} onClick={handleLogout} />
       </ProfileSection>
       

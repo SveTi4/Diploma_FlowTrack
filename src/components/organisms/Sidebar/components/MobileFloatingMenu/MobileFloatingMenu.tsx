@@ -25,7 +25,7 @@ import { useAuth } from '../../../../../hooks/useAuth'
 
 export const MobileFloatingMenu = () => {
   const [isOpen, setIsOpen] = useState(false)
-  const { logout } = useAuth()
+  const { logout, username } = useAuth()
   const navigate = useNavigate()
 
   const handleToggle = () => {
@@ -56,7 +56,7 @@ export const MobileFloatingMenu = () => {
         <MenuContent isOpen={isOpen} onClick={(e: React.MouseEvent) => e.stopPropagation()}>
           <MenuHeader>
             <ProfileSection>
-              <UserName>Username</UserName>
+              <UserName>{username || 'Гость'}</UserName>
               <IconButton type="logout" size={20} onClick={handleLogout} />
             </ProfileSection>
           </MenuHeader>

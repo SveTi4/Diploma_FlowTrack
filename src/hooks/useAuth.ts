@@ -8,13 +8,16 @@ import { RootState, resetStore } from '../store'
 export const useAuth = () => {
   const dispatch = useAppDispatch()
   const navigate = useNavigate()
-  const { isAuthenticated, loading, error } = useAppSelector((state: RootState) => state.auth)
+  const { isAuthenticated, loading, error, username } = useAppSelector((state: RootState) => state.auth)
 
   const login = async (data: LoginDto) => {
     try {
       dispatch(setLoading(true))
       const response = await services.auth.login(data)
-      dispatch(setAccessToken(response.data.access_token))
+      dispatch(setAccessToken({ 
+        token: response.data.access_token,
+        username: data.username
+      }))
       navigate('/projects')
     } catch (error) {
       console.error('Login error:', error)
@@ -39,7 +42,10 @@ export const useAuth = () => {
   const refreshToken = async () => {
     try {
       const response = await services.auth.refreshToken()
-      dispatch(setAccessToken(response.data.accessToken))
+      dispatch(setAccessToken({ 
+        token: response.data.accessToken,
+        username: username || ''
+      }))
     } catch (error) {
       console.error('Refresh token error:', error)
       dispatch(logout())
@@ -55,6 +61,7 @@ export const useAuth = () => {
     isAuthenticated,
     loading,
     error,
+    username,
     login,
     register,
     refreshToken,
