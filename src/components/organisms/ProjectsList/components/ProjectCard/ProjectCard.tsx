@@ -85,7 +85,7 @@ export const ProjectCard = ({
       </CardHeader>
       <CardContent>
         <Description isEmpty={!project.description}>
-          {project.description || 'Нет описания'}
+          {project.description && highlightMatch(project.description, searchQuery) || 'Нет описания'}
         </Description>
       </CardContent>
       <CardFooter>

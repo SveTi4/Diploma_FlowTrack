@@ -42,7 +42,6 @@ const ProjectsHeader = React.memo(({
         <ButtonGroup>
           <Button variant="ghost" onClick={onRefresh} disabled={isRefreshing}>
             <RefreshIcon size={16} />
-            {isRefreshing ? 'Обновление...' : 'Обновить'}
           </Button>
           {showCreateButton && (
             <Button onClick={onCreateClick}>
