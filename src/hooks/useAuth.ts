@@ -3,7 +3,7 @@ import { useAppDispatch, useAppSelector } from './useStore'
 import { services } from "../api/services";
 import { setAccessToken, setError, setLoading, logout } from '../store/auth/authSlice'
 import { LoginDto, RegisterDto } from '../api/services/auth/types'
-import { RootState } from '../store'
+import { RootState, resetStore } from '../store'
 
 export const useAuth = () => {
   const dispatch = useAppDispatch()
@@ -16,7 +16,8 @@ export const useAuth = () => {
       const response = await services.auth.login(data)
       dispatch(setAccessToken(response.data.access_token))
       navigate('/projects')
-    } catch (err) {
+    } catch (error) {
+      console.error('Login error:', error)
       dispatch(setError('Ошибка авторизации'))
     } finally {
       dispatch(setLoading(false))
@@ -27,7 +28,8 @@ export const useAuth = () => {
     try {
       dispatch(setLoading(true))
       await services.auth.register(data)
-    } catch (err) {
+    } catch (error) {
+      console.error('Register error:', error)
       dispatch(setError('Ошибка регистрации'))
     } finally {
       dispatch(setLoading(false))
@@ -38,9 +40,15 @@ export const useAuth = () => {
     try {
       const response = await services.auth.refreshToken()
       dispatch(setAccessToken(response.data.accessToken))
-    } catch (err) {
+    } catch (error) {
+      console.error('Refresh token error:', error)
       dispatch(logout())
     }
+  }
+
+  const handleLogout = () => {
+    dispatch(logout())
+    dispatch(resetStore())
   }
 
   return {
@@ -50,6 +58,6 @@ export const useAuth = () => {
     login,
     register,
     refreshToken,
-    logout: () => dispatch(logout())
+    logout: handleLogout
   }
 } 
