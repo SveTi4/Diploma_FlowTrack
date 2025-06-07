@@ -1,16 +1,17 @@
-import {InfoIcon, RefreshIcon, TrashIcon, EditIcon, SaveIcon, CancelIcon} from '../Icon/icons'
+import {InfoIcon, RefreshIcon, TrashIcon, EditIcon, SaveIcon, CancelIcon, LogoutIcon} from '../Icon/icons'
 import { StyledButton } from './IconButton.styles'
 
 interface IconButtonProps {
   onClick: (e: React.MouseEvent) => void;
   size?: number;
-  type?: 'delete' | 'info' | 'reload' | 'edit' | 'save' | 'cancel';
+  type?: 'delete' | 'info' | 'reload' | 'edit' | 'save' | 'cancel' | 'logout';
 }
 
 export const IconButton: React.FC<IconButtonProps> = ({ onClick, size = 16, type = 'delete' }) => {
   const getColor = (type: string) => {
     switch (type) {
       case 'delete':
+      case 'logout':
         return 'danger';
       case 'info':
         return 'warning';
@@ -36,6 +37,8 @@ export const IconButton: React.FC<IconButtonProps> = ({ onClick, size = 16, type
         return <SaveIcon size={size} />;
       case 'cancel':
         return <CancelIcon size={size} />;
+      case 'logout':
+        return <LogoutIcon size={size} />
       default:
         return <InfoIcon size={size} />;
     }
