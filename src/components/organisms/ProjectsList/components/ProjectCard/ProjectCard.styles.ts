@@ -54,11 +54,13 @@ export const Title = styled.h3`
   margin: 0;
   display: flex;
   align-items: center;
-  gap: 8px;
 `
 
 export const HighlightedText = styled.span`
-  color: ${({ theme }) => theme.colors.primary};
+    background: ${({ theme }) => theme.colors.primary};
+    color: ${({ theme }) => theme.colors.text};
+    padding: 0 2px;
+    border-radius: 2px;
 `
 
 export const Description = styled.p<{ isEmpty?: boolean }>`

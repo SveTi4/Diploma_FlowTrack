@@ -41,9 +41,9 @@ const highlightMatch = (text: string, query: string) => {
   if (!query) return text
 
   const parts = text.split(new RegExp(`(${query})`, 'gi'))
-  return parts.map((part, i) => 
-    part.toLowerCase() === query.toLowerCase() ? 
-      <HighlightedText key={i}>{part}</HighlightedText> : 
+  return parts.map((part, i) =>
+    part.toLowerCase() === query.toLowerCase() ?
+      <HighlightedText key={i}>{part}</HighlightedText> :
       part
   )
 }

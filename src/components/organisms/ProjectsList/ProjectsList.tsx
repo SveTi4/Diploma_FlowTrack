@@ -156,7 +156,7 @@ export const ProjectsList = () => {
     try {
       await dispatch(createProject(project)).unwrap()
       setIsCreateModalOpen(false)
-      handleRefresh()
+      await handleRefresh()
     } catch (err) {
       console.error('Error creating project:', err)
     }
@@ -168,7 +168,7 @@ export const ProjectsList = () => {
         id: project.id, 
         data: { archived: true } 
       })).unwrap()
-      handleRefresh()
+      await handleRefresh()
     } catch (err) {
       console.error('Error archiving project:', err)
     }
@@ -180,7 +180,7 @@ export const ProjectsList = () => {
         id: project.id, 
         data: { archived: false } 
       })).unwrap()
-      handleRefresh()
+      await handleRefresh()
     } catch (err) {
       console.error('Error restoring project:', err)
     }
@@ -189,7 +189,7 @@ export const ProjectsList = () => {
   const handleDelete = async (project: Project) => {
     try {
       await dispatch(deleteProject(project.id)).unwrap()
-      handleRefresh()
+       await handleRefresh()
     } catch (err) {
       console.error('Error deleting project:', err)
     }

@@ -158,7 +158,7 @@ export const TimeDate = styled.span`
 
 export const HighlightedText = styled.span`
   background: ${({ theme }) => theme.colors.primary};
-  color: white;
+  color: ${({ theme }) => theme.colors.text};
   padding: 0 2px;
   border-radius: 2px;
 `
