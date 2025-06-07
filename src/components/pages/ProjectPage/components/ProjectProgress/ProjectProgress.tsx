@@ -1,47 +1,11 @@
 import React from 'react';
-import styled from 'styled-components';
-
-const ProgressContainer = styled.div`
-  padding: 16px;
-  background: ${({ theme }) => theme.colors.surface};
-  border-radius: ${({ theme }) => theme.borderRadius.medium};
-`;
-
-const StatusIndicator = styled.div<{ status: 'green' | 'yellow' | 'red' }>`
-  padding: 8px 12px;
-  border-radius: ${({ theme }) => theme.borderRadius.small};
-  color: white;
-  background-color: ${props => 
-    props.status === 'green' ? '#4caf50' :
-    props.status === 'yellow' ? '#ff9800' : '#f44336'
-  };
-  margin-bottom: 16px;
-  display: inline-block;
-  font-size: 14px;
-`;
-
-const StatusDetails = styled.div`
-  margin-top: 8px;
-  font-size: 13px;
-  color: ${({ theme }) => theme.colors.textSecondary};
-  line-height: 1.4;
-`;
-
-const MetricsContainer = styled.div`
-  margin-top: 16px;
-  font-size: 14px;
-  
-  p {
-    margin: 8px 0;
-    color: ${({ theme }) => theme.colors.textSecondary};
-  }
-`;
-
-const ErrorMessage = styled.div`
-  color: ${({ theme }) => theme.colors.error};
-  font-size: 13px;
-  margin-top: 8px;
-`;
+import {
+  ProgressContainer,
+  StatusIndicator,
+  StatusDetails,
+  MetricsContainer,
+  ErrorMessage
+} from './ProjectProgress.styles';
 
 interface ProjectProgressProps {
   progress: {

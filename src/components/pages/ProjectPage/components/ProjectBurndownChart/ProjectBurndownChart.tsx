@@ -10,7 +10,7 @@ import {
   Tooltip,
   Legend
 } from 'chart.js';
-import styled from 'styled-components';
+import { ChartContainer, ErrorMessage } from './ProjectBurndownChart.styles';
 
 ChartJS.register(
   CategoryScale,
@@ -21,21 +21,6 @@ ChartJS.register(
   Tooltip,
   Legend
 );
-
-const ChartContainer = styled.div`
-  margin-top: 16px;
-  height: 300px;
-  padding: 16px;
-  background: ${({ theme }) => theme.colors.surface};
-  border-radius: ${({ theme }) => theme.borderRadius.medium};
-`;
-
-const ErrorMessage = styled.div`
-  color: ${({ theme }) => theme.colors.error};
-  text-align: center;
-  padding: 16px;
-  font-size: 14px;
-`;
 
 interface ProjectBurndownChartProps {
   burndownData: Array<{
