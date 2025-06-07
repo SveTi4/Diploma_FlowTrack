@@ -1,18 +1,19 @@
 import { useState, useEffect } from 'react'
-import { 
-  StatsIcon, 
-  ProjectsIcon, 
-  GuidesIcon, 
-  NotificationsIcon, 
-  ArchiveIcon, 
+import { useNavigate } from 'react-router-dom'
+import {
+  StatsIcon,
+  ProjectsIcon,
+  GuidesIcon,
+  NotificationsIcon,
+  ArchiveIcon,
   SupportIcon,
   LockIcon,
   UnlockIcon,
   ArrowRightIcon,
-  ArrowLeftIcon
+  ArrowLeftIcon,
+  IconButton
 } from '../../atoms'
 import {
-  Avatar,
   Container,
   NavList,
   NavItem,
@@ -20,13 +21,20 @@ import {
   BottomSection,
   BottomNavItem,
   ToggleButton,
-  LockButton
+  LockButton,
+  UserName
 } from './Sidebar.styles'
+import { MobileFloatingMenu } from './components/MobileFloatingMenu/MobileFloatingMenu'
+import { useMediaQuery } from '../../../hooks/useMediaQuery'
+import { useAuth } from '../../../hooks/useAuth'
 
 export const Sidebar = () => {
   const [isCollapsed, setIsCollapsed] = useState(false)
   const [isLocked, setIsLocked] = useState(true)
   const [isHovered, setIsHovered] = useState(false)
+  const isMobile = useMediaQuery('(max-width: 767px)')
+  const { logout } = useAuth()
+  const navigate = useNavigate()
 
   useEffect(() => {
     if (!isLocked) {
@@ -42,15 +50,24 @@ export const Sidebar = () => {
     setIsHovered(false)
   }
 
+  const handleLogout = () => {
+    logout()
+    navigate('/')
+  }
+
+  if (isMobile) {
+    return <MobileFloatingMenu />
+  }
+
   return (
     <Container 
       isCollapsed={isCollapsed}
       onMouseEnter={handleMouseEnter}
       onMouseLeave={handleMouseLeave}
     >
-      <ProfileSection to="/profile" isCollapsed={isCollapsed}>
-        <Avatar />
-        <span>Username</span>
+      <ProfileSection isCollapsed={isCollapsed}>
+        <UserName>Username</UserName>
+        <IconButton type="logout" size={20} onClick={handleLogout} />
       </ProfileSection>
       
       <NavList>

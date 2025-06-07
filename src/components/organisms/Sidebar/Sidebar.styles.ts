@@ -55,21 +55,22 @@ export const NavItem = styled(NavLink)<{ isCollapsed?: boolean }>`
   }
 `
 
-export const ProfileSection = styled(NavItem)`
+export const ProfileSection = styled.div<{ isCollapsed?: boolean }>`
   height: 80px;
   margin: 0;
-  border-radius: 0;
   padding: 0 32px;
   border-bottom: 1px solid ${({ theme }) => theme.colors.border};
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+`
 
-  ${Avatar} {
-    opacity: 1;
-    min-width: 24px;
-  }
-
-  span {
-    opacity: ${({ isCollapsed }) => isCollapsed ? 0 : 1};
-  }
+export const UserName = styled.div`
+  font-size: 16px;
+  font-weight: 600;
+  color: ${({ theme }) => theme.colors.text};
+  opacity: ${({ isCollapsed }) => isCollapsed ? 0 : 1};
+  transition: opacity 0.2s ease;
 `
 
 export const BottomSection = styled.div`
