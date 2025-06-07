@@ -125,7 +125,7 @@ export const ProjectsList = () => {
   const [isRefreshing, setIsRefreshing] = useState(false)
 
   const page = 1
-  const limit = 10
+  const limit = 999
   const isArchive = location.pathname === '/archive'
 
   const { items: projects, loading, error } = useSelector((state: RootState) => state.projects)
