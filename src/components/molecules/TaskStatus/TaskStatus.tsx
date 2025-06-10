@@ -1,6 +1,6 @@
 import React from 'react';
-import { CheckIcon } from "../Icon/icons.tsx";
-import { StatusWrapper, IconWrapper, LoadingSpinner } from './TaskStatus.styles';
+import { CheckIcon } from "../../atoms";
+import { StatusWrapper, IconWrapper, LoadingSpinner } from './TaskStatus.styles.ts';
 
 interface TaskStatusProps {
   status: boolean;

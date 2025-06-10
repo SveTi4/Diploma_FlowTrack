@@ -2,7 +2,6 @@ import React, { useState } from 'react'
 import {
   CalendarIcon,
   IconButton,
-  TaskStatus,
   CreatedAtIcon,
   UpdatedAtIcon,
   DescriptionIcon
@@ -12,7 +11,7 @@ import { format } from 'date-fns'
 import { ru } from 'date-fns/locale'
 import { Draggable } from "react-beautiful-dnd"
 import { usePanel } from '../../../../../contexts/PanelContext'
-import { EditableTitle, EditableDescription, EditableDate, Section } from '../../../../molecules'
+import { EditableTitle, EditableDescription, EditableDate, TaskStatus, Section } from '../../../../molecules'
 import {
   TaskWrapper,
   TaskInfo,
