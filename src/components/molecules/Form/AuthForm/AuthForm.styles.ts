@@ -37,22 +37,60 @@ export const Container = styled.div<{ isChanging: boolean }>`
   width: 100%;
   max-width: 400px;
   padding: 2rem;
-  background: ${({ theme }) => theme.colors.surface};
+  background: ${({ theme }) => `${theme.colors.surface}60`};
   border-radius: 12px;
-  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-  border: 1px solid ${({ theme }) => theme.colors.border};
+  box-shadow: 
+    0 8px 32px rgba(0, 0, 0, 0.15),
+    0 2px 8px rgba(0, 0, 0, 0.1),
+    inset 0 0 0 1px ${({ theme }) => `${theme.colors.border}30`};
   animation: ${fadeIn} 0.5s ease-out;
   position: relative;
   z-index: 1;
-  backdrop-filter: blur(4px);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
   overflow: hidden;
+
+  &::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: linear-gradient(
+      135deg,
+      ${({ theme }) => `${theme.colors.surface}40`} 0%,
+      ${({ theme }) => `${theme.colors.surface}20`} 100%
+    );
+    z-index: -1;
+  }
+
+  &::after {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 1px;
+    background: linear-gradient(
+      90deg,
+      transparent,
+      ${({ theme }) => `${theme.colors.border}50`},
+      transparent
+    );
+  }
 
   @media (max-width: 480px) {
     padding: 1.25rem;
     border-radius: 8px;
     max-width: calc(100% - 2rem);
     margin: 1rem;
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    box-shadow: 
+      0 4px 16px rgba(0, 0, 0, 0.15),
+      0 2px 4px rgba(0, 0, 0, 0.1),
+      inset 0 0 0 1px ${({ theme }) => `${theme.colors.border}30`};
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
   }
 `
 
@@ -112,7 +150,7 @@ export const Error = styled.div`
   font-size: 0.875rem;
   text-align: center;
   padding: 0.5rem;
-  background: ${({ theme }) => theme.colors.error}11;
+  background: ${({ theme }) => `${theme.colors.error}11`};
   border-radius: 4px;
   animation: ${fadeIn} 0.3s ease-out;
 

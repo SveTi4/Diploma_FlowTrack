@@ -81,16 +81,45 @@ export const ThemeToggleWrapper = styled.div`
   display: flex;
   justify-content: center;
   padding: 1rem;
-  background: ${({ theme }) => theme.colors.surface};
+  background: ${({ theme }) => `${theme.colors.surface}60`};
   border-radius: 12px;
-  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-  border: 1px solid ${({ theme }) => theme.colors.border};
+  box-shadow: 
+    0 4px 16px rgba(0, 0, 0, 0.15),
+    0 2px 4px rgba(0, 0, 0, 0.1),
+    inset 0 0 0 1px ${({ theme }) => `${theme.colors.border}30`};
   position: relative;
   z-index: 1;
-  backdrop-filter: blur(4px);
-  transition: transform 0.2s ease;
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  transition: all 0.3s ease;
+
+  &::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: linear-gradient(
+      135deg,
+      ${({ theme }) => `${theme.colors.surface}40`} 0%,
+      ${({ theme }) => `${theme.colors.surface}20`} 100%
+    );
+    z-index: -1;
+  }
 
   &:hover {
     transform: translateY(-2px);
+    box-shadow: 
+      0 6px 20px rgba(0, 0, 0, 0.2),
+      0 2px 6px rgba(0, 0, 0, 0.15),
+      inset 0 0 0 1px ${({ theme }) => `${theme.colors.border}40`};
+  }
+
+  @media (max-width: 480px) {
+    padding: 0.75rem;
+    border-radius: 8px;
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
   }
 ` 
