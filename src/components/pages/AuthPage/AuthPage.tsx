@@ -1,6 +1,6 @@
 import React, { useState } from 'react'
-import { AuthForm, LoginFormValues, RegisterFormValues, AuthFormMode  } from '../../molecules'
-import { Container } from './AuthPage.styles'
+import { AuthForm, ThemeToggle, LoginFormValues, RegisterFormValues, AuthFormMode } from '../../molecules'
+import { Container, ThemeToggleWrapper } from './AuthPage.styles'
 import { useAuth } from '../../../hooks/useAuth'
 
 export const AuthPage: React.FC = () => {
@@ -33,6 +33,9 @@ export const AuthPage: React.FC = () => {
         isLoading={loading}
         error={error}
       />
+      <ThemeToggleWrapper>
+        <ThemeToggle />
+      </ThemeToggleWrapper>
     </Container>
   )
 } 

@@ -1,9 +1,9 @@
-import React from 'react'
+import React, { useState } from 'react'
 import { FormField } from '../components/FormField/FormField'
 import { useForm } from '../hooks/useForm'
 import { validateLogin, validateRegister } from '../utils/validation'
 import { AuthFormMode, LoginFormValues, RegisterFormValues } from '../types/auth.types'
-import { Container, Title, Form, SubmitButton, ToggleButton, Error } from './AuthForm.styles'
+import { Container, Title, Form, SubmitButton, ToggleButton, Error, FormWrapper } from './AuthForm.styles'
 
 interface AuthFormProps {
   mode: AuthFormMode
@@ -21,6 +21,7 @@ export const AuthForm: React.FC<AuthFormProps> = ({
   error
 }) => {
   const isLogin = mode === 'login'
+  const [isChanging, setIsChanging] = useState(false)
 
   const initialValues = isLogin
     ? { username: '', password: '' }
@@ -38,49 +39,59 @@ export const AuthForm: React.FC<AuthFormProps> = ({
     validate: isLogin ? validateLogin : validateRegister
   })
 
+  const handleToggleMode = () => {
+    setIsChanging(true)
+    setTimeout(() => {
+      onToggleMode()
+      setIsChanging(false)
+    }, 300)
+  }
+
   return (
-    <Container>
-      <Title>{isLogin ? 'Вход' : 'Регистрация'}</Title>
-      <Form onSubmit={handleSubmit}>
-        {error && <Error>{error}</Error>}
-        <FormField
-          name="username"
-          label="Имя пользователя"
-          placeholder='Введите имя пользователя'
-          value={values.username}
-          onChange={handleChange}
-          error={errors.username}
-          required
-        />
-        <FormField
-          name="password"
-          label="Пароль"
-          placeholder='Введите пароль'
-          type="password"
-          value={values.password}
-          onChange={handleChange}
-          error={errors.password}
-          required
-        />
-        {!isLogin && (
+    <Container isChanging={isChanging}>
+      <FormWrapper isChanging={isChanging} isLogin={isLogin}>
+        <Title>{isLogin ? 'Вход' : 'Регистрация'}</Title>
+        <Form onSubmit={handleSubmit}>
+          {error && <Error>{error}</Error>}
           <FormField
-            name="re_password"
-            label="Подтвердите пароль"
-            placeholder='Повторите пароль'
-            type="password"
-            value={(values as RegisterFormValues).re_password}
+            name="username"
+            label="Имя пользователя"
+            placeholder='Введите имя пользователя'
+            value={values.username}
             onChange={handleChange}
-            error={errors.re_password}
+            error={errors.username}
             required
           />
-        )}
-        <SubmitButton type="submit" disabled={isLoading}>
-          {isLoading ? 'Загрузка...' : isLogin ? 'Войти' : 'Зарегистрироваться'}
-        </SubmitButton>
-        <ToggleButton type="button" onClick={onToggleMode}>
-          {isLogin ? 'Нет аккаунта? Зарегистрируйтесь' : 'Уже есть аккаунт? Войдите'}
-        </ToggleButton>
-      </Form>
+          <FormField
+            name="password"
+            label="Пароль"
+            placeholder='Введите пароль'
+            type="password"
+            value={values.password}
+            onChange={handleChange}
+            error={errors.password}
+            required
+          />
+          {!isLogin && (
+            <FormField
+              name="re_password"
+              label="Подтвердите пароль"
+              placeholder='Повторите пароль'
+              type="password"
+              value={(values as RegisterFormValues).re_password}
+              onChange={handleChange}
+              error={errors.re_password}
+              required
+            />
+          )}
+          <SubmitButton type="submit" disabled={isLoading}>
+            {isLoading ? 'Загрузка...' : isLogin ? 'Войти' : 'Зарегистрироваться'}
+          </SubmitButton>
+          <ToggleButton type="button" onClick={handleToggleMode}>
+            {isLogin ? 'Нет аккаунта? Зарегистрируйтесь' : 'Уже есть аккаунт? Войдите'}
+          </ToggleButton>
+        </Form>
+      </FormWrapper>
     </Container>
   )
 } 
