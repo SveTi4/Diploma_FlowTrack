@@ -3,7 +3,6 @@ import { BrowserRouter, Routes, Route } from 'react-router-dom'
 import { store } from './store'
 import { GlobalStyles } from './styles/GlobalStyles'
 import { AuthPage } from './components/pages/AuthPage/AuthPage'
-import { RegisterPage } from './components/pages/RegisterPage/RegisterPage'
 import { MainTemplate } from './components/templates/MainTemplate/MainTemplate'
 import { ProjectsPage } from "./components/pages/ProjectsPage/ProjectsPage"
 import { ProjectPage } from "./components/pages/ProjectPage/ProjectPage"
@@ -18,7 +17,6 @@ export const Router = () => {
       <BrowserRouter>
         <Routes>
           <Route path="/" element={<AuthPage />} />
-          <Route path="/register" element={<RegisterPage />} />
           <Route path="/projects" element={
             <MainTemplate>
               <ProjectsPage />

@@ -4,17 +4,14 @@ import {
   StatsIcon,
   ProjectsIcon,
   GuidesIcon,
-  NotificationsIcon,
   ArchiveIcon,
-  SupportIcon,
   LockIcon,
   UnlockIcon,
   ArrowRightIcon,
   ArrowLeftIcon,
   IconButton
 } from '../../atoms'
-import { ThemeToggle } from '../../molecules/ThemeToggle/ThemeToggle'
-import { useTheme } from '../../../contexts/ThemeContext'
+import { ThemeToggle } from '../../molecules'
 import {
   Container,
   NavList,
@@ -25,7 +22,6 @@ import {
   ToggleButton,
   LockButton,
   UserName,
-  ThemeToggleWrapper
 } from './Sidebar.styles'
 import { MobileFloatingMenu } from './components/MobileFloatingMenu/MobileFloatingMenu'
 import { useMediaQuery } from '../../../hooks/useMediaQuery'
@@ -37,7 +33,6 @@ export const Sidebar = () => {
   const [isHovered, setIsHovered] = useState(false)
   const isMobile = useMediaQuery('(max-width: 767px)')
   const { logout, username } = useAuth()
-  const { toggleTheme } = useTheme()
   const navigate = useNavigate()
 
   useEffect(() => {
