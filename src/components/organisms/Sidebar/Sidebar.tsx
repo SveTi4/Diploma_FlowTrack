@@ -66,7 +66,7 @@ export const Sidebar = () => {
       onMouseLeave={handleMouseLeave}
     >
       <ProfileSection isCollapsed={isCollapsed}>
-        <UserName>{username || 'Гость'}</UserName>
+        <UserName isCollapsed={isCollapsed}>{username || 'Гость'}</UserName>
         <IconButton type="logout" size={20} onClick={handleLogout} />
       </ProfileSection>
       

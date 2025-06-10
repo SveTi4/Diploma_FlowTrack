@@ -58,19 +58,22 @@ export const NavItem = styled(NavLink)<{ isCollapsed?: boolean }>`
 export const ProfileSection = styled.div<{ isCollapsed?: boolean }>`
   height: 80px;
   margin: 0;
-  padding: 0 32px;
+  padding: 0 ${({ isCollapsed }) => isCollapsed ? '32px' : '32px'};
   border-bottom: 1px solid ${({ theme }) => theme.colors.border};
   display: flex;
   align-items: center;
-  justify-content: space-between;
+  justify-content: ${({ isCollapsed }) => isCollapsed ? 'center' : 'space-between'};
 `
 
-export const UserName = styled.div`
+export const UserName = styled.div<{ isCollapsed?: boolean }>`
   font-size: 16px;
   font-weight: 600;
   color: ${({ theme }) => theme.colors.text};
   opacity: ${({ isCollapsed }) => isCollapsed ? 0 : 1};
   transition: opacity 0.2s ease;
+  width: ${({ isCollapsed }) => isCollapsed ? '0' : 'auto'};
+  overflow: hidden;
+  white-space: nowrap;
 `
 
 export const BottomSection = styled.div`
