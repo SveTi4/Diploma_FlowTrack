@@ -17,16 +17,3 @@ export interface RegisterDto {
 export interface AuthResponse {
   access_token: string;
 }
-
-export interface ResetPasswordDto {
-  username: string;
-}
-
-export interface UpdatePasswordDto {
-  token: string;
-  password: string;
-}
-
-export interface UpdateProfileDto {
-  username?: string;
-} 

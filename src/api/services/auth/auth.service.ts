@@ -5,10 +5,7 @@ import {
   User,
   LoginDto,
   RegisterDto,
-  AuthResponse,
-  ResetPasswordDto,
-  UpdatePasswordDto,
-  UpdateProfileDto
+  AuthResponse
 } from './types'
 
 export class AuthService extends BaseService<User> {
@@ -43,24 +40,6 @@ export class AuthService extends BaseService<User> {
   // Получение текущего пользователя
   async getCurrentUser(): Promise<ApiResponse<User>> {
     const response = await api.get(`${this.endpoint}/me`)
-    return response.data
-  }
-
-  // Сброс пароля (отправка письма)
-  async resetPassword(data: ResetPasswordDto): Promise<ApiResponse<void>> {
-    const response = await api.post(`${this.endpoint}/reset-password`, data)
-    return response.data
-  }
-
-  // Обновление пароля
-  async updatePassword(data: UpdatePasswordDto): Promise<ApiResponse<void>> {
-    const response = await api.post(`${this.endpoint}/update-password`, data)
-    return response.data
-  }
-
-  // Обновление профиля
-  async updateProfile(data: UpdateProfileDto): Promise<ApiResponse<User>> {
-    const response = await api.patch(`${this.endpoint}/profile`, data)
     return response.data
   }
 

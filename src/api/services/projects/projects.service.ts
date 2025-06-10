@@ -52,12 +52,9 @@ export class ProjectsService extends BaseService<Project> {
 
   // Получение прогресса проекта
   async getProjectProgress(projectId: number): Promise<ApiResponse<ProjectProgress>> {
-    // TODO: Заменить на реальный API-запрос, когда бэкенд будет готов
-    console.log('Fetching project progress for id:', projectId)
-    return {
-      data: mockProgress,
-      status: 200
-    }
+    const response = await this.getById<ProjectProgress>(projectId, 'metrics')
+    console.log('Fetching project progress for id:', response)
+    return response
   }
 
   // Получение данных бёрндауна

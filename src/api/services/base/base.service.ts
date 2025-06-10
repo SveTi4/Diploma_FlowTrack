@@ -44,8 +44,8 @@ export abstract class BaseService<T> {
   }
 
   // Получение одного элемента по ID
-  protected async getById(id: string | number): Promise<ApiResponse<T>> {
-    const response = await api.get(`${this.endpoint}/${id}`, this.config)
+  protected async getById<R = T>(id: string | number, altEndpoint?: string): Promise<ApiResponse<R>> {
+    const response = await api.get(`${this.endpoint}/${id}${altEndpoint ? `/${altEndpoint}` : ''}`, this.config)
     return {
       data: response.data,
       status: response.status,
@@ -59,15 +59,6 @@ export abstract class BaseService<T> {
       data: response.data,
       status: response.status
     }
-  }
-
-  // Обновление элемента
-  protected async update<D = Partial<T>>(
-    id: string | number, 
-    data: D
-  ): Promise<ApiResponse<T>> {
-    const response = await api.put(`${this.endpoint}/${id}`, data, this.config)
-    return response.data
   }
 
   // Частичное обновление элемента
@@ -86,15 +77,5 @@ export abstract class BaseService<T> {
   protected async delete(id: string | number): Promise<ApiResponse<void>> {
     const response = await api.delete(`${this.endpoint}/${id}`, this.config)
     return response.data
-  }
-
-  // Проверка существования
-  protected async exists(id: string | number): Promise<boolean> {
-    try {
-      await this.getById(id)
-      return true
-    } catch {
-      return false
-    }
   }
 } 
