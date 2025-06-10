@@ -13,6 +13,8 @@ import {
   ArrowLeftIcon,
   IconButton
 } from '../../atoms'
+import { ThemeToggle } from '../../molecules/ThemeToggle/ThemeToggle'
+import { useTheme } from '../../../contexts/ThemeContext'
 import {
   Container,
   NavList,
@@ -22,7 +24,8 @@ import {
   BottomNavItem,
   ToggleButton,
   LockButton,
-  UserName
+  UserName,
+  ThemeToggleWrapper
 } from './Sidebar.styles'
 import { MobileFloatingMenu } from './components/MobileFloatingMenu/MobileFloatingMenu'
 import { useMediaQuery } from '../../../hooks/useMediaQuery'
@@ -34,6 +37,7 @@ export const Sidebar = () => {
   const [isHovered, setIsHovered] = useState(false)
   const isMobile = useMediaQuery('(max-width: 767px)')
   const { logout, username } = useAuth()
+  const { toggleTheme } = useTheme()
   const navigate = useNavigate()
 
   useEffect(() => {
@@ -85,11 +89,6 @@ export const Sidebar = () => {
           <GuidesIcon size={20} />
           <span>Гайды</span>
         </NavItem>
-        
-        <NavItem to="/notifications" isCollapsed={isCollapsed}>
-          <NotificationsIcon size={20} />
-          <span>Уведомления</span>
-        </NavItem>
       </NavList>
 
       <BottomSection>
@@ -107,10 +106,8 @@ export const Sidebar = () => {
           <span>Архив</span>
         </BottomNavItem>
         
-        <BottomNavItem to="/support" isCollapsed={isCollapsed}>
-          <SupportIcon size={20} />
-          <span>Поддержка</span>
-        </BottomNavItem>
+        <ThemeToggle />
+      
       </BottomSection>
 
       <ToggleButton 

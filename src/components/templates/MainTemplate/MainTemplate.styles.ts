@@ -31,8 +31,3 @@ export const Content = styled.main`
         background: ${({ theme }) => theme.colors.surfaceHover};
     }
 `
-export const ThemeToggleWrapper = styled.div`
-    position: absolute;
-    right: 48px;
-    bottom: 24px;
-`

@@ -22,6 +22,7 @@ import {
   ProfileSection
 } from './MobileFloatingMenu.styles'
 import { useAuth } from '../../../../../hooks/useAuth'
+import { ThemeToggle } from '../../../../molecules'
 
 export const MobileFloatingMenu = () => {
   const [isOpen, setIsOpen] = useState(false)
@@ -82,6 +83,7 @@ export const MobileFloatingMenu = () => {
               <span>Архив</span>
             </MenuItem>
           </MenuList>
+          <ThemeToggle />
         </MenuContent>
       </MenuOverlay>
     </>

@@ -7,4 +7,3 @@ export { Loader } from './Loader/Loader'
 export { PagePlaceholder } from './PagePlaceholder/PagePlaceholder'
 export { ProgressBarComponent } from './ProgressBar/ProgressBar'
 export { SearchInput} from './SearchInput/SearchInput.tsx';
-export { ThemeToggle } from './ThemeToggle/ThemeToggle'

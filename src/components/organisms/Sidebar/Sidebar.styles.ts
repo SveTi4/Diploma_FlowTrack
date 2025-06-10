@@ -149,4 +149,39 @@ export const LockButton = styled.button<{ isCollapsed?: boolean; isLocked?: bool
     background: ${({ theme }) => theme.colors.backgroundHover};
     color: ${({ theme }) => theme.colors.primary};
   }
+`
+
+export const ThemeToggleWrapper = styled.button<{ isCollapsed?: boolean }>`
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  width: 100%;
+  padding: 12px 16px;
+  background: none;
+  border: none;
+  color: #A5A5A7;
+  cursor: pointer;
+  border-radius: 8px;
+  margin-bottom: 16px;
+  font-size: 14px;
+  line-height: 20px;
+  letter-spacing: 0.3px;
+  white-space: nowrap;
+  overflow: hidden;
+  transition: color 0.2s ease, background-color 0.2s ease;
+  
+  &:hover {
+    background: ${({ theme }) => theme.colors.backgroundHover};
+    color: ${({ theme }) => theme.colors.primary};
+  }
+  
+  svg {
+    width: 20px;
+    height: 20px;
+  }
+  
+  .text {
+    opacity: ${({ isCollapsed }) => isCollapsed ? 0 : 1};
+    transition: opacity 0.2s ease;
+  }
 ` 
