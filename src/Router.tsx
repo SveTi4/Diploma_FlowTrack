@@ -2,12 +2,9 @@ import { Provider } from 'react-redux'
 import { BrowserRouter, Routes, Route } from 'react-router-dom'
 import { store } from './store'
 import { GlobalStyles } from './styles/GlobalStyles'
-import { AuthPage } from './components/pages/AuthPage/AuthPage'
-import { MainTemplate } from './components/templates/MainTemplate/MainTemplate'
-import { ProjectsPage } from "./components/pages/ProjectsPage/ProjectsPage"
-import { ProjectPage } from "./components/pages/ProjectPage/ProjectPage"
-import { ArchivePage } from "./components/pages/ArchivePage/ArchivePage"
-import { PageHeader } from "./components/molecules/PageHeader/PageHeader"
+import { AuthPage, ProjectsPage, ProjectPage, ArchivePage } from './components/pages'
+import { MainTemplate } from './components/templates'
+import { PageHeader } from "./components/molecules"
 
 export const Router = () => {
   return (
@@ -41,30 +38,9 @@ export const Router = () => {
               </PageHeader>
             </MainTemplate>
           } />
-          <Route path="/notifications" element={
-            <MainTemplate>
-              <PageHeader title={'Уведомления'}>
-                Тут пока что пусто
-              </PageHeader>
-            </MainTemplate>
-          } />
           <Route path="/archive" element={
             <MainTemplate>
               <ArchivePage />
-            </MainTemplate>
-          } />
-          <Route path="/support" element={
-            <MainTemplate>
-              <PageHeader title={'Поддержка'}>
-                Тут пока что пусто
-              </PageHeader>
-            </MainTemplate>
-          } />
-          <Route path="/profile" element={
-            <MainTemplate>
-              <PageHeader title={'Профиль'} >
-                Тут пока что пусто
-              </PageHeader>
             </MainTemplate>
           } />
         </Routes>

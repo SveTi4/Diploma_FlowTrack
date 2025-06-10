@@ -1,2 +1,2 @@
 // Здесь будут экспорты всех шаблонов
-export {} 
+export { MainTemplate } from './MainTemplate/MainTemplate'
