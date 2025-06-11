@@ -4,7 +4,11 @@ export const BoardHeader = styled.div`
   display: flex;
   align-items: center;
   justify-content: space-between;
-  margin-bottom: 24px;
+  margin-bottom: 0px;
+
+  @media (max-width: 480px) {
+    margin-bottom: 0;
+  }
 `
 
 export const BoardTitle = styled.h2`
@@ -12,6 +16,10 @@ export const BoardTitle = styled.h2`
   font-weight: 500;
   color: ${({ theme }) => theme.colors.text};
   margin: 0;
+
+  @media (max-width: 480px) {
+    font-size: 16px;
+  }
 `
 
 export const ColumnsContainer = styled.div`
@@ -21,6 +29,12 @@ export const ColumnsContainer = styled.div`
   overflow-x: auto;
   width: 100%;
   align-items: flex-start;
+  -webkit-overflow-scrolling: touch;
+  scroll-behavior: smooth;
+  padding-bottom: 48px;
+  position: relative;
+  left: 0;
+  right: 0;
   
   /* Стилизация скроллбара */
   &::-webkit-scrollbar {
@@ -39,5 +53,14 @@ export const ColumnsContainer = styled.div`
 
   &::-webkit-scrollbar-thumb:hover {
     background: ${({ theme }) => theme.colors.surfaceHover};
+  }
+
+  @media (max-width: 480px) {
+    gap: 16px;
+    padding: 16px 0;
+    padding-bottom: 48px;
+    -webkit-overflow-scrolling: touch;
+    scroll-snap-type: x mandatory;
+    scroll-padding: 16px;
   }
 ` 

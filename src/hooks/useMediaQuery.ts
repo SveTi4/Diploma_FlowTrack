@@ -6,22 +6,15 @@ export const useMediaQuery = (query: string): boolean => {
   useEffect(() => {
     const media = window.matchMedia(query)
     
-    // Устанавливаем начальное значение
-    setMatches(media.matches)
-
-    // Создаем функцию-обработчик
-    const listener = (e: MediaQueryListEvent) => {
-      setMatches(e.matches)
+    if (media.matches !== matches) {
+      setMatches(media.matches)
     }
 
-    // Добавляем слушатель
+    const listener = () => setMatches(media.matches)
     media.addEventListener('change', listener)
 
-    // Очищаем слушатель при размонтировании
-    return () => {
-      media.removeEventListener('change', listener)
-    }
-  }, [query])
+    return () => media.removeEventListener('change', listener)
+  }, [matches, query])
 
   return matches
 } 

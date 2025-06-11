@@ -3,7 +3,13 @@ import styled from 'styled-components'
 export const MainContent = styled.div`
   padding: 24px;
   height: calc(100vh - 64px);
-  overflow-y: auto;
+  overflow: hidden;
+  position: relative;
+
+  @media (max-width: 480px) {
+    padding: 16px;
+    height: calc(100vh - 120px);
+  }
 `
 
 export const Chart = styled.div`

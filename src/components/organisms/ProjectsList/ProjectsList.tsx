@@ -11,6 +11,7 @@ import { EmptyState } from '../../molecules'
 import { fetchProjects, createProject, updateProject, deleteProject } from '../../../store/projects/projectsSlice'
 import { Project } from '../../../api/services'
 import { Content, ProjectsGrid, ButtonGroup, HeaderContent } from './ProjectsList.styles'
+import { useMediaQuery } from '../../../hooks/useMediaQuery'
 
 interface ProjectsHeaderProps {
   title: string
@@ -31,6 +32,8 @@ const ProjectsHeader = React.memo(({
   isRefreshing,
   showCreateButton = true
 }: ProjectsHeaderProps) => {
+  const isMobile = useMediaQuery('(max-width: 480px)')
+
   return (
     <PageHeader title={title}>
       <HeaderContent>
@@ -46,7 +49,7 @@ const ProjectsHeader = React.memo(({
           {showCreateButton && (
             <Button onClick={onCreateClick}>
               <PlusIcon size={16} />
-              Создать проект
+              {!isMobile && 'Создать проект'}
             </Button>
           )}
         </ButtonGroup>

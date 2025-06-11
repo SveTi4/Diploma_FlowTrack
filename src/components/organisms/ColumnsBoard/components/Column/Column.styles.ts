@@ -15,6 +15,12 @@ export const ColumnWrapper = styled.div`
   &:hover {
     box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
   }
+
+  @media (max-width: 480px) {
+    width: 280px;
+    flex: 0 0 280px;
+    max-height: calc(100vh - 120px);
+  }
 `
 
 export const ColumnHeader = styled.div`
@@ -26,6 +32,10 @@ export const ColumnHeader = styled.div`
   background: ${({ theme }) => theme.colors.background};
   border-top-left-radius: ${({ theme }) => theme.borderRadius.medium};
   border-top-right-radius: ${({ theme }) => theme.borderRadius.medium};
+
+  @media (max-width: 480px) {
+    padding: 12px;
+  }
 `
 
 export const ColumnTitleWrapper = styled.div`
@@ -59,5 +69,10 @@ export const AddTaskButton = styled.button`
     width: 20px;
     height: 20px;
     stroke: currentColor;
+  }
+
+  @media (max-width: 480px) {
+    min-height: 40px;
+    font-size: 13px;
   }
 ` 

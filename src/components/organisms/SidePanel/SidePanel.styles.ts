@@ -3,15 +3,22 @@ import styled from 'styled-components'
 export const Panel = styled.div<{ isOpen: boolean }>`
   position: fixed;
   top: 0;
-  right: ${({ isOpen }) => (isOpen ? '0' : '-640px')};
+  right: 0;
   width: 640px;
   height: 100vh;
   background: ${({ theme }) => theme.colors.surface};
   padding: 0;
-  transition: right 0.3s ease;
   overflow-y: auto;
   z-index: 1000;
   border-left: 1px solid ${({ theme }) => theme.colors.border};
+  visibility: ${({ isOpen }) => (isOpen ? 'visible' : 'hidden')};
+  transform: translateX(${({ isOpen }) => (isOpen ? '0' : '100%')});
+  transition: transform 0.3s ease-in-out, visibility 0.3s ease-in-out;
+  will-change: transform, visibility;
+
+  @media (max-width: 480px) {
+    width: 100%;
+  }
 
   /* Стилизация скроллбара */
   &::-webkit-scrollbar {
@@ -40,6 +47,11 @@ export const Header = styled.div`
   padding: 0 ${({ theme }) => theme.spacing.large};
   background: ${({ theme }) => theme.colors.surface};
   border-bottom: 1px solid ${({ theme }) => theme.colors.border};
+
+  @media (max-width: 480px) {
+    height: 64px;
+    padding: 0 16px;
+  }
 `
 
 export const Title = styled.h2`
@@ -48,6 +60,10 @@ export const Title = styled.h2`
   color: ${({ theme }) => theme.colors.text};
   margin: 0;
   width: 100%;
+
+  @media (max-width: 480px) {
+    font-size: 18px;
+  }
 `
 
 export const Content = styled.div`
@@ -55,6 +71,11 @@ export const Content = styled.div`
   display: flex;
   flex-direction: column;
   gap: ${({ theme }) => theme.spacing.large};
+
+  @media (max-width: 480px) {
+    padding: 16px;
+    gap: 16px;
+  }
 `
 
 export const CloseButton = styled.button`
