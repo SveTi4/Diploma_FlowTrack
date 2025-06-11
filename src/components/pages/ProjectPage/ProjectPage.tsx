@@ -1,11 +1,9 @@
-import React from 'react'
-import { useEffect, useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import { useParams, useNavigate } from 'react-router-dom'
 import { useDispatch, useSelector } from 'react-redux'
 import { PageHeader, EditableTitle } from '../../molecules'
 import { AppDispatch, RootState } from '../../../store'
 import { fetchProject, deleteProject, clearCurrentProject, updateProject } from '../../../store/projects/projectsSlice'
-import { fetchProjectProgress, fetchProjectBurndown } from '../../../store/projects/projectProgressSlice'
 import { IconButton, Loader } from "../../atoms"
 import { usePanel } from '../../../contexts/PanelContext'
 import { MainContent } from './ProjectPage.styles.ts'
@@ -21,14 +19,11 @@ export const ProjectPage: React.FC = () => {
   const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false)
   
   const { currentProject: project, loading: projectLoading, error: projectError } = useSelector((state: RootState) => state.projects)
-  const { progress, burndownData, loading: progressLoading, error: progressError } = useSelector((state: RootState) => state.projectProgress)
 
   useEffect(() => {
     if (id) {
       const projectId = parseInt(id)
       dispatch(fetchProject(projectId))
-      dispatch(fetchProjectProgress(projectId))
-      dispatch(fetchProjectBurndown(projectId))
     }
     
     return () => {
@@ -98,18 +93,13 @@ export const ProjectPage: React.FC = () => {
           project={project} 
           dispatch={dispatch} 
           updatePanel={updatePanel}
-          progress={progress}
-          burndownData={burndownData}
-          loading={progressLoading}
-          error={progressError}
         />
       )
     });
   };
 
-  if (projectLoading || progressLoading) return <Loader size="large" fullscreen={true} />
+  if (projectLoading) return <Loader size="large" fullscreen={true} />
   if (projectError) return <div>Ошибка: {projectError}</div>
-  if (progressError) return <div>Ошибка прогресса: {progressError}</div>
   if (!project) return <div>Проект не найден</div>
 
   return (

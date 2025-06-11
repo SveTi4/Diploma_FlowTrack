@@ -1,90 +1,83 @@
-import React from 'react'
+import React, { useEffect, useState } from 'react'
 import { Section, SectionTitle, EditableDescription } from '../../../../molecules'
-import { Project } from '../../../../../api/services'
+import { Project, ProjectMetrics } from '../../../../../api/services'
 import { AppDispatch } from '../../../../../store'
 import { updateProject } from '../../../../../store/projects/projectsSlice'
-import { ProjectProgress } from '../ProjectProgress/ProjectProgress'
-import { ProjectBurndownChart } from '../ProjectBurndownChart/ProjectBurndownChart'
+import { fetchProjectMetrics } from '../../../../../store/projects/projectMetricsSlice'
 import { Loader } from '../../../../atoms'
-import { ProjectBurndownData } from '../../../../../api/services/projects/types'
+import { ProjectMetrics as ProjectMetricsComponent } from '../ProjectMetrics/ProjectMetrics'
 
 interface ProjectInfoPanelProps {
   project: Project
   dispatch: AppDispatch
   updatePanel: (props: { content: React.ReactNode }) => void
-  progress: {
-    total_tasks: number;
-    done_tasks: number;
-    days_elapsed: number;
-    days_left: number | null;
-    v_real: number;
-    v_req: number | null;
-    percent_done: number;
-    projected_finish_date: string | null;
-    status: 'green' | 'yellow' | 'red';
-  } | null;
-  burndownData: ProjectBurndownData | null;
-  loading: boolean;
-  error: string | null;
 }
 
 export const ProjectInfoPanel: React.FC<ProjectInfoPanelProps> = ({
   project,
   dispatch,
   updatePanel,
-  progress,
-  burndownData,
-  loading,
-  error
 }) => {
-  if (loading) return <Loader size="large" />
-  if (error) return <div>Ошибка: {error}</div>
-  if (!progress || !burndownData) return null;
+  const [metrics, setMetrics] = useState<ProjectMetrics | null>(null)
+  const [loading, setLoading] = useState(true)
+  const [error, setError] = useState<string | null>(null)
 
-  return (
-    <>
-      <Section>
-        <SectionTitle>Общий прогресс</SectionTitle>
-        <ProjectProgress progress={progress} />
-      </Section>
+  const loadMetrics = async () => {
+    setLoading(true)
+    setError(null)
+    try {
+      const response = await dispatch(fetchProjectMetrics(project.id)).unwrap()
+      setMetrics(response.data)
+    } catch (err) {
+      setError(err instanceof Error ? err.message : 'Ошибка при загрузке метрик')
+    } finally {
+      setLoading(false)
+    }
+  }
 
-      <Section>
-        <SectionTitle>Описание</SectionTitle>
-        <EditableDescription
-          value={project.description || ''}
-          onSave={async (newDescription) => {
-            await dispatch(updateProject({ 
-              id: project.id, 
-              data: { description: newDescription } 
-            })).unwrap();
-            
-            updatePanel({
-              content: (
-                <ProjectInfoPanel
-                  project={{ ...project, description: newDescription }}
-                  dispatch={dispatch}
-                  updatePanel={updatePanel}
-                  progress={progress}
-                  burndownData={burndownData}
-                  loading={loading}
-                  error={error}
-                />
-              )
-            });
-          }}
-          placeholder="Добавьте описание проекта..."
-        />
-      </Section>
+  useEffect(() => {
+    loadMetrics()
+  }, [project.id])
 
-      <Section>
-        <SectionTitle>График продуктивности</SectionTitle>
-        <ProjectBurndownChart 
-          burndownData={burndownData.data}
-          totalTasks={burndownData.totalTasks}
-          daysElapsed={burndownData.daysElapsed}
-          daysLeft={burndownData.daysLeft}
-        />
-      </Section>
-    </>
-  )
+  const renderPanelContent = (currentProject: Project) => {
+    if (loading) return <Loader size="large" />
+    if (error) return <div>Ошибка: {error}</div>
+    if (!metrics) return null;
+
+    return (
+      <>
+        <Section>
+          <SectionTitle>Общий прогресс</SectionTitle>
+          <ProjectMetricsComponent metrics={metrics} />
+        </Section>
+
+        <Section>
+          <SectionTitle>Описание</SectionTitle>
+          <EditableDescription
+            value={currentProject.description || ''}
+            onSave={async (newDescription) => {
+              await dispatch(updateProject({ 
+                id: currentProject.id, 
+                data: { description: newDescription } 
+              })).unwrap();
+              
+              // Перезагружаем метрики после обновления проекта
+              await loadMetrics()
+              
+              updatePanel({
+                content: renderPanelContent({ ...currentProject, description: newDescription })
+              });
+            }}
+            placeholder="Добавьте описание проекта..."
+          />
+        </Section>
+
+        <Section>
+          <SectionTitle>График продуктивности</SectionTitle>
+        </Section>
+      </>
+    )
+  }
+
+  return renderPanelContent(project)
 } 

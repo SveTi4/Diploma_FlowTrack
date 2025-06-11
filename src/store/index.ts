@@ -3,14 +3,14 @@ import authReducer from './auth/authSlice'
 import projectsReducer from './projects/projectsSlice'
 import tasksReducer from './tasks/tasksSlice'
 import columnsReducer from './columns/columnsSlice'
-import projectProgressReducer from './projects/projectProgressSlice'
+import projectMetricsReducer from './projects/projectMetricsSlice'
 
 const rootReducer = combineReducers({
   auth: authReducer,
   projects: projectsReducer,
   tasks: tasksReducer,
   columns: columnsReducer,
-  projectProgress: projectProgressReducer
+  projectMetrics: projectMetricsReducer
 })
 
 export type RootState = ReturnType<typeof rootReducer>

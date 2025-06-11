@@ -1,13 +1,12 @@
 import { BaseService } from '../base/base.service'
 import {ApiResponse, PaginationParams, PaginatedResponse} from '../../types/response.types'
-import { mockProgress, mockBurndownData } from './mockData'
+// import { mockMetrics } from './mockData'
 import {
   Project,
   CreateProjectDto,
   UpdateProjectDto,
   ProjectFilters,
-  ProjectProgress,
-  ProjectBurndownData
+  ProjectMetrics
 } from './types'
 
 export class ProjectsService extends BaseService<Project> {
@@ -51,24 +50,9 @@ export class ProjectsService extends BaseService<Project> {
   }
 
   // Получение прогресса проекта
-  async getProjectProgress(projectId: number): Promise<ApiResponse<ProjectProgress>> {
-    const response = await this.getById<ProjectProgress>(projectId, 'metrics')
+  async getProjectMetrics(projectId: number): Promise<ApiResponse<ProjectMetrics>> {
+    const response = await this.getById<ProjectMetrics>(projectId, 'metrics')
     console.log('Fetching project progress for id:', response)
     return response
-  }
-
-  // Получение данных бёрндауна
-  async getProjectBurndown(projectId: number): Promise<ApiResponse<ProjectBurndownData>> {
-    // TODO: Заменить на реальный API-запрос, когда бэкенд будет готов
-    console.log('Fetching project burndown for id:', projectId)
-    return {
-      data: {
-        data: mockBurndownData,
-        totalTasks: mockProgress.total_tasks,
-        daysElapsed: mockProgress.days_elapsed,
-        daysLeft: mockProgress.days_left
-      },
-      status: 200
-    }
   }
 }
