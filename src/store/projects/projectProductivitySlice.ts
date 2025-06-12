@@ -1,6 +1,6 @@
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit'
 import { services } from '../../api/services'
-import { ProductivityData } from '../../api/services/projects/types'
+import { ProductivityData } from '../../api/services'
 import { ApiResponse } from '../../api/types/response.types'
 
 interface ProjectProductivityState {
