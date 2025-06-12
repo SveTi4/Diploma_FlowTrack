@@ -8,12 +8,26 @@ import { fetchProjectProductivity } from '../../../../../store/projects/projectP
 import { Loader } from '../../../../atoms'
 import { ProjectMetrics as ProjectMetricsComponent } from '../ProjectMetrics/ProjectMetrics'
 import { ProductivityChart } from '../ProductivityChart/ProductivityChart'
+import { EditableDate } from '../../../../molecules/EditableDate/EditableDate'
+import styled from 'styled-components'
 
 interface ProjectInfoPanelProps {
   project: Project
   dispatch: AppDispatch
   updatePanel: (props: { content: React.ReactNode }) => void
 }
+
+const DeadlineRow = styled.div`
+  display: flex;
+  align-items: center;
+  gap: 8px;
+`;
+
+const DeadlineLabel = styled.span`
+  color: #888;
+  font-size: 14px;
+  min-width: 60px;
+`;
 
 export const ProjectInfoPanel: React.FC<ProjectInfoPanelProps> = ({
   project,
@@ -53,6 +67,25 @@ export const ProjectInfoPanel: React.FC<ProjectInfoPanelProps> = ({
 
     return (
       <>
+        <Section style={{ paddingBottom: 0, paddingTop: 0 }}>
+          <DeadlineRow>
+            <DeadlineLabel>Дедлайн</DeadlineLabel>
+            <EditableDate
+              value={currentProject.deadline}
+              onSave={async (newDeadline) => {
+                await dispatch(updateProject({
+                  id: currentProject.id,
+                  data: { deadline: newDeadline }
+                })).unwrap();
+                await loadMetrics();
+                updatePanel({
+                  content: renderPanelContent({ ...currentProject, deadline: newDeadline })
+                });
+              }}
+              placeholder="Установите дедлайн"
+            />
+          </DeadlineRow>
+        </Section>
         <Section>
           <SectionTitle>Общий прогресс</SectionTitle>
           <ProjectMetricsComponent metrics={metrics} />
@@ -72,9 +105,7 @@ export const ProjectInfoPanel: React.FC<ProjectInfoPanelProps> = ({
                 id: currentProject.id, 
                 data: { description: newDescription } 
               })).unwrap();
-              
               await loadMetrics()
-              
               updatePanel({
                 content: renderPanelContent({ ...currentProject, description: newDescription })
               });
