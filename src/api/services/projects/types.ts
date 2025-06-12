@@ -55,11 +55,18 @@ export interface ProjectStats {
   projectsByPriority: Record<ProjectPriority, number>;
 }
 
+export interface ProductivityDataPoint {
+  day: string;
+  count: number;
+}
+
+export type ProductivityData = ProductivityDataPoint[];
+
 export interface ProjectMetrics {
-  days_elapsed: number;
-  days_left: number | null;
   total_tasks: number;
   done_tasks: number;
+  days_elapsed: number;
+  days_left: number | null;
   rem_tasks: number;
   v_real: number;
   v_req: number | null;

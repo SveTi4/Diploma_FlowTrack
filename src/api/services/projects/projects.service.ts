@@ -6,7 +6,8 @@ import {
   CreateProjectDto,
   UpdateProjectDto,
   ProjectFilters,
-  ProjectMetrics
+  ProjectMetrics,
+  ProductivityData
 } from './types'
 
 export class ProjectsService extends BaseService<Project> {
@@ -53,6 +54,12 @@ export class ProjectsService extends BaseService<Project> {
   async getProjectMetrics(projectId: number): Promise<ApiResponse<ProjectMetrics>> {
     const response = await this.getById<ProjectMetrics>(projectId, 'metrics')
     console.log('Fetching project progress for id:', response)
+    return response
+  }
+
+  // Получение данных продуктивности
+  async getProjectProductivity(projectId: number): Promise<ApiResponse<ProductivityData>> {
+    const response = await this.getById<ProductivityData>(projectId, 'progress')
     return response
   }
 }
