@@ -1,17 +1,13 @@
 import React, { useEffect, useState } from 'react'
 import { Section, SectionTitle, EditableDescription } from '../../../../molecules'
-import { Project, ProjectMetrics } from '../../../../../api/services'
+import { Project, ProjectMetrics, ProductivityData } from '../../../../../api/services'
 import { AppDispatch } from '../../../../../store'
 import { updateProject } from '../../../../../store/projects/projectsSlice'
 import { fetchProjectMetrics } from '../../../../../store/projects/projectMetricsSlice'
+import { fetchProjectProductivity } from '../../../../../store/projects/projectProductivitySlice'
 import { Loader } from '../../../../atoms'
 import { ProjectMetrics as ProjectMetricsComponent } from '../ProjectMetrics/ProjectMetrics'
 import { ProductivityChart } from '../ProductivityChart/ProductivityChart'
-
-interface ProductivityData {
-  day: string
-  count: number
-}
 
 interface ProjectInfoPanelProps {
   project: Project
@@ -25,7 +21,7 @@ export const ProjectInfoPanel: React.FC<ProjectInfoPanelProps> = ({
   updatePanel,
 }) => {
   const [metrics, setMetrics] = useState<ProjectMetrics | null>(null)
-  const [productivityData, setProductivityData] = useState<ProductivityData[]>([])
+  const [productivityData, setProductivityData] = useState<ProductivityData | null>(null)
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState<string | null>(null)
 
@@ -33,19 +29,12 @@ export const ProjectInfoPanel: React.FC<ProjectInfoPanelProps> = ({
     setLoading(true)
     setError(null)
     try {
-      const response = await dispatch(fetchProjectMetrics(project.id)).unwrap()
-      setMetrics(response.data)
-      // TODO: Здесь будет загрузка данных для графика
-      // Временно используем тестовые данные
-      setProductivityData([
-        { day: "2025-06-03T00:00:00Z", count: 5 },
-        { day: "2025-06-04T00:00:00Z", count: 8 },
-        { day: "2025-06-05T00:00:00Z", count: 3 },
-        { day: "2025-06-06T00:00:00Z", count: 12 },
-        { day: "2025-06-07T00:00:00Z", count: 7 },
-        { day: "2025-06-08T00:00:00Z", count: 9 },
-        { day: "2025-06-09T00:00:00Z", count: 4 }
+      const [metricsResponse, productivityResponse] = await Promise.all([
+        dispatch(fetchProjectMetrics(project.id)).unwrap(),
+        dispatch(fetchProjectProductivity(project.id)).unwrap()
       ])
+      setMetrics(metricsResponse.data)
+      setProductivityData(productivityResponse.data)
     } catch (err) {
       setError(err instanceof Error ? err.message : 'Ошибка при загрузке метрик')
     } finally {
@@ -60,7 +49,7 @@ export const ProjectInfoPanel: React.FC<ProjectInfoPanelProps> = ({
   const renderPanelContent = (currentProject: Project) => {
     if (loading) return <Loader size="large" />
     if (error) return <div>Ошибка: {error}</div>
-    if (!metrics) return null;
+    if (!metrics || !productivityData) return null;
 
     return (
       <>

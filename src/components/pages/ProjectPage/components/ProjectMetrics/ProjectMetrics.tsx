@@ -57,7 +57,7 @@ export const ProjectMetrics: React.FC<ProjectMetricsProps> = ({ metrics }) => {
     const speedDiff = Math.abs(metrics.v_req!) - metrics.v_real;
     const speedDiffPercent = Math.round((speedDiff / Math.abs(metrics.v_req!)) * 100);
     
-    switch (metrics.perception_done > 80 ? 'green' : metrics.perception_done > 50 ? 'yellow' : 'red') {
+    switch (metrics.status) {
       case 'green':
         return {
           text: '✅ Проект идет по плану',
@@ -100,7 +100,7 @@ export const ProjectMetrics: React.FC<ProjectMetricsProps> = ({ metrics }) => {
             <p>Прогнозируемая дата: {format(new Date(metrics.projected_finish_date!), 'd MMMM yyyy', { locale: ru }) || 'Не определена'}</p>
           </>
         )}
-        {metrics.v_real === 0 && metrics.days_elapsed > 0 && (
+        {metrics.v_real < 1 && metrics.days_elapsed > 0 && (
           <ErrorMessage>
             Внимание: за последний период не было выполнено ни одной задачи
           </ErrorMessage>

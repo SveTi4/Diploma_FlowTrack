@@ -17,6 +17,7 @@ import 'chartjs-adapter-date-fns'
 import { ru } from 'date-fns/locale'
 import { ChartContainer, ChartTypeToggle, ToggleButton } from './ProductivityChart.styles'
 import { useTheme } from 'styled-components'
+import { ProductivityData } from '../../../../../api/services/projects/types'
 
 // Регистрируем необходимые компоненты Chart.js
 ChartJS.register(
@@ -31,13 +32,8 @@ ChartJS.register(
   TimeScale
 )
 
-interface ProductivityData {
-  day: string
-  count: number
-}
-
 interface ProductivityChartProps {
-  data: ProductivityData[]
+  data: ProductivityData
 }
 
 type ChartType = 'line' | 'bar'
