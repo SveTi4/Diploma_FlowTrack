@@ -15,7 +15,7 @@ export const ProgressInfo = styled.div`
 
 export const ProgressBar = styled.div<{ progress: number }>`
   height: 4px;
-  background: rgba(255, 255, 255, 0.1);
+  background: ${({ theme }) => theme.colors.border};
   border-radius: 2px;
   overflow: hidden;
   position: relative;
