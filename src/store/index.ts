@@ -5,6 +5,7 @@ import projectProductivityReducer from './projects/projectProductivitySlice'
 import authReducer from './auth/authSlice'
 import tasksReducer from './tasks/tasksSlice'
 import columnsReducer from './columns/columnsSlice'
+import heatmapReducer from './heatmap/heatmapSlice'
 
 const rootReducer = combineReducers({
   projects: projectsReducer,
@@ -13,6 +14,7 @@ const rootReducer = combineReducers({
   auth: authReducer,
   tasks: tasksReducer,
   columns: columnsReducer,
+  heatmap: heatmapReducer,
 })
 
 export type RootState = ReturnType<typeof rootReducer>
