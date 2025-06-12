@@ -1,6 +1,4 @@
-import { Provider } from 'react-redux'
 import { BrowserRouter, Routes, Route } from 'react-router-dom'
-import { store } from './store'
 import { GlobalStyles } from './styles/GlobalStyles'
 import { AuthPage, ProjectsPage, ProjectPage, ArchivePage } from './components/pages'
 import { MainTemplate } from './components/templates'
@@ -8,7 +6,7 @@ import { PageHeader } from "./components/molecules"
 
 export const Router = () => {
   return (
-    <Provider store={store}>
+    <>
       {/* @ts-expect-error GlobalStyles использует styled-components, который не имеет типов */}
       <GlobalStyles />
       <BrowserRouter>
@@ -45,6 +43,6 @@ export const Router = () => {
           } />
         </Routes>
       </BrowserRouter>
-    </Provider>
+    </>
   )
 } 
