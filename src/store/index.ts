@@ -1,16 +1,18 @@
 import { configureStore, combineReducers, Action } from '@reduxjs/toolkit'
-import authReducer from './auth/authSlice'
 import projectsReducer from './projects/projectsSlice'
+import projectMetricsReducer from './projects/projectMetricsSlice'
+import projectProductivityReducer from './projects/projectProductivitySlice'
+import authReducer from './auth/authSlice'
 import tasksReducer from './tasks/tasksSlice'
 import columnsReducer from './columns/columnsSlice'
-import projectMetricsReducer from './projects/projectMetricsSlice'
 
 const rootReducer = combineReducers({
-  auth: authReducer,
   projects: projectsReducer,
+  projectMetrics: projectMetricsReducer,
+  projectProductivity: projectProductivityReducer,
+  auth: authReducer,
   tasks: tasksReducer,
   columns: columnsReducer,
-  projectMetrics: projectMetricsReducer
 })
 
 export type RootState = ReturnType<typeof rootReducer>
