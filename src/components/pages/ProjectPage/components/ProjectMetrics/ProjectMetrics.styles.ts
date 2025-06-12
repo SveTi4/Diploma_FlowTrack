@@ -9,7 +9,7 @@ export const ProgressContainer = styled.div`
   border-radius: ${({ theme }) => theme.borderRadius.medium};
 `;
 
-export const StatusIndicator = styled.div<{ status: 'green' | 'yellow' | 'red' }>`
+export const StatusIndicator = styled.div<{ status: 'green' | 'yellow' | 'red' | null }>`
   display: flex;
   align-items: center;
   justify-content: space-between;
