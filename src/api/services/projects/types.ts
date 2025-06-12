@@ -1,19 +1,13 @@
 // import { ApiResponse } from '../../types/response.types'
 
-export type ProjectStatus = 'active' | 'archived' | 'completed' | 'draft';
-export type ProjectPriority = 'low' | 'medium' | 'high';
-
 export interface Project {
   id: number;
   name: string;
   description: string;
   deadline: string | null;
-  progress?: number;
-  status?: ProjectStatus;
-  priority?: ProjectPriority;
+  status: boolean;
   created_at: string;
   updated_at: string;
-  tags?: string[];
   archived: boolean;
 }
 
@@ -21,7 +15,6 @@ export interface CreateProjectDto {
   name: string;
   description: string;
   deadline?: string | null;
-  priority?: ProjectPriority;
   teamSize?: number;
   tags?: string[];
 }
@@ -29,7 +22,6 @@ export interface CreateProjectDto {
 export interface UpdateProjectDto {
   name?: string;
   description?: string;
-  priority?: ProjectPriority;
   deadline?: string | null;
   teamSize?: number;
   progress?: number;
@@ -38,7 +30,6 @@ export interface UpdateProjectDto {
 }
 
 export interface ProjectFilters {
-  priority?: ProjectPriority;
   search?: string;
   archived?: boolean;
   startDate?: string;
@@ -52,7 +43,6 @@ export interface ProjectStats {
   completedProjects: number;
   archivedProjects: number;
   averageProgress: number;
-  projectsByPriority: Record<ProjectPriority, number>;
 }
 
 export interface ProductivityDataPoint {
@@ -72,5 +62,5 @@ export interface ProjectMetrics {
   v_req: number | null;
   perception_done: number;
   projected_finish_date: string | null;
-  status: 'green' | 'yellow' | 'red';
+  status: 'green' | 'yellow' | 'red' | null;
 } 
