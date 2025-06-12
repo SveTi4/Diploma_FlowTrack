@@ -44,6 +44,15 @@ export abstract class BaseService<T> {
   }
 
   // Получение одного элемента по ID
+  protected async get<R = T>( altEndpoint?: string): Promise<ApiResponse<R>> {
+    const response = await api.get(`${this.endpoint}${altEndpoint ? `/${altEndpoint}` : ''}`, this.config)
+    return {
+      data: response.data,
+      status: response.status,
+    }
+  }
+
+  // Получение одного элемента по ID
   protected async getById<R = T>(id: string | number, altEndpoint?: string): Promise<ApiResponse<R>> {
     const response = await api.get(`${this.endpoint}/${id}${altEndpoint ? `/${altEndpoint}` : ''}`, this.config)
     return {
