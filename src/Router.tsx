@@ -1,6 +1,6 @@
 import { BrowserRouter, Routes, Route } from 'react-router-dom'
 import { GlobalStyles } from './styles/GlobalStyles'
-import { AuthPage, ProjectsPage, ProjectPage, ArchivePage } from './components/pages'
+import { AuthPage, ProjectsPage, ProjectPage, ArchivePage, StatsPage } from './components/pages'
 import { MainTemplate } from './components/templates'
 import { PageHeader } from "./components/molecules"
 
@@ -24,9 +24,7 @@ export const Router = () => {
           } />
           <Route path="/stats" element={
             <MainTemplate>
-              <PageHeader title={'Статистика'}>
-                Тут пока что пусто
-              </PageHeader>
+              <StatsPage />
             </MainTemplate>
           } />
           <Route path="/guides" element={
