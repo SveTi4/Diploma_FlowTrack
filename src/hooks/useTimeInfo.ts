@@ -28,7 +28,10 @@ const getHoursWord = (hours: number): string => {
   return 'часов'
 }
 
-export const useTimeInfo = (deadline: string | null): TimeInfo => {
+export const useTimeInfo = (deadline: string | null, status: boolean): TimeInfo => {
+
+  if (status) return { formattedDate: 'Выполнено', timeLeft: null, timeIcon: '✔', isExpired: false }
+
   const isExpired = deadline ? new Date(deadline) < new Date() : false
   
   const formattedDate = deadline 

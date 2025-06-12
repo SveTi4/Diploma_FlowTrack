@@ -20,17 +20,18 @@ import {
   CardFooter
 } from './ProjectCard.styles'
 import { useTimeInfo } from '../../../../../hooks/useTimeInfo'
+import { Project } from "../../../../../api/services";
 
 // Types
-interface Project {
-  id: number
-  name: string
-  description: string
-  deadline: string | null
-  created_at: string
-  updated_at: string
-  archived: boolean
-}
+// interface Project {
+//   id: number
+//   name: string
+//   description: string
+//   deadline: string | null
+//   created_at: string
+//   updated_at: string
+//   archived: boolean
+// }
 
 interface ProjectCardProps {
   project: Project
@@ -54,7 +55,7 @@ export const ProjectCard = ({
   searchQuery = ''
 }: ProjectCardProps) => {
   const navigate = useNavigate()
-  const { formattedDate, timeLeft, timeIcon, isExpired } = useTimeInfo(project.deadline)
+  const { formattedDate, timeLeft, timeIcon, isExpired } = useTimeInfo(project.deadline, project.status)
 
   const formattedCreatedAt = format(new Date(project.created_at), 'd MMM', { locale: ru })
   const formattedUpdatedAt = format(new Date(project.updated_at), 'd MMM', { locale: ru })

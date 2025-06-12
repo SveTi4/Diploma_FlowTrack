@@ -21,17 +21,18 @@ import {
 } from './ArchivedProjectCard.styles'
 import { useTimeInfo } from '../../../../../hooks/useTimeInfo'
 import { IconButton } from '../../../../atoms/IconButton/IconButton'
+import { Project } from '../../../../../api/services'
 
 // Types
-interface Project {
-  id: number
-  name: string
-  description: string
-  deadline: string | null
-  created_at: string
-  updated_at: string
-  archived: boolean
-}
+// interface Project {
+//   id: number
+//   name: string
+//   description: string
+//   deadline: string | null
+//   created_at: string
+//   updated_at: string
+//   archived: boolean
+// }
 
 interface ArchivedProjectCardProps {
   project: Project
@@ -58,7 +59,7 @@ export const ArchivedProjectCard = ({
   onRestore, 
   onDelete 
 }: ArchivedProjectCardProps) => {
-  const { formattedDate, timeLeft, timeIcon, isExpired } = useTimeInfo(project.deadline)
+  const { formattedDate, timeLeft, timeIcon, isExpired } = useTimeInfo(project.deadline, project.status)
 
   const formattedCreatedAt = format(new Date(project.created_at), 'd MMM', { locale: ru })
   const formattedUpdatedAt = format(new Date(project.updated_at), 'd MMM', { locale: ru })
