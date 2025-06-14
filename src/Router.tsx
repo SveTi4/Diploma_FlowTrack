@@ -1,8 +1,7 @@
 import { BrowserRouter, Routes, Route } from 'react-router-dom'
 import { GlobalStyles } from './styles/GlobalStyles'
-import { AuthPage, ProjectsPage, ProjectPage, ArchivePage, StatsPage } from './components/pages'
+import { AuthPage, ProjectsPage, ProjectPage, StatsPage, GuidesPage } from './components/pages'
 import { MainTemplate } from './components/templates'
-import { PageHeader } from "./components/molecules"
 
 export const Router = () => {
   return (
@@ -29,14 +28,12 @@ export const Router = () => {
           } />
           <Route path="/guides" element={
             <MainTemplate>
-              <PageHeader title={'Гайды'}>
-                Тут пока что пусто
-              </PageHeader>
+              <GuidesPage />
             </MainTemplate>
           } />
           <Route path="/archive" element={
             <MainTemplate>
-              <ArchivePage />
+              <ProjectsPage />
             </MainTemplate>
           } />
         </Routes>
